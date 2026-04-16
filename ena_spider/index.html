@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ena's Portfolio</title>
+    <link rel="icon" type="image/x-icon" href="../asset/images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.6.0/remixicon.css">
+    <link rel="stylesheet" href="../asset/css/swap.css">
+    <link rel="stylesheet" href="../asset/css/boostrap.min.css">
+    <link rel="stylesheet" href="../asset/css/boxicons.min.css">
+    <link rel="stylesheet" href="../asset/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="../asset/css/slick.css">
+    <link rel="stylesheet" href="../asset/css/style.css">
+    <link rel="stylesheet" href="../asset/css/about.css">
+    <link rel="stylesheet" href="../asset/css/resume.css">
+    <link rel="stylesheet" href="../asset/css/services.css">
+    <link rel="stylesheet" href="../asset/css/skills.css">
+    <link rel="stylesheet" href="../asset/css/portfolio.css">
+    <link rel="stylesheet" href="../asset/css/testimonials.css">
+    <link rel="stylesheet" href="../asset/css/blog.css">
+    <link rel="stylesheet" href="../asset/css/contact.css">
+    <link rel="stylesheet" href="../asset/css/layout.css">
+    <link rel="stylesheet" href="../asset/css/media_query.css">
+</head>
+
+<body>
+    <!-- ====================================== Preloader ===================================== -->
+    <div class="wrapper">
+        <div id="loader-wrapper">
+            <div id="loader">
+                <svg viewBox="0 0 1320 300">
+                    <text x="50%" y="50%" dy=".35em" text-anchor="middle">Ena </text>
+                </svg>
+            </div>
+            <div class="loader-section section-left"></div>
+            <div class="loader-section section-right"></div>
+        </div>
+    </div>
+    <!-- ====================================== Preloader End ===================================== -->
+    <!-- ====================================== Background Animation ===================================== -->
+    <div id="particles-js"></div>
+    <!-- ====================================== Background Animation End ===================================== -->
+    <!-- ====================================== Cursor ===================================== -->
+    <div class="cursor"></div>
+    <!-- ====================================== Cursor End ===================================== -->
+    <!-- ====================================== Dark Light Mode ===================================== -->
+    <div class="dark_toggle">
+        <div class="ul-header">
+            <a class="mode" onclick="myFunction()" title="Toggle Mode">
+                <div class="icon-container">
+                    <i id="sunIcon" class="fa-solid fa-sun fa-spin icon"></i>
+                    <i id="moonIcon" class="fa-solid fa-moon icon hidden"></i>
+                </div>
+            </a>
+        </div>
+    </div>
+    <!-- ====================================== Dark Light Mode End===================================== -->
+    <header>
+        <!-- ====================================== Fix Icon Menu ===================================== -->
+        <div class="sidebar close">
+            <ul class="nav-links icetab-container" id="icetab-container">
+                <li class="icetab current-tab">
+                    <a class="nav_menu_icon_line" href="javascript:void(0)">
+                        <img class="nav_menu_icon" src="../asset/images/home_icon.svg" alt="home_icon">
+                    </a>
+                    <ul class="sub-menu blank">
+                        <li class=""><a class="link_name" href="javascript:void(0)">Home</a></li>
+                    </ul>
+                </li>
+                <li class="icetab menu-btn">
+                    <a class="nav_menu_icon_line" href="javascript:void(0)">
+                        <img class="nav_menu_icon" src="../asset/images/about_icon.svg" alt="about_icon">
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a class="link_name" href="javascript:void(0)">About Me</a></li>
+                    </ul>
+                </li>
+                <li class="icetab">
+                    <a class="nav_menu_icon_line" href="javascript:void(0)">
+                        <img class="nav_menu_icon" src="../asset/images/resume_icon.svg" alt="resume_icon">
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a class="link_name" href="javascript:void(0)">Resume</a></li>
+                    </ul>
+                </li>
+                <li class="icetab">
+                    <a class="nav_menu_icon_line" href="javascript:void(0)">
+                        <img class="nav_menu_icon" src="../asset/images/services_icon.svg" alt="services_icon">
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a class="link_name" href="javascript:void(0)">Services</a></li>
+                    </ul>
+                </li>
+                <li class="icetab">
+                    <a class="nav_menu_icon_line" href="javascript:void(0)">
+                        <img class="nav_menu_icon" src="../asset/images/skills_icon.svg" alt="skills_icon">
+                    </a>
+                    <ul class="sub-menu blank">
+                        <li><a class="link_name" href="javascript:void(0)">Skills</a></li>
+                    </ul>
+                </li>
+                <li class="icetab">
+                    <a class="nav_menu_icon_line" href="javascript:void(0)">
+                        <img class="nav_menu_icon" src="../asset/images/portfolio_icon.svg" alt="portfolio_icon">
+                    </a>
+                    <ul class="sub-menu blank">
+                        <li><a class="link_name" href="javascript:void(0)">Portfolio</a></li>
+                    </ul>
+                </li>
+                <li class="icetab">
+                    <a class="nav_menu_icon_line" href="javascript:void(0)">
+                        <img class="nav_menu_icon" src="../asset/images/blog_icon.svg" alt="blog_icon">
+                    </a>
+                    <ul class="sub-menu blank">
+                        <li><a class="link_name" href="javascript:void(0)">Blogs</a></li>
+                    </ul>
+                </li>
+                <li class="icetab">
+                    <a class="" href="javascript:void(0)">
+                        <img class="nav_menu_icon" src="../asset/images/contact_icon.svg" alt="contact_icon">
+                    </a>
+                    <ul class="sub-menu blank">
+                        <li><a class="link_name" href="javascript:void(0)">Contact</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- ====================================== Fix Icon Menu End ===================================== -->
+    </header>
+    <!-- ====================================== Mobile Hamburger ===================================== -->
+    <button class="hamburger_btn" id="hamburger_btn" aria-label="Open navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <!-- Mobile Nav Drawer -->
+    <div class="mobile_nav_overlay" id="mobile_nav_overlay">
+        <nav class="mobile_nav_drawer">
+            <ul class="mobile_nav_list">
+                <li class="mobile_nav_item" data-tab="0">
+                    <img src="../asset/images/home_icon.svg" alt="home"> Home
+                </li>
+                <li class="mobile_nav_item" data-tab="1">
+                    <img src="../asset/images/about_icon.svg" alt="about"> About Me
+                </li>
+                <li class="mobile_nav_item" data-tab="2">
+                    <img src="../asset/images/resume_icon.svg" alt="resume"> Resume
+                </li>
+                <li class="mobile_nav_item" data-tab="3">
+                    <img src="../asset/images/services_icon.svg" alt="services"> Services
+                </li>
+                <li class="mobile_nav_item" data-tab="4">
+                    <img src="../asset/images/skills_icon.svg" alt="skills"> Skills
+                </li>
+                <li class="mobile_nav_item" data-tab="5">
+                    <img src="../asset/images/portfolio_icon.svg" alt="portfolio"> Portfolio
+                </li>
+                <li class="mobile_nav_item" data-tab="6">
+                    <img src="../asset/images/blog_icon.svg" alt="blog"> Blogs
+                </li>
+                <li class="mobile_nav_item" data-tab="7">
+                    <img src="../asset/images/contact_icon.svg" alt="contact"> Contact
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!-- ====================================== Mobile Hamburger End ===================================== -->
+    <div class="all_page" id="page">
+        <section class="card_section" id="card_main">
+            <div class="olivia_bio" id="oliva_details">
+                <div class="imgBox">
+                    <img class="olivia-img" src="../asset/images/3n4port.png" alt="3n4port-img">
+                </div>
+                <div class="bio_contain">
+                    <h1 class="olivia_moswa">Ena Helena Otuokon</h1>
+                    <h2 class="designer font_w_font_s1 overflow-hidden">Product Designer/Manager, AI Engineer and Front-End Developer</h2>
+                    <button class="download_cv hire_me font_w_font_s">
+                        <i class="ri-at-line"></i> Hire Me
+                    </button>
+                </div>
+            </div>
+            <div class="right_card_main icetab-content" id="icetab-content">
+                <!-- ======================================= Home Section ================================== -->
+                <section class="oliva-intro tabcontent tab-active" id="home">
+                    <div class="intro_main">
+                        <h2 class="intro font_w_font_s fade_up">intro</h2>
+                    </div>
+                    <h2 class="moswa font_w_font_s fade_up">Hi, I’m Ena — Software Engineer, Designer & AI Enthusiast</h2>
+                    <h3 class="passionate font_w_font_s1 fade_up">I’m a tech-focused and people-oriented professional based in Newcastle, UK. Currently completing an MSc in Artificial Intelligence at Northumbria University, I specialise in UI/UX design, product management, and front-end development. I’ve led products across fintech, music, and government sectors — and I’m on a mission to build intelligent, inclusive digital experiences that make a real difference.
+                    </h3>
+                    <div class="button_circle_group">
+                        <div>
+                            <button class="download_cv font_w_font_s"
+                                onClick="window.open('../asset/pdf/ena_cv.pdf');">
+                                <i class="ri-download-cloud-2-line"></i>Download CV
+                            </button>
+                        </div>
+                        <div class="circular_text_main ">
+                            <a href="javascript:void(0)" class="down_arrow_main position-relative">
+                                <img class="circular_text" src="../asset/images/circular_text.png" alt="circular_text">
+                                <img class="down_arrow" src="../asset/images/down_arrow.svg" alt="down_arrow">
+                            </a>
+                        </div>
+                    </div>
+                </section>
+                <!-- ======================================= About Section ================================== -->
+                <section class="oliva-intro tabcontent" id="about">
+                    <div class="intro_main">
+                        <h2 class="intro font_w_font_s fade_up">about me</h2>
+                    </div>
+                    <h2 class="moswa font_w_font_s fade_up">Tech-Focused. People-Oriented. Endlessly Curious.</h2>
+                    <h3 class="passionate font_w_font_s1 fade_up">I'm Ena Helena Otuokon — a Software Engineer, UI/UX Designer, Product Manager, and Brand Strategist based in Newcastle, UK. Currently completing an MSc in Artificial Intelligence at Northumbria University, I bring a rare blend of technical depth and creative vision. I've led product design across finance, music, and government sectors, built websites from the ground up, and won a UI/UX design competition at the Association for Computing Machinery. I'm curious, collaborative, and committed to creating welcoming, inclusive digital experiences.
+                    </h3>
+                    <div class="about_counter fade_up">
+                        <div class="counter">
+                            <h3 class="counter2 count font_w_font_s" data-count="3">3+</h3>
+                            <h3 class="experince font_w_font_s1">YEARS OF EXPERIENCE</h3>
+                        </div>
+                        <div class="counter">
+                            <h3 class="counter2 count font_w_font_s" data-count="10">10+</h3>
+                            <h3 class="experince">PROJECTS ACROSS 3 COUNTRIES</h3>
+                        </div>
+                    </div>
+                </section>
+                <!-- ======================================= Resume Section ================================== -->
+                <section class="oliva-intro tabcontent" id="resume">
+                    <div class="intro_main">
+                        <h2 class="intro font_w_font_s fade_up">Resume</h2>
+                    </div>
+                    <h2 class="moswa font_w_font_s fade_up">Education</h2>
+                    <h3 class="passionate font_w_font_s1 fade_up">A strong academic foundation spanning software engineering and artificial intelligence, across two countries and institutions.
+                    </h3>
+                    <div class="education position-relative education_space">
+                        <div class="side_circle_ring fade_up">
+                            <div class="small_yellow_border">
+                                <div class="small_yellow_circle"></div>
+                            </div>
+                        </div>
+                        <div class="small_yellow_border_main fade_up">
+                            <h3 class="bachelor font_w_font_s1">Masters of Science in Artificial Intelligence</h3>
+                            <h4 class="university font_w_font_s1">Northumbria University, Newcastle, UK / September 2025 - Present</h4>
+                            <h5 class="cursus font_w_font_s1">Currently completing an MSc in Artificial Intelligence, focusing on machine learning, intelligent systems, and applied AI engineering.</h5>
+                        </div>
+                    </div>
+                    <div class="education position-relative">
+                        <div class="side_circle_ring fade_up">
+                            <div class="small_yellow_border">
+                                <div class="small_yellow_circle"></div>
+                            </div>
+                        </div>
+                        <div class="small_yellow_border_main fade_up">
+                            <h3 class="bachelor font_w_font_s1">Bachelor of Science in Software Engineering</h3>
+                            <h4 class="university font_w_font_s1">American University of Nigeria (AUN), Yola / August 2019 - May 2023</h4>
+                            <h5 class="cursus font_w_font_s1">Graduated with a BSc in Software Engineering. Final year project involved developing an Elderly Care Management System covering UI design and front-end development.</h5>
+                        </div>
+                    </div>
+                    <h2 class="moswa experience_main_text font_w_font_s fade_up">Experience</h2>
+                    <h3 class="passionate font_w_font_s1 fade_up">A track record of delivering impactful products, designs, and digital solutions across multiple industries and countries.
+                    </h3>
+                    <div class="education position-relative education_space">
+                        <div class="side_circle_ring fade_up">
+                            <div class="small_yellow_border">
+                                <div class="small_yellow_circle"></div>
+                            </div>
+                        </div>
+                        <div class="small_yellow_border_main fade_up">
+                            <div class="envato_group_main">
+                                <div>
+                                    <h3 class="bachelor font_w_font_s1">Lead UI/UX Designer</h3>
+                                    <h4 class="company font_w_font_s1">Epsilon Development Labs (Remote), Lagos / February 2023 - Present</h4>
+                                </div>
+                            </div>
+                            <h5 class="cursus font_w_font_s1">Led UI design for a mobile finance AI application, developed a comprehensive design system, and created interactive prototypes to validate user experience.</h5>
+                        </div>
+                    </div>
+                    <div class="education position-relative education_space">
+                        <div class="side_circle_ring fade_up">
+                            <div class="small_yellow_border">
+                                <div class="small_yellow_circle"></div>
+                            </div>
+                        </div>
+                        <div class="small_yellow_border_main fade_up">
+                            <div class="envato_group_main">
+                                <div>
+                                    <h3 class="bachelor font_w_font_s1">IT Trainee Analyst</h3>
+                                    <h4 class="company font_w_font_s1">Aberdeen Commercial Group, Abuja / August 2023 - April 2025</h4>
+                                </div>
+                            </div>
+                            <h5 class="cursus font_w_font_s1">Spearheaded the design and development of the company website, executed end-to-end front-end development, and created marketing collateral aligned with brand guidelines.</h5>
+                        </div>
+                    </div>
+                    <div class="education position-relative education_space">
+                        <div class="side_circle_ring fade_up">
+                            <div class="small_yellow_border">
+                                <div class="small_yellow_circle"></div>
+                            </div>
+                        </div>
+                        <div class="small_yellow_border_main fade_up">
+                            <div class="envato_group_main">
+                                <div>
+                                    <h3 class="bachelor font_w_font_s1">Product Manager</h3>
+                                    <h4 class="company font_w_font_s1">Ariro Inc (Remote), Lagos / February 2024 - March 2025</h4>
+                                </div>
+                            </div>
+                            <h5 class="cursus font_w_font_s1">Led UI design for an afrogospel music application, supervised product development, assisted with front-end implementation, and executed the product marketing strategy.</h5>
+                        </div>
+                    </div>
+                    <div class="education position-relative">
+                        <div class="side_circle_ring fade_up">
+                            <div class="small_yellow_border">
+                                <div class="small_yellow_circle"></div>
+                            </div>
+                        </div>
+                        <div class="small_yellow_border_main fade_up">
+                            <div class="envato_group_main">
+                                <div>
+                                    <h3 class="bachelor font_w_font_s1">UI/UX Designer Intern</h3>
+                                    <h4 class="company font_w_font_s1">Centrifuge Groups, Abuja / June 2022 - December 2022</h4>
+                                </div>
+                            </div>
+                            <h5 class="cursus font_w_font_s1">Designed Company Registration Portal, CAC/EU-ACT Electronic Filing System, ERP, and a School Management System. Trained end users on the use of EFS.</h5>
+                        </div>
+                    </div>
+
+                    <h2 class="moswa experience_main_text font_w_font_s fade_up">Licences &amp; Certifications</h2>
+                    <h3 class="passionate font_w_font_s1 fade_up">Verified credentials across product management, UX design, cybersecurity, and artificial intelligence.</h3>
+
+                    <div class="education position-relative education_space">
+                        <div class="side_circle_ring fade_up">
+                            <div class="small_yellow_border">
+                                <div class="small_yellow_circle"></div>
+                            </div>
+                        </div>
+                        <div class="small_yellow_border_main fade_up">
+                            <h3 class="bachelor font_w_font_s1">Product Management Virtual Experience</h3>
+                            <h4 class="university font_w_font_s1">EntryLevel &nbsp;·&nbsp; Issued July 2023</h4>
+                            <h5 class="cursus font_w_font_s1">Credential ID: 9f92dffa-da7e-4363-8e12-45185f6842d3 &nbsp;·&nbsp;
+                                <a class="cert_link" href="https://entrylevel-public.s3.amazonaws.com/certificate/0007be48-48a4-4dd8-b02d-c56298714594/9f92dffa-da7e-4363-8e12-45185f6842d3_cert.pdf" target="_blank" rel="noopener noreferrer">View Certificate <i class="ri-external-link-line"></i></a>
+                            </h5>
+                        </div>
+                    </div>
+
+                    <div class="education position-relative education_space">
+                        <div class="side_circle_ring fade_up">
+                            <div class="small_yellow_border">
+                                <div class="small_yellow_circle"></div>
+                            </div>
+                        </div>
+                        <div class="small_yellow_border_main fade_up">
+                            <h3 class="bachelor font_w_font_s1">UX Designer — Entry Level</h3>
+                            <h4 class="university font_w_font_s1">EntryLevel &nbsp;·&nbsp; Issued November 2023</h4>
+                            <h5 class="cursus font_w_font_s1">Credential ID: 7581b2c7-bfe2-40ee-9dc5-03850198fe10 &nbsp;·&nbsp;
+                                <a class="cert_link" href="https://entrylevel-public.s3.amazonaws.com/certificate/05ac5980-a11d-44c2-b7ea-9fa7f8d6d136/7581b2c7-bfe2-40ee-9dc5-03850198fe10_cert.pdf" target="_blank" rel="noopener noreferrer">View Certificate <i class="ri-external-link-line"></i></a>
+                            </h5>
+                        </div>
+                    </div>
+
+                    <div class="education position-relative education_space">
+                        <div class="side_circle_ring fade_up">
+                            <div class="small_yellow_border">
+                                <div class="small_yellow_circle"></div>
+                            </div>
+                        </div>
+                        <div class="small_yellow_border_main fade_up">
+                            <h3 class="bachelor font_w_font_s1">Cyber Security Bootcamp: CompTIA Security+ 701</h3>
+                            <h4 class="university font_w_font_s1">GoMyCode &nbsp;·&nbsp; Issued October 2024</h4>
+                            <h5 class="cursus font_w_font_s1">Credential ID: 31728828013524747 &nbsp;·&nbsp;
+                                <a class="cert_link" href="https://diploma.gomycode.app/?id=31728828013524747" target="_blank" rel="noopener noreferrer">View Certificate <i class="ri-external-link-line"></i></a>
+                            </h5>
+                        </div>
+                    </div>
+
+                    <div class="education position-relative">
+                        <div class="side_circle_ring fade_up">
+                            <div class="small_yellow_border">
+                                <div class="small_yellow_circle"></div>
+                            </div>
+                        </div>
+                        <div class="small_yellow_border_main fade_up">
+                            <h3 class="bachelor font_w_font_s1">Google AI Specialisation</h3>
+                            <h4 class="university font_w_font_s1">Google &nbsp;·&nbsp; Coursera &nbsp;·&nbsp; Issued April 2026</h4>
+                            <h5 class="cursus font_w_font_s1">Credential ID: 366Z97NI7B82 &nbsp;·&nbsp;
+                                <a class="cert_link" href="https://www.coursera.org/account/accomplishments/specialization/366Z97NI7B82" target="_blank" rel="noopener noreferrer">View Certificate <i class="ri-external-link-line"></i></a>
+                            </h5>
+                        </div>
+                    </div>
+
+                </section>
+                <!-- ======================================= Services Section ================================== -->
+                <section class="oliva-intro tabcontent" id="services">
+                    <div class="intro_main">
+                        <h2 class="intro font_w_font_s fade_up">my services</h2>
+                    </div>
+                    <h2 class="moswa font_w_font_s fade_up">Bringing Your Vision to Life with Precision and Purpose</h2>
+                    <h3 class="passionate font_w_font_s1 fade_up">From concept to launch, I deliver end-to-end solutions across design, engineering, and strategy — tailored to your users and your business goals.
+                    </h3>
+                    <div class="services_box_main">
+                        <div class="service_box fade_up">
+                            <img class="services_icon" src="../asset/images/ux.png" alt="ux">
+                            <h3 class="ui_ux font_w_font_s">UI/UX Design</h3>
+                            <h4 class="ui_sub_text font_w_font_s1">User-centred design using Figma and Adobe Suite — from wireframes and prototypes to full design systems that prioritise usability and visual appeal.
+                            </h4>
+                        </div>
+                        <div class="service_box fade_up">
+                            <img class="services_icon" src="../asset/images/android.png" alt="product">
+                            <h3 class="ui_ux font_w_font_s">Product Management</h3>
+                            <h4 class="ui_sub_text font_w_font_s1">End-to-end product strategy, roadmapping, user stories, and go-to-market execution — turning ideas into products that users love and businesses grow with.
+                            </h4>
+                        </div>
+                        <div class="service_box fade_up">
+                            <img class="services_icon" src="../asset/images/web.png" alt="web">
+                            <h3 class="ui_ux font_w_font_s">Web Development</h3>
+                            <h4 class="ui_sub_text font_w_font_s1">Front-end development using HTML, CSS, JavaScript, and Bootstrap — building fast, responsive, and visually engaging websites and web applications.
+                            </h4>
+                        </div>
+                        <div class="service_box fade_up">
+                            <img class="services_icon" src="../asset/images/marketing.png" alt="ai">
+                            <h3 class="ui_ux font_w_font_s">AI Engineering</h3>
+                            <h4 class="ui_sub_text font_w_font_s1">Applying artificial intelligence and machine learning to build smarter products — from intelligent interfaces to data-driven features and automation.
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="pricing_group_REMOVED" style="display:none">
+                        <div class="plan_box fade_up">
+                            <div class="plan_box_sub">
+                                <div>
+                                    <h3 class="basic_plain font_w_font_s">Basic Plan</h3>
+                                    <h4 class="per_month font_w_font_s"><span class="plan_price">$39</span>/ Per Month
+                                    </h4>
+                                </div>
+                                <button class="download_cv buy_now font_w_font_s"
+                                    onClick="window.open('https://themeforest.net/user/the_krishna');">
+                                    <img class="shopping_bag" src="../asset/images/shopping_bag.png"
+                                        alt="shopping_bag">Buy Now
+                                </button>
+                            </div>
+                            <h5 class="build font_w_font_s1">Have design ready to build? or <span class="help">Need Help
+                                    ?</span></h5>
+                            <div class="plan_box_sub2">
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Web Development</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Mobile Development</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Advertising</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev decline font_w_font_s1">Graphic design</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev decline font_w_font_s1">Project management</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="plan_box fade_up" id="plan_box">
+                            <div class="plan_box_sub">
+                                <div>
+                                    <h3 class="basic_plain font_w_font_s">Ultra Plan</h3>
+                                    <h4 class="per_month font_w_font_s"><span class="plan_price">$69</span>/ Per Month
+                                    </h4>
+                                </div>
+                                <button class="download_cv buy_now font_w_font_s"
+                                    onClick="window.open('https://themeforest.net/user/the_krishna');">
+                                    <img class="shopping_bag" src="../asset/images/shopping_bag.png"
+                                        alt="shopping_bag">Buy Now
+                                </button>
+                            </div>
+                            <h5 class="build font_w_font_s1">Have design ready to build? or <span class="help">Need Help
+                                    ?</span></h5>
+                            <div class="plan_box_sub2">
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Web Development</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Mobile Development</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Advertising</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Graphic design</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev decline font_w_font_s1">Project management</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="plan_box fade_up" id="plan_box2">
+                            <div class="plan_box_sub">
+                                <div>
+                                    <h3 class="basic_plain font_w_font_s">Gold Plan</h3>
+                                    <h4 class="per_month font_w_font_s"><span class="plan_price">$99</span>/ Per Month
+                                    </h4>
+                                </div>
+                                <button class="download_cv buy_now font_w_font_s"
+                                    onClick="window.open('https://themeforest.net/user/the_krishna');">
+                                    <img class="shopping_bag" src="../asset/images/shopping_bag.png"
+                                        alt="shopping_bag">Buy Now
+                                </button>
+                            </div>
+                            <h5 class="build font_w_font_s1">Have design ready to build? or <span class="help">Need Help
+                                    ?</span></h5>
+                            <div class="plan_box_sub2">
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Web Development</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Mobile Development</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Advertising</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Graphic design</h3>
+                                </div>
+                                <div class="web-dev_main">
+                                    <img src="../asset/images/check.png" alt="check">
+                                    <h3 class="web-dev font_w_font_s1">Project management</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- ======================================= Skills Section ================================== -->
+                <section class="oliva-intro tabcontent" id="skill">
+                    <div class="intro_main">
+                        <h2 class="intro font_w_font_s fade_up">my skills</h2>
+                    </div>
+                    <h2 class="moswa font_w_font_s fade_up">A Versatile Skill Set Built Across Design, Tech & Strategy</h2>
+                    <h3 class="passionate font_w_font_s1">From AI engineering to brand design, my skills span the full product lifecycle — ideation, design, development, and delivery.
+                    </h3>
+                    <h3 class="lan_skill font_w_font_s fade_up">Core Competencies</h3>
+                    <div class="skill_circle_main">
+                        <div>
+                            <div class="circlechart" data-percentage="95"></div>
+                            <h2 class="subject">UI/UX Design</h2>
+                        </div>
+                        <div>
+                            <div class="circlechart" data-percentage="85"></div>
+                            <h2 class="subject">Product Management</h2>
+                        </div>
+                        <div>
+                            <div class="circlechart" data-percentage="80"></div>
+                            <h2 class="subject">AI Engineering</h2>
+                        </div>
+                        <div>
+                            <div class="circlechart" data-percentage="88"></div>
+                            <h2 class="subject">Web Development</h2>
+                        </div>
+                        <div>
+                            <div class="circlechart" data-percentage="75"></div>
+                            <h2 class="subject">AI (Rec. Systems)</h2>
+                        </div>
+                    </div>
+                    <h3 class="lan_skill hard_skill font_w_font_s fade_up">Technical Skills</h3>
+                    <div class="skill_circle_main">
+                        <div class="skill_circle fade_up">
+                            <div class="hard_skill_group">
+                                <img class="figma" src="../asset/images/figma.png" alt="figma">
+                                <h4 class="hard_skill_counter font_w_font_s1">92%</h4>
+                            </div>
+                            <h4 class="subject font_w_font_s1">Figma</h4>
+                        </div>
+                        <div class="skill_circle fade_up">
+                            <div class="hard_skill_group">
+                                <img class="figma" src="../asset/images/html.png" alt="html">
+                                <h4 class="hard_skill_counter font_w_font_s1">94%</h4>
+                            </div>
+                            <h4 class="subject font_w_font_s1">HTML/CSS</h4>
+                        </div>
+                        <div class="skill_circle fade_up">
+                            <div class="hard_skill_group">
+                                <img class="figma" src="../asset/images/css.png" alt="javascript">
+                                <h4 class="hard_skill_counter font_w_font_s1">88%</h4>
+                            </div>
+                            <h4 class="subject font_w_font_s1">JavaScript</h4>
+                        </div>
+                        <div class="skill_circle fade_up">
+                            <div class="hard_skill_group">
+                                <img class="figma" src="../asset/images/wordpress.png" alt="python">
+                                <h4 class="hard_skill_counter font_w_font_s1">76%</h4>
+                            </div>
+                            <h4 class="subject font_w_font_s1">Python</h4>
+                        </div>
+                        <div class="skill_circle fade_up">
+                            <div class="hard_skill_group">
+                                <img class="figma" src="../asset/images/bootstrap.png" alt="adobe">
+                                <h4 class="hard_skill_counter font_w_font_s1">85%</h4>
+                            </div>
+                            <h4 class="subject font_w_font_s1">Adobe Suite</h4>
+                        </div>
+                        <div class="skill_circle fade_up">
+                            <div class="hard_skill_group">
+                                <img class="figma" src="../asset/images/framer.png" alt="branding">
+                                <h4 class="hard_skill_counter font_w_font_s1">90%</h4>
+                            </div>
+                            <h4 class="subject font_w_font_s1">Branding</h4>
+                        </div>
+                        <div class="skill_circle fade_up">
+                            <div class="hard_skill_group">
+                                <img class="figma" src="../asset/images/flutter.png" alt="cybersecurity">
+                                <h4 class="hard_skill_counter font_w_font_s1">72%</h4>
+                            </div>
+                            <h4 class="subject font_w_font_s1">Cyber Security</h4>
+                        </div>
+                        <div class="skill_circle fade_up">
+                            <div class="hard_skill_group">
+                                <img class="figma" src="../asset/images/kotline.png" alt="cloud">
+                                <h4 class="hard_skill_counter font_w_font_s1">78%</h4>
+                            </div>
+                            <h4 class="subject font_w_font_s1">Cloud & Google Apps</h4>
+                        </div>
+                    </div>
+                </section>
+                <!-- ======================================= Portfolio Section  ================================== -->
+                <section class="oliva-intro tabcontent" id="portfolio">
+                    <div class="intro_main">
+                        <h2 class="intro font_w_font_s fade_up">portfolio</h2>
+                    </div>
+                    <h2 class="moswa font_w_font_s fade_up">Kuda Teens Debit Card</h2>
+                    <h3 class="passionate font_w_font_s1 fade_up">Product Management &nbsp;·&nbsp; Fintech &nbsp;·&nbsp; A case study in building a banking product for teens — from problem discovery through to MVP scoping and user stories.</h3>
+
+                    <!-- Featured case study card -->
+                    <div class="kuda_hero_row fade_up">
+                        <div class="kuda_hero_thumb pop-up">
+                            <div class="content-overlay"></div>
+                            <img src="../asset/portfolio_page/kuda_teens/01_problem_statement.png" alt="Kuda Teens">
+                            <div class="content-details fadeIn-bottom">
+                                <h3 class="content-title">Kuda Teens — View Case Study</h3>
+                                <p class="content-text">Product Management · Fintech</p>
+                            </div>
+                        </div>
+                        <div class="kuda_hero_info">
+                            <h3 class="kuda_title font_w_font_s">Kuda Teens Debit Card</h3>
+                            <p class="kuda_subtitle font_w_font_s1">Product Manager &nbsp;·&nbsp; Fintech &nbsp;·&nbsp; Nigeria</p>
+                            <p class="kuda_desc font_w_font_s1">Led end-to-end product discovery for Kuda's teen banking feature — a prepaid debit card designed to give Nigerian teenagers financial independence while keeping parents in full control. The project covered assumption mapping, market research, dual-audience user interviews, MoSCoW prioritisation, and user story definition.</p>
+                            <div class="kuda_tags">
+                                <span class="kuda_tag">Problem Discovery</span>
+                                <span class="kuda_tag">User Research</span>
+                                <span class="kuda_tag">MoSCoW</span>
+                                <span class="kuda_tag">MVP Scoping</span>
+                                <span class="kuda_tag">Fintech</span>
+                            </div>
+                            <button class="download_cv pop-up font_w_font_s" style="margin-top:20px;">
+                                <i class="ri-eye-line"></i> View Full Case Study
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- UX Design Case Study -->
+                    <h2 class="moswa font_w_font_s fade_up" style="margin-top:40px;">UFit — Fitness &amp; Nutrition App</h2>
+                    <h3 class="passionate font_w_font_s1 fade_up">UI/UX Design &nbsp;·&nbsp; Design Thinking &nbsp;·&nbsp; A full UX case study from user research through affinity mapping, wireframing, prototyping, and usability testing.</h3>
+
+                    <div class="kuda_hero_row fade_up">
+                        <div class="kuda_hero_thumb ux-pop-up">
+                            <div class="content-overlay"></div>
+                            <img src="../asset/portfolio_page/UX/header_thumbnail.png" alt="UFit UX Design Portfolio">
+                            <div class="content-details fadeIn-bottom">
+                                <h3 class="content-title">UFit — View Case Study</h3>
+                                <p class="content-text">UI/UX Design · Prototyping</p>
+                            </div>
+                        </div>
+                        <div class="kuda_hero_info">
+                            <h3 class="kuda_title font_w_font_s">UFit — Fitness &amp; Nutrition App</h3>
+                            <p class="kuda_subtitle font_w_font_s1">UX Designer &nbsp;·&nbsp; Mobile App &nbsp;·&nbsp; Design Thinking</p>
+                            <p class="kuda_desc font_w_font_s1">End-to-end UX design case study for UFit, a mobile fitness and nutrition app. Using design thinking and user-centred design principles, I led the full UX process — from user interviews and affinity mapping through to low-fi wireframes, a Whimsical prototype, and structured usability testing.</p>
+                            <div class="kuda_tags">
+                                <span class="kuda_tag">UX Design</span>
+                                <span class="kuda_tag">User Research</span>
+                                <span class="kuda_tag">Prototyping</span>
+                                <span class="kuda_tag">Usability Testing</span>
+                                <span class="kuda_tag">Design Thinking</span>
+                            </div>
+                            <button class="download_cv ux-pop-up font_w_font_s" style="margin-top:20px;">
+                                <i class="ri-eye-line"></i> View Full Case Study
+                            </button>
+                        </div>
+                    </div>
+
+                </section>
+                <!-- ======================================= Portfolio Section End  ================================== -->
+                <!-- ======================================= Testimonials Section  ================================== -->
+                <section class="oliva-intro tabcontent" id="testimonials" style="display:none">
+                    <div class="intro_main">
+                        <h2 class="intro font_w_font_s fade_up">testimonials</h2>
+                    </div>
+                    <h2 class="moswa font_w_font_s fade_up">Trusted By Hundred Clients</h2>
+                    <h3 class="passionate font_w_font_s1 fade_up">Aliquam aenean quis massa sagittis quis. Aliquam metus
+                        vel curabitur est bibendum scelerisque urna semper.
+                    </h3>
+                    <div class="testimonials_card">
+                        <div>
+                            <div class="slider_contain_main">
+                                <div class="img_text">
+                                    <img class="client_img" src="../asset/images/testimonial_img.png"
+                                        alt="testimonial_img">
+                                    <div>
+                                        <h4 class="client_name font_w_font_s">John Doe</h4>
+                                        <p class="client_roll font_w_font_s1">CEO of AAC Intra</p>
+                                    </div>
+                                </div>
+                                <img class="collan" src="../asset/images/collan.png" alt="collan">
+                            </div>
+                            <div class="rating_main">
+                                <img src="../asset/images/rating.png" alt="rating">
+                            </div>
+                            <h3 class="placerat font_w_font_s1">Volutpat placerat pellentesque sed ut donec. Massa et
+                                quam pellentesque lorem at dolor dui a et. Nullam aliquet pharetra eu odio egestas nunc
+                                bibendum porttitor in. Nunc magna nunc nunc amet id sed sed platea elementum. Feugiat
+                                pharetra eleifend fringilla volutpat arcu. Dolor eget ut mi cursus faucibus risus
+                                tristique sit. Vitae pellentesque ac cras nisi tempus orci.
+                            </h3>
+                        </div>
+                        <div>
+                            <div class="slider_contain_main">
+                                <div class="img_text">
+                                    <img class="client_img" src="../asset/images/testimonial_img2.png"
+                                        alt="testimonial_img2">
+                                    <div>
+                                        <h4 class="client_name font_w_font_s">Mark Daly</h4>
+                                        <p class="client_roll font_w_font_s1">CEO</p>
+                                    </div>
+                                </div>
+                                <img class="collan" src="../asset/images/collan.png" alt="collan">
+                            </div>
+                            <div class="rating_main">
+                                <img src="../asset/images/rating.png" alt="rating">
+                            </div>
+                            <h3 class="placerat font_w_font_s1">Volutpat placerat pellentesque sed ut donec. Massa et
+                                quam pellentesque lorem at dolor dui a et. Nullam aliquet pharetra eu odio egestas nunc
+                                bibendum porttitor in. Nunc magna nunc nunc amet id sed sed platea elementum. Feugiat
+                                pharetra eleifend fringilla volutpat arcu. Dolor eget ut mi cursus faucibus risus
+                                tristique sit. Vitae pellentesque ac cras nisi tempus orci.
+                            </h3>
+                        </div>
+                        <div>
+                            <div class="slider_contain_main">
+                                <div class="img_text">
+                                    <img class="client_img" src="../asset/images/testimonial_img3.png"
+                                        alt="testimonial_img3">
+                                    <div>
+                                        <h4 class="client_name font_w_font_s">Dan Sawyer</h4>
+                                        <p class="client_roll font_w_font_s1">Manager</p>
+                                    </div>
+                                </div>
+                                <img class="collan" src="../asset/images/collan.png" alt="collan">
+                            </div>
+                            <div class="rating_main">
+                                <img src="../asset/images/rating.png" alt="rating">
+                            </div>
+                            <h3 class="placerat font_w_font_s1">Volutpat placerat pellentesque sed ut donec. Massa et
+                                quam pellentesque lorem at dolor dui a et. Nullam aliquet pharetra eu odio egestas nunc
+                                bibendum porttitor in. Nunc magna nunc nunc amet id sed sed platea elementum. Feugiat
+                                pharetra eleifend fringilla volutpat arcu. Dolor eget ut mi cursus faucibus risus
+                                tristique sit. Vitae pellentesque ac cras nisi tempus orci.
+                            </h3>
+                        </div>
+                        <div>
+                            <div class="slider_contain_main">
+                                <div class="img_text">
+                                    <img class="client_img" src="../asset/images/testimonial_img4.png"
+                                        alt="testimonial_img4">
+                                    <div>
+                                        <h4 class="client_name font_w_font_s">Andrew Lewis</h4>
+                                        <p class="client_roll font_w_font_s1">Developer</p>
+                                    </div>
+                                </div>
+                                <img class="collan" src="../asset/images/collan.png" alt="collan">
+                            </div>
+                            <div class="rating_main">
+                                <img src="../asset/images/rating.png" alt="rating">
+                            </div>
+                            <h3 class="placerat font_w_font_s1">Volutpat placerat pellentesque sed ut donec. Massa et
+                                quam pellentesque lorem at dolor dui a et. Nullam aliquet pharetra eu odio egestas nunc
+                                bibendum porttitor in. Nunc magna nunc nunc amet id sed sed platea elementum. Feugiat
+                                pharetra eleifend fringilla volutpat arcu. Dolor eget ut mi cursus faucibus risus
+                                tristique sit. Vitae pellentesque ac cras nisi tempus orci.
+                            </h3>
+                        </div>
+                        <div>
+                            <div class="slider_contain_main">
+                                <div class="img_text">
+                                    <img class="client_img" src="../asset/images/testimonial_img5.png"
+                                        alt="testimonial_img4">
+                                    <div>
+                                        <h4 class="client_name font_w_font_s">Lewi Andrew </h4>
+                                        <p class="client_roll font_w_font_s1">Developer</p>
+                                    </div>
+                                </div>
+                                <img class="collan" src="../asset/images/collan.png" alt="collan">
+                            </div>
+                            <div class="rating_main">
+                                <img src="../asset/images/rating.png" alt="rating">
+                            </div>
+                            <h3 class="placerat font_w_font_s1">Volutpat placerat pellentesque sed ut donec. Massa et
+                                quam pellentesque lorem at dolor dui a et. Nullam aliquet pharetra eu odio egestas nunc
+                                bibendum porttitor in. Nunc magna nunc nunc amet id sed sed platea elementum. Feugiat
+                                pharetra eleifend fringilla volutpat arcu. Dolor eget ut mi cursus faucibus risus
+                                tristique sit. Vitae pellentesque ac cras nisi tempus orci.
+                            </h3>
+                        </div>
+                    </div>
+                </section>
+                <!-- ======================================= Testimonials Section End ================================== -->
+                <!-- ======================================= Blog Section  ================================== -->
+                <section class="oliva-intro tabcontent" id="blog">
+                    <div class="intro_main">
+                        <h2 class="intro font_w_font_s fade_up">Blogs</h2>
+                    </div>
+                    <h2 class="moswa font_w_font_s fade_up">Featured Article</h2>
+                    <h3 class="passionate font_w_font_s1 fade_up">Thoughts on AI, product design, and the digital world.
+                    </h3>
+                    <div id="featured-article" class="fade_up">
+                        <p class="web_development font_w_font_s1">Loading...</p>
+                    </div>
+                </section>
+                <!-- ======================================= Blog Section End  ================================== -->
+                <!-- ======================================= Contact us Section  ================================== -->
+                <section class="oliva-intro tabcontent" id="contact">
+                    <div class="intro_main">
+                        <h2 class="intro fade_up">contact us</h2>
+                    </div>
+                    <h2 class="moswa fade_up">Let's Build Something Great Together!</h2>
+                    <form id="contact-form">
+                        <input type="hidden" name="access_key" value="5666ce19-d767-4f34-981b-ddc8d24a8e36">
+                        <input type="hidden" name="redirect" value="false">
+                        <div class="container1">
+                            <div class="form form__1">
+                                <label for="name" class="form__label">What’s Your Name*</label>
+                                <input type="text" class="form__input" placeholder="" id="name" name="name" required autocomplete="off">
+                            </div>
+                            <div class="form form__2">
+                                <label for="email" class="form__label">Your Email*</label>
+                                <input type="email" class="form__input" placeholder="" id="email" name="email" required autocomplete="off">
+                            </div>
+                            <div class="form form__1 active" id="phone-form-group">
+                                <label for="phone" class="form__label phone_label_static">Your Phone Number*</label>
+                                <div class="phone_input_group">
+                                    <div class="custom_code_select" id="custom_code_select">
+                                        <div class="code_trigger" id="code_trigger">
+                                            <span class="code_value">+44 🇬🇧</span>
+                                            <i class="ri-arrow-down-s-line code_arrow"></i>
+                                        </div>
+                                        <ul class="code_options" id="code_options">
+                                            <li class="code_option selected" data-value="+44">+44 🇬🇧</li>
+                                            <li class="code_option" data-value="+1">+1 🇺🇸</li>
+                                            <li class="code_option" data-value="+234">+234 🇳🇬</li>
+                                            <li class="code_option" data-value="+33">+33 🇫🇷</li>
+                                            <li class="code_option" data-value="+49">+49 🇩🇪</li>
+                                            <li class="code_option" data-value="+91">+91 🇮🇳</li>
+                                            <li class="code_option" data-value="+27">+27 🇿🇦</li>
+                                            <li class="code_option" data-value="+254">+254 🇰🇪</li>
+                                            <li class="code_option" data-value="+233">+233 🇬🇭</li>
+                                            <li class="code_option" data-value="+55">+55 🇧🇷</li>
+                                            <li class="code_option" data-value="+61">+61 🇦🇺</li>
+                                            <li class="code_option" data-value="+7">+7 🇷🇺</li>
+                                            <li class="code_option" data-value="+81">+81 🇯🇵</li>
+                                            <li class="code_option" data-value="+82">+82 🇰🇷</li>
+                                            <li class="code_option" data-value="+971">+971 🇦🇪</li>
+                                        </ul>
+                                        <input type="hidden" id="phone_code" name="phone_code" value="+44">
+                                    </div>
+                                    <input type="tel" class="form__input phone_number_input" placeholder="Number" id="phone" name="phone" required autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form form__1">
+                                <label for="subject" class="form__label">Subject*</label>
+                                <input type="text" class="form__input" placeholder="" id="subject" name="subject" required autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="btn_message">
+                            <div class="form form__3">
+                                <label for="project" class="form__label">Tell us about your project*</label>
+                                <input type="text" class="form__input message2" placeholder="" id="project" name="message" required>
+                                <div class="file_upload_area" id="file_upload_area">
+                                    <input type="file" id="file_upload" name="attachments" multiple accept=".png,.pptx,.pdf,.doc,.docx" style="display:none">
+                                    <div class="file_upload_trigger" id="file_upload_trigger">
+                                        <i class="ri-attachment-2"></i>
+                                        <span>Attach files &nbsp;·&nbsp; PNG, PDF, PPTX, Word</span>
+                                    </div>
+                                    <ul class="file_upload_list" id="file_upload_list"></ul>
+                                </div>
+                            </div>
+                            <div class="send_message_form">
+                                <button type="submit" class="download_cv form__btn">
+                                    <i class="fa-regular fa-paper-plane material-icons"></i>Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="form-status" style="display:none; margin: 10px 0; font-size: 15px; font-weight: 600;"></div>
+                    <div>
+                        <h3 class="moswa touch">Get in touch!</h3>
+                        <div class="contact_number_main">
+                            <img src="../asset/images/contact.svg" alt="contact">
+                            <h4 class="contact_number"><a href="tel:+447352843248">+44 7352 843248</a></h4>
+                        </div>
+                        <div class="contact_number_main">
+                            <img src="../asset/images/gmail.svg" alt="gmail">
+                            <h4 class="contact_number"><a href="mailto:nanaotuokon@gmail.com">nanaotuokon@gmail.com</a></h4>
+                        </div>
+                        <div class="contact_number_main">
+                            <img src="../asset/images/map.svg" alt="map">
+                            <h4 class="contact_number">
+                                <a href="javascript:void(0);">Newcastle upon Tyne, UK</a>
+                            </h4>
+                        </div>
+                    </div>
+                    <iframe
+                        src="https://maps.google.com/maps?q=Newcastle+upon+Tyne,+UK&output=embed&z=13"
+                        style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <h5 class="copyright">© Ena Helena Otuokon 2025. All rights reserved.</h5>
+                </section>
+                <!-- ======================================= Contact us Section End ================================== -->
+            </div>
+        </section>
+        <!-- ======================================= Social Media Right Side  ================================== -->
+        <div class="social_media_main" id="social_media_main">
+            <ul class="social_media">
+                <li><a href="https://x.com/wrldcr8tive" target="_blank">X</a></li>
+                <li><a href="https://www.instagram.com" target="_blank">IG</a></li>
+                <li><a href="https://www.linkedin.com" target="_blank">LI</a></li>
+                <li><a href="https://medium.com/@otuokonhelena" target="_blank">MD</a></li>
+            </ul>
+        </div>
+        <!-- ======================================= Social Media Right Side End ================================== -->
+        <!-- ======================================= Portfolio PopUp Window  ================================== -->
+        <div class="overlay">
+            <div class="content2">
+                <div id="close">
+                    <i class="ri-close-fill"></i>
+                </div>
+
+                <!-- Case Study Header -->
+                <div class="kuda_cs_header">
+                    <h3 class="kuda_cs_title font_w_font_s">Kuda Teens Debit Card</h3>
+                    <p class="kuda_cs_subtitle font_w_font_s1">Product Management &nbsp;·&nbsp; Fintech &nbsp;·&nbsp; UX Research</p>
+                </div>
+
+                <!-- Carousel — images only, text updates below -->
+                <div class="kuda_case_slider">
+                    <div><img src="../asset/portfolio_page/kuda_teens/01_problem_statement.png" alt="Problem Statement"></div>
+                    <div><img src="../asset/portfolio_page/kuda_teens/04_market_research.png" alt="Market Research"></div>
+                    <div><img src="../asset/portfolio_page/kuda_teens/02_assumption_mapping.png" alt="Assumption Mapping"></div>
+                    <div><img src="../asset/portfolio_page/kuda_teens/03_risk_importance_graph.png" alt="Risk Importance Graph"></div>
+                    <div><img src="../asset/portfolio_page/kuda_teens/05_parent_user_interviews.png" alt="Parent User Interviews"></div>
+                    <div><img src="../asset/portfolio_page/kuda_teens/06_teen_user_interviews.png" alt="Teen User Interviews"></div>
+                    <div><img src="../asset/portfolio_page/kuda_teens/07_key_findings.png" alt="Key Findings"></div>
+                    <div><img src="../asset/portfolio_page/kuda_teens/08_moscow_framework.png" alt="Feature Prioritisation"></div>
+                    <div><img src="../asset/portfolio_page/kuda_teens/09_value_vs_effort_map.png" alt="MVP Definition"></div>
+                    <div><img src="../asset/portfolio_page/kuda_teens/10_user_stories.png" alt="User Stories"></div>
+                </div>
+
+                <!-- Slide info: updates on slide change -->
+                <div class="kuda_slide_info">
+                    <h4 id="kuda_slide_title" class="kuda_cs_section_title font_w_font_s">Problem Statement</h4>
+                    <p id="kuda_slide_text" class="kuda_cs_text font_w_font_s1">Teens in Nigeria lacked a safe, controlled way to access and manage money. Parents had no visibility into their child's spending. I led the product strategy for Kuda Teens — a prepaid debit card and digital banking experience built for teens aged 11–18 and their parents.</p>
+                </div>
+
+                <!-- Bottom meta: Role / Tools / Timeline -->
+                <div class="kuda_cs_footer">
+                    <div class="kuda_cs_footer_item">
+                        <h5 class="kuda_cs_footer_label font_w_font_s">My Role</h5>
+                        <p class="kuda_cs_footer_value font_w_font_s1">Product Manager · UX Researcher · Market Analyst</p>
+                    </div>
+                    <div class="kuda_cs_footer_item">
+                        <h5 class="kuda_cs_footer_label font_w_font_s">Tools</h5>
+                        <p class="kuda_cs_footer_value font_w_font_s1">Figma · Canva · Google Forms · Photoshop</p>
+                    </div>
+                    <div class="kuda_cs_footer_item">
+                        <h5 class="kuda_cs_footer_label font_w_font_s">Timeline</h5>
+                        <p class="kuda_cs_footer_value font_w_font_s1">July 2023</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- ======================================= Portfolio PopUp Window End ================================== -->
+        <!-- ======================================= UX PopUp Window  ================================== -->
+        <div class="overlay" id="ux-overlay">
+            <div class="content2">
+                <div id="ux-close">
+                    <i class="ri-close-fill"></i>
+                </div>
+
+                <!-- Case Study Header -->
+                <div class="kuda_cs_header">
+                    <h3 class="kuda_cs_title font_w_font_s">UFit — Fitness &amp; Nutrition App</h3>
+                    <p class="kuda_cs_subtitle font_w_font_s1">UX Design &nbsp;·&nbsp; User Research &nbsp;·&nbsp; Prototyping &nbsp;·&nbsp; Usability Testing</p>
+                </div>
+
+                <!-- Carousel -->
+                <div class="ux_case_slider">
+                    <div><img src="../asset/portfolio_page/UX/ux_01_project_overview.png" alt="Project Overview"></div>
+                    <div><img src="../asset/portfolio_page/UX/ux_02_user_research.png" alt="User Research"></div>
+                    <div><img src="../asset/portfolio_page/UX/ux_03_affinity_map.png" alt="Affinity Map"></div>
+                    <div><img src="../asset/portfolio_page/UX/ux_04_user_persona.png" alt="User Persona"></div>
+                    <div><img src="../asset/portfolio_page/UX/ux_05_problem_statement.png" alt="Problem Statement"></div>
+                    <div><img src="../asset/portfolio_page/UX/ux_06_lightning_demo.png" alt="Lightning Demo"></div>
+                    <div><img src="../asset/portfolio_page/UX/ux_07_brainstorming.png" alt="Brainstorming"></div>
+                    <div><img src="../asset/portfolio_page/UX/ux_08_lofi_wireframes_1.png" alt="Lo-Fi Wireframes 1"></div>
+                    <div><img src="../asset/portfolio_page/UX/ux_09_lofi_wireframes_2.png" alt="Lo-Fi Wireframes 2"></div>
+                    <div><img src="../asset/portfolio_page/UX/ux_10_prototype.png" alt="Prototype"></div>
+                    <div><img src="../asset/portfolio_page/UX/ux_11_usability_testing_flow1.png" alt="Usability Testing Flow 1"></div>
+                    <div><img src="../asset/portfolio_page/UX/ux_12_usability_testing_flow2.png" alt="Usability Testing Flow 2"></div>
+                </div>
+
+                <!-- Slide info -->
+                <div class="kuda_slide_info">
+                    <h4 id="ux_slide_title" class="kuda_cs_section_title font_w_font_s">Project Overview</h4>
+                    <p id="ux_slide_text" class="kuda_cs_text font_w_font_s1">UFit is a mobile fitness and nutrition app designed to help users track workouts, set goals, and receive personalised meal recommendations. Using design thinking and user-centred design principles, I led the full UX process — from user research through to prototype testing — to create an intuitive and motivating health experience.</p>
+                </div>
+
+                <!-- Footer -->
+                <div class="kuda_cs_footer">
+                    <div class="kuda_cs_footer_item">
+                        <h5 class="kuda_cs_footer_label font_w_font_s">My Role</h5>
+                        <p class="kuda_cs_footer_value font_w_font_s1">UX Designer · User Researcher · Prototype Designer</p>
+                    </div>
+                    <div class="kuda_cs_footer_item">
+                        <h5 class="kuda_cs_footer_label font_w_font_s">Tools</h5>
+                        <p class="kuda_cs_footer_value font_w_font_s1">Whimsical · Google Forms · Figma · Canva</p>
+                    </div>
+                    <div class="kuda_cs_footer_item">
+                        <h5 class="kuda_cs_footer_label font_w_font_s">Method</h5>
+                        <p class="kuda_cs_footer_value font_w_font_s1">Design Thinking · User Interviews · Affinity Mapping · Usability Testing</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- ======================================= UX PopUp Window End ================================== -->
+        <!-- ======================================= Blog PopUp Window  ================================== -->
+        <div class="modal-wrapper">
+            <div class="modal">
+                <div class="content3">
+                    <h3 class="logo_design">11 Best Logo Design Online & Offline Courses</h3>
+                    <h4 class="graphic font_w_font_s1">graphic design | December 18, 2023</h4>
+                    <div class="blog_pop_up_main">
+                        <img class="blog_pop_up " src="../asset/images/blog_pop_up.png" alt="blog_pop_up">
+                    </div>
+                    <h4 class="nunc font_w_font_s1">
+                        Mi fames nunc donec diam mi arcu. Vitae justo consequat blandit proin tellus feugiat dignissim.
+                        Nibh fames cursus amet tempor pharetra. Sit nulla aliquam adipiscing auctor non id adipiscing
+                        dictum non. Augue id eleifend facilisi ac egestas dui quis. Sit a viverra tristique volutpat
+                        amet odio. Molestie blandit et donec convallis rhoncus.
+                    </h4>
+                    <h4 class="nunc font_w_font_s1">Non tincidunt pulvinar nunc enim pulvinar purus pellentesque est
+                        felis. Et quam rhoncus egestas in sed at pellentesque faucibus. Diam sollicitudin non et
+                        placerat odio sed nunc. Faucibus tempor nunc eu volutpat auctor cursus quis. Scelerisque nisi
+                        turpis in lorem magna ultrices.
+                    </h4>
+                    <div class="blog-pop-up-list-main">
+                        <ul class="blog-pop-up-list">
+                            <li>Mi fames nunc donec diam mi arcu. Vitae justo consequat blandit proin tellus
+                                feugiat dignissim.</li>
+                            <li>Nibh fames cursus amet tempor pharetra.</li>
+                            <li>Sit nulla aliquam adipiscing auctor non id adipiscing dictum non.</li>
+                            <li>Augue id eleifend facilisi ac egestas dui quis. Sit a viverra tristique
+                                volutpat amet odio.</li>
+                            <li>Molestie blandit et donec convallis rhoncus.</li>
+                            <li>Non tincidunt pulvinar nunc enim pulvinar purus pellentesque est felis.</li>
+                            <li>Et quam rhoncus egestas in sed at pellentesque faucibus. Diam sollicitudin
+                                non et placerat odio sed nunc.</li>
+                        </ul>
+                    </div>
+                    <div class="small_blog ">
+                        <h5 class="integer font_w_font_s1">Vel augue ullamcorper integer risus cras aliquet nisl.
+                            Consequat ipsum dui orci adipiscing egestas molestie non. Et tristique ipsum gravida pretium
+                            massa curabitur ac auctor adipiscing. Sit odio tellus hendrerit suspendisse non.
+                        </h5>
+                        <div class="line_client">
+                            <div class="line"></div>
+                            <h5 class="jordon font_w_font_s">By Jordon Smith</h5>
+                        </div>
+                    </div>
+                    <h5 class="viverra font_w_font_s">Viverra habitasse nunc praesent enim bibendum. Lectus ornare in
+                        facilisis.</h5>
+                    <h5 class="integer vel font_w_font_s1">
+                        Vel augue ullamcorper integer risus cras aliquet nisl. Consequat ipsum dui orci adipiscing
+                        egestas molestie non. Et tristique ipsum gravida pretium massa curabitur ac auctor adipiscing.
+                        Sit odio tellus hendrerit suspendisse non. Phasellus aenean tellus in nisl fusce orci tristique
+                        augue eget. Commodo lacus volutpat libero mauris pulvinar id pellentesque est. Habitant
+                        habitasse nunc commodo odio lectus ipsum.
+                    </h5>
+                    <div class="blog_pop_up_slider">
+                        <div class="blog_img_main">
+                            <img class="blog_slider_img" src="../asset/images/blog_slider_img1.png"
+                                alt="blog_slider_img1">
+                        </div>
+                        <div class="blog_img_main">
+                            <img class="blog_slider_img" src="../asset/images/blog_slider_img2.png"
+                                alt="blog_slider_img2">
+                        </div>
+                        <div class="blog_img_main">
+                            <img class="blog_slider_img" src="../asset/images/blog_slider_img3.png"
+                                alt="blog_slider_img3">
+                        </div>
+                        <div class="blog_img_main">
+                            <img class="blog_slider_img" src="../asset/images/blog_slider_img4.png"
+                                alt="blog_slider_img4">
+                        </div>
+                    </div>
+                    <h5 class="integer eget font_w_font_s1">
+                        Non vel eget pharetra vestibulum orci amet feugiat mi cras. Neque ac duis sed viverra volutpat.
+                        Natoque habitasse sit in interdum ut in pharetra proin amet. Non id egestas tellus enim nisi
+                        proin. Vel neque gravida sed nunc. Scelerisque vulputate sit tellus dui. Sollicitudin id nec
+                        amet porttitor id. In condimentum id id phasellus eu lobortis quis porta nisi.
+                    </h5>
+                    <div class="next_prev_share  position-relative">
+                        <div class="next_prev_arrow">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <h5 class="blog_next_prev font_w_font_s1">Prev</h5>
+                        </div>
+                        <div class="share-button share share2">
+                            <i class="ri-share-line share-btn share-btn2"></i>
+                            <div class="social top center networks-5 ">
+                                <a class="fbtn facebook" href="https://www.facebook.com" target="_blank">
+                                    <i class="ri-facebook-fill"></i>
+                                </a>
+                                <a class="fbtn instagram" href="https://www.instagram.com" target="_blank">
+                                    <i class="ri-instagram-line"></i>
+                                </a>
+                                <a class="fbtn whatsapp" href="https://wa.me/+12345678899" target="_blank">
+                                    <i class="ri-whatsapp-line"></i>
+                                </a>
+                                <a class="fbtn linkedin" href="https://www.linkedin.com" target="_blank">
+                                    <i class="ri-linkedin-fill"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="next_prev_arrow">
+                            <h5 class="blog_next_prev font_w_font_s1">Next</h5>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    <div class="page-wrapper trigger">
+                        <div class="circle-wrapper">
+                            <div class="warning circle_close"></div>
+                            <div class="close-btn font_w_font_s1">CLOSE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ======================================= Portfolio gallery ================================== -->
+    <div id="popup1" class="overlay_gallery">
+        <div class="popup_gallery">
+            <h2 class="city_gallery">City 3D View Gallery</h2>
+            <a class="close" href="#">&times;</a>
+            <div id="cbwrap">
+                <div class="gallery">
+                    <img src="../asset/images/gallery_img1.png" alt="gallery_img1">
+                    <img src="../asset/images/gallery_img2.png" alt="gallery_img2">
+                    <img src="../asset/images/gallery_img3.png" alt="gallery_img3">
+                    <img src="../asset/images/gallery_img4.png" alt="gallery_img4">
+                    <img src="../asset/images/gallery_img5.png" alt="gallery_img5">
+                    <img src="../asset/images/gallery_img1.png" alt="gallery_img1">
+                    <img src="../asset/images/gallery_img4.png" alt="gallery_img4">
+                    <img src="../asset/images/gallery_img2.png" alt="gallery_img2">
+                    <img src="../asset/images/gallery_img5.png" alt="gallery_img5">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../asset/javascript/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="../asset/javascript/circle_progress.js"></script>
+    <script src="../asset/javascript/cursor.js"></script>
+    <script src="../asset/javascript/bootstrap.bundle.min.js"></script>
+    <script src="../asset/javascript/slick.min.js"></script>
+    <script src="../asset/javascript/hexagon_animation/particles.min.js"></script>
+    <script src="../asset/javascript/spider_animation/spider_animation.js"></script>
+    <script src="../asset/javascript/script.js"></script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</body>
+
+</html>
