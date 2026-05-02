@@ -2,7 +2,7 @@
 $(document).ready(function () {
     setTimeout(function () {
         $('.wrapper').addClass('loaded');
-    }, 2500);
+    }, 1600);
 });
 
 // olivia moswa text
@@ -377,11 +377,10 @@ const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
             entry.target.classList.add('show');
-        } else {
-            entry.target.classList.remove('show');
+            observer.unobserve(entry.target);
         }
     });
-});
+}, { threshold: 0.1 });
 const hiddenElements = document.querySelectorAll('.fade_up');
 hiddenElements.forEach((el) => observer.observe(el));
 

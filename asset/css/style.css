@@ -75,6 +75,7 @@ a {
     --uiux-text-hover: #55E6A5;
     --bag: brightness(0) saturate(100%) invert(2%) sepia(4%) saturate(7498%) hue-rotate(139deg) brightness(101%) contrast(99%);
     --background-hover-card: rgba(0, 0, 0, 0.7);
+    --2: #02050A;
 }
 
 .dark-mode {
@@ -83,20 +84,21 @@ a {
     --one-background: #141C27;
     --card-background: #09101A;
     --card-text: #FFF;
-    --card-sub-text: #A2A2A2;
+    --card-sub-text: #FFFFFF;
     --button-color-hover: #FFF;
     --circle-img-border: #141C27;
     --circle-img-filter: brightness(0) saturate(100%) invert(69%) sepia(0%) saturate(0%) hue-rotate(74deg) brightness(94%) contrast(93%);
     --menu-toggle-btn: #141C27;
     --nav-menu-icon: brightness(0) saturate(100%) invert(12%) sepia(100%) saturate(6500%) hue-rotate(280deg) brightness(88%) contrast(110%) sepia(100%) saturate(0%) hue-rotate(181deg) brightness(103%) contrast(103%);
     --background-blur: linear-gradient(95deg, rgba(2, 5, 10, 0.40) 0%, rgba(2, 5, 10, 0.20) 100%);
-    --designer-text: #A2A2A2;
+    --designer-text: #FFFFFF;
     --dev-icons: brightness(0) saturate(100%) invert(12%) sepia(100%) saturate(6500%) hue-rotate(280deg) brightness(88%) contrast(110%);
     --uiux: #55E6A5;
     --uiux-hover: brightness(0) saturate(100%) invert(12%) sepia(100%) saturate(6500%) hue-rotate(280deg) brightness(88%) contrast(110%) sepia(0%) saturate(2%) hue-rotate(275deg) brightness(103%) contrast(103%);
     --uiux-text-hover: #FFF;
     --bag: brightness(0) saturate(100%) invert(12%) sepia(100%) saturate(6500%) hue-rotate(280deg) brightness(88%) contrast(110%) sepia(100%) saturate(0%) hue-rotate(286deg) brightness(101%) contrast(101%);
     --background-hover-card: rgba(172, 171, 171, 0.603);
+    --2: #FFF;
 }
 
 body {
@@ -166,40 +168,29 @@ body {
 }
 
 #loader svg text {
-    text-transform: uppercase;
-    animation: stroke 3s alternate;
-    stroke-width: 2;
-    stroke: #440047;
+    animation: loader-glow 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    fill: transparent;
+    stroke: none;
     font-size: 100px;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: 4px;
 }
 
-@keyframes stroke {
+@keyframes loader-glow {
     0% {
-        fill: rgba(72, 138, 20, 0);
-        stroke: #440047;
-        stroke-dashoffset: 25%;
-        stroke-dasharray: 0 50%;
-        stroke-width: 2;
+        fill: transparent;
+        opacity: 0;
+        filter: blur(24px) drop-shadow(0 0 0px rgba(244, 31, 255, 0));
     }
-
-    70% {
-        fill: rgba(72, 138, 20, 0);
-        stroke: #440047;
+    40% {
+        opacity: 1;
+        fill: rgba(244, 31, 255, 0.4);
+        filter: blur(6px) drop-shadow(0 0 40px rgba(244, 31, 255, 1));
     }
-
-    80% {
-        fill: rgba(72, 138, 20, 0);
-        stroke: #440047;
-        stroke-width: 3;
-    }
-
     100% {
-        fill: #440047;
-        stroke: rgba(54, 95, 160, 0);
-        stroke-dashoffset: -25%;
-        stroke-dasharray: 50% 0;
-        stroke-width: 0;
+        fill: #F41FFF;
+        opacity: 1;
+        filter: blur(0px) drop-shadow(0 0 18px rgba(244, 31, 255, 0.55));
     }
 }
 
@@ -1256,6 +1247,30 @@ button:hover {
     background-color: var(--one-background);
     padding: 20px;
     border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+}
+
+.service_box::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #9B00A3, #55E6A5);
+    transition: width 0.4s ease;
+    border-radius: 0 0 20px 20px;
+}
+
+.service_box:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(155, 0, 163, 0.2);
+}
+
+.service_box:hover::after {
+    width: 100%;
 }
 
 .services_icon {
@@ -1295,7 +1310,7 @@ button:hover {
 .plan_box {
     border-radius: 20px;
     border: 2px solid var(--one-background);
-    transition: all 0.5s;
+    transition: all 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 #plan_box,
@@ -1305,7 +1320,8 @@ button:hover {
 
 .plan_box:hover {
     border: 2px solid #55E6A5;
-    transition: all 0.5s;
+    transform: translateY(-5px);
+    box-shadow: 0 16px 36px rgba(85, 230, 165, 0.18);
 }
 
 .plan_box_sub {
@@ -1436,7 +1452,9 @@ button:hover .shopping_bag {
     dominant-baseline: hanging;
     text-anchor: middle;
     font-size: 5px;
-    fill: var(--card-text);
+    fill: #F41FFF;
+    filter: drop-shadow(0 0 3px rgba(244, 31, 255, 0.8));
+    font-weight: 700;
 }
 
 .success-stroke {
@@ -1478,10 +1496,13 @@ button:hover .shopping_bag {
     align-items: center;
     flex-direction: column;
     justify-content: space-evenly;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.3s;
 }
 
 .hard_skill_group:hover {
     border: 2px solid #55E6A5;
+    transform: translateY(-6px) scale(1.04);
+    box-shadow: 0 16px 32px rgba(85, 230, 165, 0.25);
 }
 
 .hard_skill_counter {
@@ -1526,6 +1547,13 @@ button:hover .shopping_bag {
     width: 100%;
     max-width: 100%;
     margin: auto;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.content_portfolio:hover {
+    transform: scale(1.03);
 }
 
 .content_portfolio .content-overlay {
@@ -1811,6 +1839,7 @@ button:hover .shopping_bag {
 
 .blog_img:hover {
     filter: drop-shadow(0px 10px 20px rgba(2, 5, 10, 0.40));
+    transform: translateY(-5px);
     transition: all 0.5s ease-in-out;
 }
 
@@ -2983,14 +3012,12 @@ ul {
 /*-----------------------[ 22.Whole Page Aniamtion CSS ]------------------------*/
 .fade_up {
     opacity: 0;
-    transition: all 2s;
-    filter: blur(1px);
-    transform: translateY(-100%);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    transform: translateY(28px);
 }
 
 .show {
     opacity: 1;
-    filter: blur(0);
     transform: translateY(0);
 }
 
