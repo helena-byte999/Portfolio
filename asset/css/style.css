@@ -75,7 +75,7 @@ a {
     --uiux-text-hover: #55E6A5;
     --bag: brightness(0) saturate(100%) invert(2%) sepia(4%) saturate(7498%) hue-rotate(139deg) brightness(101%) contrast(99%);
     --background-hover-card: rgba(0, 0, 0, 0.7);
-    --2: #02050A;
+    --2: #FFF;
 }
 
 .dark-mode {
