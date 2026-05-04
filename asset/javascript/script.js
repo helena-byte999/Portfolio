@@ -100,13 +100,6 @@ $("#ux-close").on("click", function () {
     $("#ux-overlay").removeClass("is-on");
 });
 
-// Portfolio Pop-up — AfroGospel
-$(".agm-pop-up").on("click", function () {
-    $("#agm-overlay").addClass("is-on");
-});
-$("#agm-close").on("click", function () {
-    $("#agm-overlay").removeClass("is-on");
-});
 // Portfolio Pop-up end
 
 // Share Btn
@@ -205,55 +198,6 @@ $(function () {
     }
 });
 // Kuda Teens Case Study Carousel End
-
-// AfroGospel Case Study Carousel
-var agmSlides = [
-    {
-        title: 'Homepage',
-        text: 'The AfroGospel Music homepage introduces the platform with a clean, modern layout — featuring navigation to the blog, library, events, shop, and Akoko Daily devotional service. Designed to feel welcoming and on-brand for the afrogospel music community.'
-    },
-    {
-        title: 'Blog',
-        text: 'The blog section showcases articles exploring gospel music topics, artist profiles, and industry discussions. I designed the post listing layout, typography hierarchy, and category system to make content discovery intuitive for readers.'
-    },
-    {
-        title: 'Library',
-        text: 'The audio library gives users access to gospel music with an integrated streaming player. I designed the browsing experience, playlist UI, and audio player controls to feel familiar yet spiritually resonant.'
-    },
-    {
-        title: 'Events',
-        text: 'The events calendar connects the afrogospel community with upcoming concerts, worship gatherings, and online experiences. Designed for clarity and ease of discovery across desktop and mobile.'
-    },
-    {
-        title: 'Shop',
-        text: 'The shop allows fans to purchase music, merchandise, and resources from afrogospel artists. I designed the product listing pages, cart experience, and checkout flow with a clean, trustworthy aesthetic.'
-    },
-    {
-        title: 'Akoko Daily',
-        text: 'Akoko Daily is a devotional subscription service — short, gentle daily pauses with God delivered by email. I designed the landing page and subscription flow to communicate warmth, spiritual depth, and simplicity.'
-    }
-];
-
-$(function () {
-    if ($('.agm_case_slider').length) {
-        $('.agm_case_slider').slick({
-            centerMode: true,
-            centerPadding: '70px',
-            slidesToShow: 1,
-            infinite: true,
-            autoplay: false,
-            arrows: true,
-            dots: true,
-            prevArrow: '<span class="kuda_prev_arrow"><i class="ri-arrow-left-s-line"></i></span>',
-            nextArrow: '<span class="kuda_next_arrow"><i class="ri-arrow-right-s-line"></i></span>',
-        }).on('afterChange', function (e, slick, currentSlide) {
-            var s = agmSlides[currentSlide];
-            $('#agm_slide_title').text(s.title);
-            $('#agm_slide_text').text(s.text);
-        });
-    }
-});
-// AfroGospel Case Study Carousel End
 
 // UFit UX Case Study Carousel
 var uxSlides = [
