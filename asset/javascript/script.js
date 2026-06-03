@@ -100,6 +100,14 @@ $("#ux-close").on("click", function () {
     $("#ux-overlay").removeClass("is-on");
 });
 
+// Portfolio Pop-up — MOV.IE REC
+$(".movierec-pop-up").on("click", function () {
+    $("#movierec-overlay").addClass("is-on");
+});
+$("#movierec-close").on("click", function () {
+    $("#movierec-overlay").removeClass("is-on");
+});
+
 // Portfolio Pop-up end
 
 // Share Btn
@@ -271,6 +279,51 @@ $(function () {
     }
 });
 // UFit UX Case Study Carousel End
+
+// MOV.IE REC Case Study Carousel
+var movierecSlides = [
+    {
+        title: 'Project Overview',
+        text: 'MOV.IE REC is a full-stack, production-deployed AI recommender inspired by Netflix and Spotify. Built entirely from scratch, it serves personalised movie and TV show recommendations using a two-stage ML pipeline — combining content-based filtering with collaborative filtering, live at movierec-gzsa.onrender.com.'
+    },
+    {
+        title: 'ML Pipeline — Stage 1: Content Retrieval',
+        text: 'The first stage uses TF-IDF vectorisation on movie metadata (genres, cast, keywords, overview) to build a sparse cosine similarity index. The index was compressed from 1.24GB to 30MB using a top-300 sparse storage format, making it deployable on a free-tier server without memory constraints.'
+    },
+    {
+        title: 'ML Pipeline — Stage 2: Quality Reranking',
+        text: 'The top-300 candidates from stage 1 are reranked using a blended score: 60% content similarity, 30% Bayesian-weighted quality score (IMDb formula with Rotten Tomatoes and Metacritic when available), and 10% recency boost for 2022+ titles. A diversity injection stage de-clusters the top 10 by genre — mirroring Netflix\'s approach.'
+    },
+    {
+        title: 'Personalisation — Collaborative Filtering',
+        text: 'Logged-in users get an affinity vector built from their watch history and watchlist using item-based collaborative filtering. This adjusts the ranking formula to blend content similarity (50%) with user affinity (20%), quality (20%), and recency (10%). The /api/for_you endpoint serves a personalised feed refreshed on each login.'
+    },
+    {
+        title: 'Architecture & Tech Stack',
+        text: 'Backend: Python, Flask, SQLAlchemy, scikit-learn, NumPy, Pandas. Database: PostgreSQL (Neon free tier). Auth: Flask-Login + Google OAuth (Authlib). APIs: TMDB (posters, streaming providers, reviews), OMDB (Rotten Tomatoes, Metacritic). Hosting: Render. 14 unit tests. The site supports 5 UI languages and 22 regions with per-session caching.'
+    }
+];
+
+$(document).ready(function () {
+    if ($('.movierec_case_slider').length) {
+        $('.movierec_case_slider').slick({
+            centerMode: true,
+            centerPadding: '70px',
+            slidesToShow: 1,
+            infinite: true,
+            autoplay: false,
+            arrows: true,
+            dots: true,
+            prevArrow: '<span class="kuda_prev_arrow"><i class="ri-arrow-left-s-line"></i></span>',
+            nextArrow: '<span class="kuda_next_arrow"><i class="ri-arrow-right-s-line"></i></span>',
+        }).on('afterChange', function (e, slick, currentSlide) {
+            var s = movierecSlides[currentSlide];
+            $('#movierec_slide_title').text(s.title);
+            $('#movierec_slide_text').text(s.text);
+        });
+    }
+});
+// MOV.IE REC Case Study Carousel End
 
 // View More View Less btn
 $(document).ready(function () {
