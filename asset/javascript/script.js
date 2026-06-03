@@ -108,6 +108,14 @@ $("#movierec-close").on("click", function () {
     $("#movierec-overlay").removeClass("is-on");
 });
 
+// Portfolio Pop-up — PeerPods
+$(".peerpods-pop-up").on("click", function () {
+    $("#peerpods-overlay").addClass("is-on");
+});
+$("#peerpods-close").on("click", function () {
+    $("#peerpods-overlay").removeClass("is-on");
+});
+
 // Portfolio Pop-up end
 
 // Share Btn
@@ -324,6 +332,49 @@ $(document).ready(function () {
     }
 });
 // MOV.IE REC Case Study Carousel End
+
+// PeerPods Case Study Carousel
+var peerpodsSlides = [
+    { title: 'PeerPods', text: 'PeerPods is a context-aware intelligent user interface for music reflection and community — designed as a calm companion layer alongside existing music platforms for writing, discovery, and peer connection.' },
+    { title: 'Problem Statement', text: 'Music reflection is already happening — on Substack, Reddit, X, Medium — but scattered across platforms not built for it. Six public X posts surfaced four recurring user needs: structured listening, long-form review spaces, contextual playlist sharing, and like-minded community.' },
+    { title: 'What is PeerPods?', text: 'PeerPods supports reflective writing with adaptive prompts, guided listening parties and clubs, meaningful playlist sharing with context, and onboarding-driven recommendations with visible, adjustable signals.' },
+    { title: 'Intelligence', text: 'Four intelligent behaviours: adaptive writing prompts that evolve with your draft and listening history; adaptive content visibility based on release cycles and reading behaviour; a recommender with explicit onboarding signals refined over time; and user control as a first-class feature — every toggle visible, no buried settings.' },
+    { title: 'Research Approach', text: 'Three-strand research: social listening on X (6 posts coded), competitive analysis across 6 platforms (Letterboxd, Medium, Substack, Reddit, Spotify, SoundCloud), and synthesis into 3 personas representing the user archetypes that emerged.' },
+    { title: 'Persona 1 — Amara Johnson', text: 'Amara, 23, is a Creative Arts student in London. She listens daily across platforms and sometimes writes about music — but finds apps overwhelming and cluttered. She needs a dedicated space for reflections, context-aware prompts, and interest-based communities with personal control.' },
+    { title: 'Persona 2 — Daniel Ekong', text: 'Daniel, 25, works in technical support in Port Harcourt. He listens 1–3 hours daily and actively shares playlists, but finds his posts get lost in fast-moving feeds. He needs easy playlist sharing with context and messaging built into the music discussion space.' },
+    { title: 'Persona 3 — Munachi Umeh', text: 'Munachi, 35, is a Product Designer in Lagos. She listens 5+ hours daily, reflects often on music, and is highly aware of AI behaviour. She wants transparent, diverse recommendations beyond mainstream trends and control over personalisation to trust AI features.' },
+    { title: 'Requirements', text: 'Every functional requirement traces directly to a user statement: F1 structured reflections, F2 context-aware writing prompts, F3 listening parties, F4 music clubs, F5 playlist sharing with context, F6 onboarding-driven For You with opt-out. No feature without evidence.' },
+    { title: 'Primary Scenario — Amara', text: 'Amara plays a track on Spotify. PeerPods detects it and surfaces a dismissable prompt: "Pod your thought?" She taps Write now, the song auto-attaches, she drafts a paragraph, and Smart Prompts surface — grounded in her draft, not generic. She posts to her fan club.' },
+    { title: 'Wireframe — Lo-Fidelity', text: 'Lo-fi sketches mapped the core flow: listening detection triggers a gentle notification; tapping opens the compose screen with the track pre-attached; Smart Prompts appear after the first paragraph with an on/off toggle; the finished pod appears in the For You feed.' },
+    { title: 'Breadth Scenarios', text: 'Daniel: his feed re-weights as a Tyler, the Creator drop approaches; a Listen Together option surfaces in his Alte club; 14 members join a synced session. Munachi: long-presses a mainstream pop rec, selects "I want more underground", adjusts feed signal sliders — feed re-reasons immediately.' },
+    { title: 'Information Architecture', text: 'Five top-level sections: Home (For You / Following), Community (Browse / My Communities), Listening Parties (Live / Upcoming), Compose (Reflection / Playlist / Tracks), and Profile (Settings / Opt-outs). IA drove directly into the lo-fi wireframes.' },
+    { title: 'Hi-Fi Prototype', text: 'Five high-fidelity screens built in Figma: Home (For You feed with music card and Smart Prompts drawer), Compose screen with adaptive prompts, Listening Party with live synced playback and chat, Community discovery, and Personalisation & Recommendation settings panel.' },
+    { title: 'The Intelligence — Visible', text: 'Intelligence surfaced in the UI: listening detected → track auto-attached (Amershi G4); Smart Prompts after 1st paragraph with toggle (G1, G3); global off switch (G17); signal sliders showing what shapes your feed (G11); Not for me with reason capture (G15); live feed re-reasoning on change (G16).' },
+    { title: 'Evaluation — Think-Aloud', text: 'Think-aloud protocol via Teams (screen-share, recorded) with 3 participants mapped to personas. Six tasks: onboarding, write a reflection, join a community, host a listening party, dismiss a rec, adjust feed signals. Five triggers used to keep users verbalising throughout.' },
+    { title: 'Findings', text: 'Friction fixed: Smart Prompts gated to after 1st paragraph (Amara: "why is it interrupting me before I\'ve even started?"); long-press dismiss hint added; listening party invite reduced from 3 steps to 1. Utility confirmed: prompts scaffold writing, personalisation panel earns trust, discussion preview added to pod cards.' },
+    { title: 'Reflection', text: 'Where it helps: context recognition, scaffolded writing, transparent control. Where it falls short: cold-start recs weak in week 1; writing-first framing excludes voice/photo reflectors; 3 participants can\'t measure long-term engagement. Key learning: traceability forced every feature to be evidence-backed.' }
+];
+
+$(function () {
+    if ($('.peerpods_case_slider').length) {
+        $('.peerpods_case_slider').slick({
+            centerMode: true,
+            centerPadding: '70px',
+            slidesToShow: 1,
+            infinite: true,
+            autoplay: false,
+            arrows: true,
+            dots: true,
+            prevArrow: '<span class="kuda_prev_arrow"><i class="ri-arrow-left-s-line"></i></span>',
+            nextArrow: '<span class="kuda_next_arrow"><i class="ri-arrow-right-s-line"></i></span>',
+        }).on('afterChange', function (e, slick, currentSlide) {
+            var s = peerpodsSlides[currentSlide];
+            $('#peerpods_slide_title').text(s.title);
+            $('#peerpods_slide_text').text(s.text);
+        });
+    }
+});
+// PeerPods Case Study Carousel End
 
 // View More View Less btn
 $(document).ready(function () {
