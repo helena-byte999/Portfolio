@@ -187,8 +187,8 @@ var kudaSlides = [
 ];
 
 $(function () {
-    if ($('.kuda_case_slider').length) {
-        $('.kuda_case_slider').slick({
+    if ($('.kuda_case_slider').not('#movierec_slider').length) {
+        $('.kuda_case_slider').not('#movierec_slider').slick({
             centerMode: true,
             centerPadding: '70px',
             slidesToShow: 1,
@@ -284,23 +284,23 @@ $(function () {
 var movierecSlides = [
     {
         title: 'Project Overview',
-        text: 'MOV.IE REC is a full-stack, production-deployed AI recommender inspired by Netflix and Spotify. Built entirely from scratch, it serves personalised movie and TV show recommendations using a two-stage ML pipeline — combining content-based filtering with collaborative filtering, live at movierec-gzsa.onrender.com.'
+        text: 'MOV.IE REC is a production-ready, Netflix-style movie and TV recommender built entirely from scratch. Users search any title and instantly get intelligent recommendations, browse curated genre rows (Action, K-Drama, LGBTQ+, Bollywood and more), and save titles to a personal Watchlist. The live site supports 5 languages and 22 global regions.'
     },
     {
-        title: 'ML Pipeline — Stage 1: Content Retrieval',
-        text: 'The first stage uses TF-IDF vectorisation on movie metadata (genres, cast, keywords, overview) to build a sparse cosine similarity index. The index was compressed from 1.24GB to 30MB using a top-300 sparse storage format, making it deployable on a free-tier server without memory constraints.'
+        title: 'Watchlist & User Features',
+        text: 'Authenticated users get a full Watchlist — add titles from any page, mark them as watched, and the system automatically improves future recommendations based on what you\'ve saved and seen. Guest users can build a session-based Watchlist that migrates to their account on sign-up. Google OAuth and email/password auth are both supported.'
     },
     {
-        title: 'ML Pipeline — Stage 2: Quality Reranking',
-        text: 'The top-300 candidates from stage 1 are reranked using a blended score: 60% content similarity, 30% Bayesian-weighted quality score (IMDb formula with Rotten Tomatoes and Metacritic when available), and 10% recency boost for 2022+ titles. A diversity injection stage de-clusters the top 10 by genre — mirroring Netflix\'s approach.'
+        title: 'ML Pipeline — Content Retrieval',
+        text: 'Stage 1 uses TF-IDF vectorisation on movie metadata (genres, cast, keywords, overview) to build a sparse cosine similarity index compressed from 1.24GB to 30MB — making it deployable on a free server without memory constraints. The top 300 candidates are retrieved per query in milliseconds.'
     },
     {
-        title: 'Personalisation — Collaborative Filtering',
-        text: 'Logged-in users get an affinity vector built from their watch history and watchlist using item-based collaborative filtering. This adjusts the ranking formula to blend content similarity (50%) with user affinity (20%), quality (20%), and recency (10%). The /api/for_you endpoint serves a personalised feed refreshed on each login.'
+        title: 'ML Pipeline — Reranking & Personalisation',
+        text: 'Stage 2 reranks the 300 candidates using a blended score: content similarity, Bayesian quality weighting (with Rotten Tomatoes and Metacritic), and a recency boost for 2022+ titles. For logged-in users, item-based collaborative filtering blends in a personal affinity vector built from their full watch and Watchlist history.'
     },
     {
-        title: 'Architecture & Tech Stack',
-        text: 'Backend: Python, Flask, SQLAlchemy, scikit-learn, NumPy, Pandas. Database: PostgreSQL (Neon free tier). Auth: Flask-Login + Google OAuth (Authlib). APIs: TMDB (posters, streaming providers, reviews), OMDB (Rotten Tomatoes, Metacritic). Hosting: Render. 14 unit tests. The site supports 5 UI languages and 22 regions with per-session caching.'
+        title: 'Tech Stack & Deployment',
+        text: 'Backend: Python, Flask, SQLAlchemy, scikit-learn, NumPy, Pandas. Database: PostgreSQL (Neon). Auth: Google OAuth + email/password (Flask-Login, Authlib). Data: TMDB API for posters, streaming providers and reviews; OMDB for Rotten Tomatoes and Metacritic scores. Deployed live on Render with in-memory row caching for fast page loads.'
     }
 ];
 
