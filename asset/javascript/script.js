@@ -116,6 +116,13 @@ $("#peerpods-close").on("click", function () {
     $("#peerpods-overlay").removeClass("is-on");
 });
 
+// Click outside content to close any open overlay
+$(".overlay").on("click", function (e) {
+    if ($(e.target).hasClass("overlay")) {
+        $(this).removeClass("is-on");
+    }
+});
+
 // Portfolio Pop-up end
 
 // Share Btn
