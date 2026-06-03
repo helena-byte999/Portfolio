@@ -305,8 +305,8 @@ var movierecSlides = [
 ];
 
 $(document).ready(function () {
-    if ($('.movierec_case_slider').length) {
-        $('.movierec_case_slider').slick({
+    if ($('#movierec_slider').length) {
+        $('#movierec_slider').slick({
             centerMode: true,
             centerPadding: '70px',
             slidesToShow: 1,
