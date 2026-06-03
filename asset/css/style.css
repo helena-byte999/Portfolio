@@ -3507,3 +3507,14 @@ ul {
         grid-template-columns: repeat(1, 1fr);
     }
 }
+
+/* PeerPods carousel — mirrors ux_case_slider rules */
+.peerpods_case_slider { margin-bottom: 0; position: relative; }
+.peerpods_case_slider .slick-slide { padding: 0 8px; transition: transform 0.4s ease, opacity 0.4s ease; transform: scale(0.88); opacity: 0.55; }
+.peerpods_case_slider .slick-center { transform: scale(1); opacity: 1; }
+.peerpods_case_slider .slick-slide img { width: 100%; display: block; border-radius: 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.18); }
+.peerpods_case_slider .slick-dots { display: flex !important; justify-content: center; flex-wrap: wrap; gap: 6px; position: static; margin-top: 18px; padding: 0; list-style: none; }
+.peerpods_case_slider .slick-dots li { width: auto; height: auto; margin: 0; }
+.peerpods_case_slider .slick-dots li button { width: 28px; height: 28px; border-radius: 8px; background: rgba(155,0,163,0.25); border: none; color: #fff; font-size: 11px; font-weight: 700; font-family: 'Kodchasan', sans-serif; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+.peerpods_case_slider .slick-dots li button::before { display: none; }
+.peerpods_case_slider .slick-dots li.slick-active button { background: #9B00A3; color: #fff; }
