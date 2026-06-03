@@ -284,11 +284,11 @@ $(function () {
 var movierecSlides = [
     {
         title: 'Project Overview',
-        text: 'MOV.IE REC is a production-ready, Netflix-style movie and TV recommender built entirely from scratch. Users search any title and instantly get intelligent recommendations, browse curated genre rows (Action, K-Drama, LGBTQ+, Bollywood and more), and save titles to a personal Watchlist. The live site supports 5 languages and 22 global regions.'
+        text: 'MOV.IE REC is a production-ready, Netflix-style movie and TV recommender built entirely from scratch. Users search any title and instantly get intelligent recommendations, browse curated genre rows (Action, K-Drama, Romance, Bollywood and more), and save titles to a personal Watchlist. The live site supports 5 languages and 22 global regions.'
     },
     {
         title: 'Watchlist & User Features',
-        text: 'Authenticated users get a full Watchlist — add titles from any page, mark them as watched, and the system automatically improves future recommendations based on what you\'ve saved and seen. Guest users can build a session-based Watchlist that migrates to their account on sign-up. Google OAuth and email/password auth are both supported.'
+        text: 'Authenticated users get a personal Watchlist — save any title, mark it as watched, and the system automatically improves recommendations based on your history. Guest users build a session Watchlist that transfers to their account on sign-up. Supports Google OAuth and email/password login. Try it live: movierec-gzsa.onrender.com/watchlist'
     },
     {
         title: 'ML Pipeline — Content Retrieval',
