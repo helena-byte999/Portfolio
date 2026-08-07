@@ -899,7 +899,7 @@ canvas {
 /*-----------------------[ 8.Fix Image CSS ]------------------------*/
 section#card_main {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     margin: 0 0 0 150px;
     height: 100vh;
@@ -915,6 +915,10 @@ section#card_main {
 
 .olivia-img {
     border-radius: 240px 40px 40px 40px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .hire_me {
@@ -2998,7 +3002,7 @@ ul {
 }
 
 .imgBox {
-    height: 775px;
+    height: 100%;
     width: 480px;
     border-radius: 260px 40px 40px 40px;
 }
