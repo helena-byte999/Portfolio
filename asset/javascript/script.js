@@ -590,7 +590,15 @@ function fetchMediumPosts() {
                 container.innerHTML = '<p class="web_development font_w_font_s1">No articles found yet. <a href="https://medium.com/@' + mediumUser + '" target="_blank" style="color:#9B00A3;">Visit Medium profile</a></p>';
                 return;
             }
-            container.innerHTML = data.items.map(function(post) {
+            var pinnedBelowUrl = 'https://medium.com/@otuokonhelena/x-deleted-circle-three-years-ago-its-still-rebuilding-it-476eaa82a486';
+            var items = data.items.slice().sort(function(a, b) {
+                var aPinned = a.link.indexOf(pinnedBelowUrl) === 0;
+                var bPinned = b.link.indexOf(pinnedBelowUrl) === 0;
+                if (aPinned && !bPinned) return 1;
+                if (bPinned && !aPinned) return -1;
+                return 0;
+            });
+            container.innerHTML = items.map(function(post) {
                 var date = new Date(post.pubDate);
                 var day = date.getDate();
                 var month = date.toLocaleString('default', { month: 'short' }).toUpperCase();
