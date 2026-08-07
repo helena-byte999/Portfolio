@@ -2900,6 +2900,10 @@ ul {
     text-decoration: none;
 }
 
+.featured-card + .featured-card {
+    margin-top: 20px;
+}
+
 .featured-card:hover {
     border: 2px solid #9B00A3;
 }

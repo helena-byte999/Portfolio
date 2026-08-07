@@ -535,43 +535,51 @@ $(function () {
     $('.circlechart').circlechart();
 });
 
-// Featured Medium Article
+// Featured Medium Articles
 function loadFeaturedArticle() {
-    var articleUrl = 'https://medium.com/@otuokonhelena/x-deleted-circle-three-years-ago-its-still-rebuilding-it-476eaa82a486';
-    var apiUrl = 'https://api.microlink.io?url=' + encodeURIComponent(articleUrl);
+    var featuredArticles = [
+        {
+            url: 'https://medium.com/@otuokonhelena/x-deleted-circle-three-years-ago-its-still-rebuilding-it-476eaa82a486',
+            title: 'Killing Circle Was a Mistake. X Keeps Proving It',
+            desc: 'What one removed feature reveals about confusing low adoption with low value.'
+        },
+        {
+            url: 'https://medium.com/@otuokonhelena/youre-not-discovering-music-ai-is-deciding-it-for-you-a22f27cf9921',
+            title: "You're Not Discovering Music — AI Is Deciding It for You",
+            desc: 'A deep dive into how AI algorithms shape what we listen to — and what that means for music discovery.'
+        }
+    ];
     var container = document.getElementById('featured-article');
     if (!container) return;
 
-    fetch(apiUrl)
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-            if (data.status !== 'success') throw new Error('failed');
-            var d = data.data;
-            var imgUrl = (d.image && d.image.url) ? d.image.url : '';
-            var title = d.title || 'Killing Circle Was a Mistake. X Keeps Proving It';
-            var desc = d.description || 'What one removed feature reveals about confusing low adoption with low value.';
-            container.innerHTML =
-                '<a class="featured-card" href="' + articleUrl + '" target="_blank" rel="noopener noreferrer">' +
-                    (imgUrl ? '<img class="featured-card__thumb" src="' + imgUrl + '" alt="featured article thumbnail">' : '') +
-                    '<div class="featured-card__body">' +
-                        '<p class="featured-card__tag">Featured · Medium</p>' +
-                        '<h3 class="featured-card__title">' + title + '</h3>' +
-                        '<p class="featured-card__desc">' + desc + '</p>' +
-                        '<p class="featured-card__read">Read on Medium →</p>' +
-                    '</div>' +
-                '</a>';
-        })
-        .catch(function() {
-            container.innerHTML =
-                '<a class="featured-card" href="' + articleUrl + '" target="_blank" rel="noopener noreferrer">' +
-                    '<div class="featured-card__body" style="padding:24px;">' +
-                        '<p class="featured-card__tag">Featured · Medium</p>' +
-                        '<h3 class="featured-card__title">Killing Circle Was a Mistake. X Keeps Proving It</h3>' +
-                        '<p class="featured-card__desc">What one removed feature reveals about confusing low adoption with low value.</p>' +
-                        '<p class="featured-card__read">Read on Medium →</p>' +
-                    '</div>' +
-                '</a>';
-        });
+    function cardHtml(article, imgUrl, title, desc) {
+        return '<a class="featured-card" href="' + article.url + '" target="_blank" rel="noopener noreferrer">' +
+                (imgUrl ? '<img class="featured-card__thumb" src="' + imgUrl + '" alt="featured article thumbnail">' : '') +
+                '<div class="featured-card__body">' +
+                    '<p class="featured-card__tag">Featured · Medium</p>' +
+                    '<h3 class="featured-card__title">' + title + '</h3>' +
+                    '<p class="featured-card__desc">' + desc + '</p>' +
+                    '<p class="featured-card__read">Read on Medium →</p>' +
+                '</div>' +
+            '</a>';
+    }
+
+    Promise.all(featuredArticles.map(function(article) {
+        var apiUrl = 'https://api.microlink.io?url=' + encodeURIComponent(article.url);
+        return fetch(apiUrl)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.status !== 'success') throw new Error('failed');
+                var d = data.data;
+                var imgUrl = (d.image && d.image.url) ? d.image.url : '';
+                return cardHtml(article, imgUrl, d.title || article.title, d.description || article.desc);
+            })
+            .catch(function() {
+                return cardHtml(article, '', article.title, article.desc);
+            });
+    })).then(function(cards) {
+        container.innerHTML = cards.join('');
+    });
 }
 loadFeaturedArticle();
 
