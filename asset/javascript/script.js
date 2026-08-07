@@ -537,7 +537,7 @@ $(function () {
 
 // Featured Medium Article
 function loadFeaturedArticle() {
-    var articleUrl = 'https://medium.com/@otuokonhelena/youre-not-discovering-music-ai-is-deciding-it-for-you-a22f27cf9921';
+    var articleUrl = 'https://medium.com/@otuokonhelena/x-deleted-circle-three-years-ago-its-still-rebuilding-it-476eaa82a486';
     var apiUrl = 'https://api.microlink.io?url=' + encodeURIComponent(articleUrl);
     var container = document.getElementById('featured-article');
     if (!container) return;
@@ -548,8 +548,8 @@ function loadFeaturedArticle() {
             if (data.status !== 'success') throw new Error('failed');
             var d = data.data;
             var imgUrl = (d.image && d.image.url) ? d.image.url : '';
-            var title = d.title || "You're Not Discovering Music — AI Is Deciding It for You";
-            var desc = d.description || 'A deep dive into how AI algorithms shape what we listen to — and what that means for music discovery.';
+            var title = d.title || 'Killing Circle Was a Mistake. X Keeps Proving It';
+            var desc = d.description || 'What one removed feature reveals about confusing low adoption with low value.';
             container.innerHTML =
                 '<a class="featured-card" href="' + articleUrl + '" target="_blank" rel="noopener noreferrer">' +
                     (imgUrl ? '<img class="featured-card__thumb" src="' + imgUrl + '" alt="featured article thumbnail">' : '') +
@@ -566,8 +566,8 @@ function loadFeaturedArticle() {
                 '<a class="featured-card" href="' + articleUrl + '" target="_blank" rel="noopener noreferrer">' +
                     '<div class="featured-card__body" style="padding:24px;">' +
                         '<p class="featured-card__tag">Featured · Medium</p>' +
-                        '<h3 class="featured-card__title">You\'re Not Discovering Music — AI Is Deciding It for You</h3>' +
-                        '<p class="featured-card__desc">A deep dive into how AI algorithms shape what we listen to — and what that means for authentic music discovery.</p>' +
+                        '<h3 class="featured-card__title">Killing Circle Was a Mistake. X Keeps Proving It</h3>' +
+                        '<p class="featured-card__desc">What one removed feature reveals about confusing low adoption with low value.</p>' +
                         '<p class="featured-card__read">Read on Medium →</p>' +
                     '</div>' +
                 '</a>';
