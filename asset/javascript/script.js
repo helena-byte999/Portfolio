@@ -49,7 +49,10 @@ const elements = document.getElementById("portfolio");
 const homeNavabr = document.getElementById("home");
 const circular_imgClick = document.getElementsByClassName("circular_text_main");
 
-circular_imgClick[0].addEventListener("click", () => {
+circular_imgClick[0].addEventListener("click", (e) => {
+    // The badge is now a real link out to the GitHub profile.
+    // Let that navigation happen on its own and don't also swap tabs.
+    if (e.target.closest(".gh_dial")) return;
     homeNavabr.classList.remove("tab-active");
     elements.classList.add("tab-active");
 });

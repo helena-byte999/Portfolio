@@ -198,8 +198,22 @@
                             </button>
                         </div>
                         <div class="circular_text_main ">
-                            <a href="javascript:void(0)" class="down_arrow_main position-relative">
-                                <img class="circular_text" src="asset/images/circular_text.png" alt="circular_text">
+                            <a href="https://github.com/helena-byte999" target="_blank" rel="noopener"
+                               class="gh_dial down_arrow_main position-relative" aria-label="My projects on GitHub">
+                                <svg class="gh_dial_ring" viewBox="0 0 140 140" aria-hidden="true">
+                                    <defs>
+                                        <path id="ghCirclePath"
+                                              d="M70,70 m-52,0 a52,52 0 1,1 104,0 a52,52 0 1,1 -104,0"></path>
+                                    </defs>
+                                    <text>
+                                        <textPath href="#ghCirclePath" startOffset="0">
+                                            MY PROJECTS &#8226; ON GITHUB &#8226; MY PROJECTS &#8226; ON GITHUB &#8226;
+                                        </textPath>
+                                    </text>
+                                </svg>
+                                <span class="gh_dial_core">
+                                    <i class="ri-github-fill"></i>
+                                </span>
                             </a>
                         </div>
                     </div>
@@ -746,6 +760,20 @@
                         </div>
                     </div>
 
+                    <!-- ============== GitHub Projects ============== -->
+                    <h2 class="moswa font_w_font_s fade_up" style="margin-top:40px;">On GitHub</h2>
+                    <h3 class="passionate font_w_font_s1 fade_up">
+                        Code, commits and works in progress &mdash; the projects I build in the open.
+                    </h3>
+                    <div class="gh_repo_grid fade_up" id="gh-repos">
+                        <div class="gh_repo_loading">Loading repositories&hellip;</div>
+                    </div>
+                    <a class="gh_profile_link" href="https://github.com/helena-byte999" target="_blank" rel="noopener">
+                        <i class="ri-github-fill"></i>
+                        <span>View full profile on GitHub</span>
+                        <i class="ri-arrow-right-up-line"></i>
+                    </a>
+
                 </section>
                 <!-- ======================================= Blog Section  ================================== -->
                 <section class="oliva-intro tabcontent" id="blog">
@@ -1077,6 +1105,7 @@
     <script src="asset/javascript/hexagon_animation/particles.min.js"></script>
     <script src="asset/javascript/spider_animation/spider_animation.js"></script>
     <script src="asset/javascript/script.js"></script>
+    <script src="asset/javascript/github.js"></script>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 
