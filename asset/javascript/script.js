@@ -10,7 +10,7 @@ document.getElementsByClassName("olivia_moswa")[0];
 // olivia moswa text end
 
 // designer text
-var designerTexts = ["Product Designer", "Product Manager", "AI Engineer", "Software Engineer"];
+var designerTexts = ["Product Manager"];
 var designerIndex = 0;
 intervalTime = 800;
 function displayText() {
@@ -43,6 +43,13 @@ for (var index = 0; index < tabs.length; index++) {
     tabs[index].addEventListener('click', mybtn, false);
 }
 // card Tabs end
+
+// "Get in Touch" on the profile card opens the Contact tab
+document.querySelector('.hire_me').addEventListener('click', function () {
+    var contactTab = tabs[tabs.length - 1];
+    contactTab.click();
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
 
 // circle Img my project click event
 const elements = document.getElementById("portfolio");
@@ -164,7 +171,7 @@ $(function () {
 var kudaSlides = [
     {
         title: 'Problem Statement',
-        text: 'Teens in Nigeria lacked a safe, controlled way to access and manage money. Parents had no visibility into their child\'s spending. I led the product strategy for Kuda Teens — a prepaid debit card and digital banking experience built for teens aged 11–18 and their parents.'
+        text: 'Teens in Nigeria lacked a safe, controlled way to access and manage money. Parents had no visibility into their child\'s spending. Kuda Teens is a concept case study I took through product discovery: a prepaid debit card and digital banking experience for teens aged 11–18 and their parents.'
     },
     {
         title: 'Market Research',
@@ -548,8 +555,8 @@ function loadFeaturedArticle() {
         },
         {
             url: 'https://medium.com/@otuokonhelena/youre-not-discovering-music-ai-is-deciding-it-for-you-a22f27cf9921',
-            title: "You're Not Discovering Music — AI Is Deciding It for You",
-            desc: 'A deep dive into how AI algorithms shape what we listen to — and what that means for music discovery.'
+            title: 'AI is DJing Too, But Can It Read the Room?',
+            desc: 'How AI algorithms shape what we listen to, and what that means for music discovery.'
         }
     ];
     var container = document.getElementById('featured-article');
@@ -586,54 +593,6 @@ function loadFeaturedArticle() {
 }
 loadFeaturedArticle();
 
-// Medium RSS Feed
-function fetchMediumPosts() {
-    var mediumUser = 'otuokonhelena';
-    var rssUrl = 'https://medium.com/feed/@' + mediumUser;
-    var apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl) + '&count=6';
-    var container = document.getElementById('medium-posts');
-    if (!container) return;
-
-    fetch(apiUrl)
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-            if (data.status !== 'ok' || !data.items || !data.items.length) {
-                container.innerHTML = '<p class="web_development font_w_font_s1">No articles found yet. <a href="https://medium.com/@' + mediumUser + '" target="_blank" style="color:#9B00A3;">Visit Medium profile</a></p>';
-                return;
-            }
-            var pinnedBelowUrl = 'https://medium.com/@otuokonhelena/x-deleted-circle-three-years-ago-its-still-rebuilding-it-476eaa82a486';
-            var items = data.items.slice().sort(function(a, b) {
-                var aPinned = a.link.indexOf(pinnedBelowUrl) === 0;
-                var bPinned = b.link.indexOf(pinnedBelowUrl) === 0;
-                if (aPinned && !bPinned) return 1;
-                if (bPinned && !aPinned) return -1;
-                return 0;
-            });
-            container.innerHTML = items.map(function(post) {
-                var date = new Date(post.pubDate);
-                var day = date.getDate();
-                var month = date.toLocaleString('default', { month: 'short' }).toUpperCase();
-                var thumb = post.thumbnail || post.description.match(/src="([^"]+)"/)?.[1] || '';
-                var bgStyle = thumb ? 'background-image: url("' + thumb + '"); background-size: cover; background-position: center;' : '';
-                var category = (post.categories && post.categories[0]) ? post.categories[0] : 'article';
-                return '<div class="fade_up">' +
-                    '<a href="' + post.link + '" target="_blank" rel="noopener noreferrer">' +
-                        '<div class="blog_img" style="' + bgStyle + '">' +
-                            '<div class="blog_date">' +
-                                '<h4 class="date font_w_font_s">' + day + ' <span class="month">' + month + '</span></h4>' +
-                            '</div>' +
-                        '</div>' +
-                    '</a>' +
-                    '<h3 class="become font_w_font_s">' + post.title + '</h3>' +
-                    '<p class="web_development font_w_font_s1">' + category + '</p>' +
-                '</div>';
-            }).join('');
-        })
-        .catch(function() {
-            container.innerHTML = '<p class="web_development font_w_font_s1">Unable to load articles. <a href="https://medium.com/@' + mediumUser + '" target="_blank" style="color:#9B00A3;">Visit Medium profile</a></p>';
-        });
-}
-fetchMediumPosts();
 
 // File upload
 document.addEventListener('DOMContentLoaded', function () {
@@ -769,8 +728,8 @@ document.addEventListener('DOMContentLoaded', function () {
         var code = document.getElementById('phone_code').value;
         var num = document.getElementById('phone').value;
         var phoneInput = form.querySelector('input[name="phone"]');
-        var combined = code + ' ' + num;
-        phoneInput.value = combined;
+        // Phone is optional, so don't send a bare country code
+        phoneInput.value = num.trim() ? code + ' ' + num.trim() : '';
 
         var formData = new FormData(form);
 
