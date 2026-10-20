@@ -9,17 +9,25 @@
     /* Repos I want surfaced first, and the wording I want on them.
        Anything not listed still shows, just after these.            */
     var CURATED = {
+        'discovery-gap-analysis': {
+            title: 'Discovery Gap',
+            desc: 'Does streaming discovery fail smaller artists? 1.44M plays analysed, ending in a "Second Listen" feature proposal.'
+        },
+        'ecms': {
+            title: 'ECMS \u2014 Elderly Care Management',
+            desc: 'My final-year project, relaunched as a live product: care records, family access, invoices and analytics.'
+        },
+        'cuepoint': {
+            title: 'Cuepoint',
+            desc: 'Open-source DJ tool that recommends the next track and the exact bar to mix it in. 1,700+ downloads on PyPI.'
+        },
         'MovieRec': {
             title: 'MOV.IE REC',
-            desc: 'A production-ready, Netflix-style recommender built end to end — ML pipeline, data engineering and live deployment.'
-        },
-        'sony-digital-partnerships': {
-            title: 'Sony Music — Application Site',
-            desc: 'A bespoke application site built for the Digital Partnerships internship at Sony Music UK \u2014 music, product and events in one place.'
+            desc: 'A live, Netflix-style movie and TV recommender I scoped, built and shipped on my own.'
         },
         'Portfolio': {
             title: 'This Portfolio',
-            desc: 'My personal site — hand-built front end, dynamic Medium feed, dark mode and all.'
+            desc: 'My personal site \u2014 hand-built front end, case studies and dark mode.'
         }
     };
 

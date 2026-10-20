@@ -3735,3 +3735,37 @@ ul {
         font-size: 14px;
     }
 }
+
+/* Skills tab — grouped skill tags (replaced the percentage rings) */
+.skill_tags {
+    margin: 14px 0 30px;
+}
+
+.skill_tags .kuda_tag {
+    font-size: 14px;
+    padding: 7px 16px;
+    white-space: normal;
+}
+
+/* Portfolio — icon thumbnail for projects without a screenshot */
+.kuda_hero_thumb.thumb_icon {
+    background: linear-gradient(135deg, #2a0030, #6F0075);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    text-align: center;
+    padding: 20px;
+}
+
+.thumb_icon i {
+    font-size: 3rem;
+    opacity: 0.85;
+}
+
+.thumb_icon p {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
