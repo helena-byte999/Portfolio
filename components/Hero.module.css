@@ -1,0 +1,107 @@
+.hero {
+  padding-top: clamp(28px, 4vw, 48px);
+}
+
+/* Sized so "ENA OTUOKON" fills the content width on one line (it's ~9.6em wide). */
+.name {
+  font-size: min(9.4vw, 118px);
+  white-space: nowrap;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 32px;
+  align-items: end;
+  margin-top: clamp(16px, 2.2vw, 28px);
+}
+
+.roleLine {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-stretch: 112%;
+  font-weight: 700;
+  font-size: clamp(20px, 2.4vw, 30px);
+  text-transform: uppercase;
+}
+
+.role {
+  color: var(--yellow);
+}
+
+.roleWindow {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  height: 1.2em;
+}
+
+.roleText {
+  display: inline-block;
+  animation: roll 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@keyframes roll {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.where {
+  color: var(--ink-2);
+  font-weight: 600;
+  font-size: 0.7em;
+}
+
+.side {
+  display: grid;
+  gap: 18px;
+  justify-items: end;
+}
+
+.side ul {
+  justify-content: flex-end;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+  .side {
+    justify-items: start;
+  }
+  .side ul {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 700px) {
+  .name {
+    font-size: 13.6vw;
+    white-space: normal;
+  }
+  .name span {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roleText {
+    animation: none;
+  }
+}
