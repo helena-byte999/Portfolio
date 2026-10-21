@@ -23,12 +23,6 @@ export const HERO = {
   /** Shown in blue with a blinking caret, like a line still being typed. */
   accent: 'reads the room',
   intro: 'I build AI, music and consumer products in London, test ideas by building them myself, and DJ and produce events on the side.',
-  /** Tilted stickers to the right of the booth. */
-  proof: [
-    { value: '8,000+', label: 'lens users in 4 days' },
-    { value: '500+', label: 'users at launch' },
-    { value: 'MSc', label: 'AI, Distinction' },
-  ],
 };
 
 /** The six pads on the mixer. Keys 1–6 hit them too. */

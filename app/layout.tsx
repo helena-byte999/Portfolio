@@ -1,11 +1,13 @@
 import type { Metadata, Viewport } from 'next';
-import { Archivo, JetBrains_Mono } from 'next/font/google';
+import { Archivo, Doto, JetBrains_Mono } from 'next/font/google';
 import Reveal from '@/components/Reveal';
 import './globals.css';
 
 // Archivo throughout; its width axis gives the expanded ExtraBold used for the name.
 const archivo = Archivo({ subsets: ['latin'], axes: ['wdth'], style: ['normal', 'italic'], variable: '--font-sans', display: 'swap' });
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
+// Dot-matrix display face for the Spotify card's track title.
+const dot = Doto({ subsets: ['latin'], weight: '700', variable: '--font-dot', display: 'swap' });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ena-labs.netlify.app'),
@@ -21,17 +23,21 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#f3f1ec',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f3f1ec' },
+    { media: '(prefers-color-scheme: dark)', color: '#121211' },
+  ],
 };
 
-// Marks the page as scripted before paint, so scroll reveals never flash.
-const jsFlag = `document.documentElement.classList.add('js')`;
+// Runs before paint: applies the saved theme (or the system's) and marks the page as scripted,
+// so neither the theme nor the scroll reveals flash.
+const boot = `(function(){var d=document.documentElement;try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';d.dataset.theme=t}catch(e){}d.classList.add('js')})()`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GB" className={`${archivo.variable} ${mono.variable}`}>
+    <html lang="en-GB" className={`${archivo.variable} ${mono.variable} ${dot.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: jsFlag }} />
+        <script dangerouslySetInnerHTML={{ __html: boot }} />
       </head>
       <body>
         {children}

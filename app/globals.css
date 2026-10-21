@@ -1,5 +1,5 @@
 /* Tokens: warm paper, near-black ink, a marker yellow and one blue, with keycap
-   red/green/orange for the pads. Light only. */
+   red/green/orange for the pads. Dark mode overrides below. */
 :root {
   --bg: #f3f1ec;
   --bg-2: #e9e6df;
@@ -20,6 +20,20 @@
   --font-display: var(--font-sans);
   --font-body: var(--font-sans);
   color-scheme: light;
+}
+
+/* Dark: a warm charcoal, same yellow, a lighter blue so it reads on dark. */
+:root[data-theme='dark'] {
+  --bg: #121211;
+  --bg-2: #1b1b19;
+  --card: #1e1e1c;
+  --ink: #f2f0eb;
+  --ink-2: #a8a49c;
+  --line: rgba(255, 255, 255, 0.1);
+  --accent: #7d92ff;
+  --fill: rgba(255, 255, 255, 0.07);
+  --shadow: 0 22px 44px -22px rgba(0, 0, 0, 0.7);
+  color-scheme: dark;
 }
 
 *,
@@ -179,7 +193,7 @@ a {
 .btn-primary {
   background: var(--ink);
   border-color: var(--ink);
-  color: #fff;
+  color: var(--bg);
 }
 
 .btn-primary:hover {
