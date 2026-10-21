@@ -1,11 +1,11 @@
-/* Tokens: warm paper, near-black ink, a marker yellow and one blue, with keycap
-   red/green/orange for the pads. Dark mode overrides below. */
+/* Tokens: white page, near-black ink, a marker yellow and one blue, with keycap
+   red/green/orange for the pads. Dark mode (black) overrides below. */
 :root {
-  --bg: #f3f1ec;
-  --bg-2: #e9e6df;
+  --bg: #ffffff;
+  --bg-2: #f4f4f5;
   --card: #ffffff;
   --ink: #161616;
-  --ink-2: #5f5b55;
+  --ink-2: #5c5c62;
   --line: rgba(0, 0, 0, 0.09);
   --accent: #2f4be0;
   --yellow: #f2c94c;
@@ -22,13 +22,13 @@
   color-scheme: light;
 }
 
-/* Dark: a warm charcoal, same yellow, a lighter blue so it reads on dark. */
+/* Dark: black, same yellow, a lighter blue so it reads on dark. */
 :root[data-theme='dark'] {
-  --bg: #121211;
-  --bg-2: #1b1b19;
-  --card: #1e1e1c;
-  --ink: #f2f0eb;
-  --ink-2: #a8a49c;
+  --bg: #000000;
+  --bg-2: #0d0d0e;
+  --card: #141416;
+  --ink: #f4f4f5;
+  --ink-2: #a1a1aa;
   --line: rgba(255, 255, 255, 0.1);
   --accent: #7d92ff;
   --fill: rgba(255, 255, 255, 0.07);
@@ -268,4 +268,24 @@ a {
     color: var(--ink-2);
     background: none;
   }
+}
+
+/* Cursor: a LEGO-brick USB stick, the kind DJs carry their sets on; it turns yellow over anything
+   you can click. Hotspot is the tip of the plug. */
+:root {
+  --cursor: url('/cursor/usb.svg') 6 6, auto;
+  --cursor-hover: url('/cursor/usb-hover.svg') 6 6, pointer;
+}
+
+html {
+  cursor: var(--cursor);
+}
+
+a,
+button,
+[role='button'],
+label,
+summary,
+select {
+  cursor: var(--cursor-hover) !important;
 }
