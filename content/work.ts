@@ -342,12 +342,32 @@ export const TRACKS: Track[] = [
   },
 ];
 
+export type BSide = {
+  title: string;
+  /** One line under the title. */
+  text: string;
+  chips: string[];
+  /** Right-hand meta, like a running time. */
+  meta: string;
+  /** Small picture top-right; without one the card shows a drawn chart. */
+  thumb?: string;
+  href?: string;
+};
+
 /** Work that doesn't need a full case study page. */
-export const B_SIDES = [
+export const B_SIDES: BSide[] = [
   {
     title: 'Human-AI Collaboration in Music Streaming & Production',
-    kicker: 'AI Research · Academic paper · MSc AI · 2025',
-    text: 'How collaborative filtering (the engine behind Spotify recommendations) and GANs (MuseGAN, GANSynth) shape music streaming and production, evaluated with NDCG and Recall@N, and what that means for creativity and authorship.',
-    link: { label: 'Read the paper (PDF)', href: '/asset/pdf/HAIC_Music_Streaming_Production_Ena_Helena_Otuokon.pdf' },
+    text: 'How collaborative filtering and GANs shape what we hear and make, and what that means for creativity and authorship.',
+    chips: ['Paper', 'MSc AI', '2025'],
+    meta: '11 min read',
+    thumb: '/work/b-sides/01.webp',
+    href: '/asset/pdf/HAIC_Music_Streaming_Production_Ena_Helena_Otuokon.pdf',
+  },
+  {
+    title: 'Certainty and Justification Framing in Music Recommendation',
+    text: 'Explanations raised trust in a recommendation, but only for listeners who already knew the music.',
+    chips: ['Dissertation', 'Distinction', '2026'],
+    meta: '118 listeners',
   },
 ];

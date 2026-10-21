@@ -1,10 +1,8 @@
 import Link from 'next/link';
-import Header from '@/components/Header';
 
 export default function NotFound() {
   return (
     <>
-      <Header />
       <main className="section">
         <div className="wrap" style={{ textAlign: 'center' }}>
           <p className="eyebrow">404</p>

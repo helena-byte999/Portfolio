@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import s from './fx.module.css';
 
-// A floating "now playing" pill that names the section on screen, like a track on a deck display.
-// It slides in once the booth has scrolled away; the skip button jumps to the next section.
+// A "now playing" indicator in the middle of the header that names the section on screen, like a
+// track on a deck display. It fades in once the booth has scrolled away; skip jumps to the next.
 const TRACKLIST = [
   { id: 'top', label: 'The booth' },
   { id: 'work', label: 'Selected work' },

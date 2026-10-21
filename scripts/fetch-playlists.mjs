@@ -29,14 +29,13 @@ for (const link of links.slice(0, 3)) {
   const description = decode(meta('og:description') ?? '');
   // A personal playlist's description reads "Playlist · Name · 39 items · 5 saves".
   const counted = description.match(/(\d[\d,]*)\s+(?:songs|items|tracks)/i)?.[1]?.replace(/,/g, '');
-  // The page lists at most 30 songs, so a count of 30 from the listing means "30 or more".
-  const listed = (html.match(/<meta name="music:song" /g) ?? []).length;
+
   playlists.push({
     id,
     url,
     title: decode(oembed.title),
     cover: meta('og:image') ?? oembed.thumbnail_url,
-    tracks: counted ? Number(counted) : listed && listed < 30 ? listed : null,
+    tracks: counted ? Number(counted) : null,
     subtitle: description && !description.startsWith('Playlist ·') ? description : null,
   });
   console.log('playlist', decode(oembed.title));

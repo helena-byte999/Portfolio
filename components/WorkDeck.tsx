@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useLayoutEffect, useRef, useState, type PointerEvent } from 'react';
 import { PADS, WORK_INTRO } from '@/content/site';
-import { B_SIDES, SHELVES, TRACKS, type Shelf } from '@/content/work';
+import { SHELVES, TRACKS, type Shelf } from '@/content/work';
+import BSides from './BSides';
 import { Squiggle } from './fx/Doodles';
 import Rise from './fx/Rise';
 import s from './WorkDeck.module.css';
@@ -152,20 +153,7 @@ export default function WorkDeck() {
         ))}
       </ol>
 
-      <div className={`wrap ${s.bsides}`} data-reveal>
-        <p className="eyebrow">B-sides</p>
-        {B_SIDES.map((b) => (
-          <a key={b.title} className={s.bside} href={b.link.href} target="_blank" rel="noopener">
-            <span className="mono">{b.kicker}</span>
-            <strong>{b.title}</strong>
-            <span>{b.text}</span>
-            <span className={s.more}>{b.link.label} ↗</span>
-          </a>
-        ))}
-        <a className={s.github} href="https://github.com/helena-byte999" target="_blank" rel="noopener">
-          Everything else I build in the open is on GitHub ↗
-        </a>
-      </div>
+      <BSides />
     </section>
   );
 }

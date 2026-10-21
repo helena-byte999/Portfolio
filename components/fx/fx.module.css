@@ -39,31 +39,23 @@
 
 /* Now playing */
 .now {
-  position: fixed;
-  left: 16px;
-  bottom: 16px;
-  z-index: 30;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 8px 8px 16px;
+  height: 46px;
+  padding: 6px 6px 6px 16px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--card) 88%, transparent);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  transform: translateY(160%);
-  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: var(--fill);
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .now[data-shown] {
+  opacity: 1;
   transform: none;
-}
-
-/* The music player's pill takes the bottom of the screen while it's open */
-:global(body[data-music='on']) .now {
-  transform: translateY(160%);
+  pointer-events: auto;
 }
 
 .eq {

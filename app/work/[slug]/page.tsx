@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Cover from '@/components/Cover';
-import Header from '@/components/Header';
 import VideoClip from '@/components/VideoClip';
 import { Footer } from '@/components/Sections';
 import { PADS } from '@/content/site';
@@ -40,7 +39,6 @@ export default async function CaseStudy({ params }: Params) {
 
   return (
     <>
-      <Header />
       <main className={s.page} style={{ ['--accent-c' as string]: PADS[index % PADS.length].color }}>
         <div className="wrap">
           <Link href="/#work" className={s.back}>
