@@ -1,13 +1,11 @@
 import type { Metadata, Viewport } from 'next';
-import { Archivo, Doto, JetBrains_Mono } from 'next/font/google';
+import { Archivo, JetBrains_Mono } from 'next/font/google';
 import Reveal from '@/components/Reveal';
 import './globals.css';
 
 // Archivo throughout; its width axis gives the expanded ExtraBold used for the name.
 const archivo = Archivo({ subsets: ['latin'], axes: ['wdth'], style: ['normal', 'italic'], variable: '--font-sans', display: 'swap' });
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
-// Dot-matrix display face for the Spotify card's track title.
-const dot = Doto({ subsets: ['latin'], weight: '700', variable: '--font-dot', display: 'swap' });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ena-labs.netlify.app'),
@@ -35,7 +33,7 @@ const boot = `(function(){var d=document.documentElement;try{var t=localStorage.
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GB" className={`${archivo.variable} ${mono.variable} ${dot.variable}`} suppressHydrationWarning>
+    <html lang="en-GB" className={`${archivo.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: boot }} />
       </head>
