@@ -29,13 +29,17 @@ for (const link of links.slice(0, 3)) {
   const description = decode(meta('og:description') ?? '');
   // A personal playlist's description reads "Playlist · Name · 39 items · 5 saves".
   const counted = description.match(/(\d[\d,]*)\s+(?:songs|items|tracks)/i)?.[1]?.replace(/,/g, '');
+  // Otherwise count the songs in Spotify's embed page data.
+  const embed = await (await fetch(`https://open.spotify.com/embed/playlist/${id}`, { headers: { 'User-Agent': 'Mozilla/5.0' } })).text();
+  const data = embed.match(/<script id="__NEXT_DATA__" type="application\/json">(.*?)<\/script>/s)?.[1];
+  const listed = data ? (JSON.parse(data).props?.pageProps?.state?.data?.entity?.trackList ?? []).length : 0;
 
   playlists.push({
     id,
     url,
     title: decode(oembed.title),
     cover: meta('og:image') ?? oembed.thumbnail_url,
-    tracks: counted ? Number(counted) : null,
+    tracks: counted ? Number(counted) : listed || null,
     subtitle: description && !description.startsWith('Playlist ·') ? description : null,
   });
   console.log('playlist', decode(oembed.title));
