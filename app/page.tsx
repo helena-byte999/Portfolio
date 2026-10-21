@@ -7,10 +7,10 @@ export default function Home() {
     <>
       <main>
         <Hero />
+        <About />
         <WorkDeck />
         <Experience />
         <SetList />
-        <About />
         <Writing />
         <Contact />
       </main>

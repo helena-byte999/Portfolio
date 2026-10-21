@@ -8,10 +8,13 @@
     "preview": "npx serve@14.2.4 out",
     "typecheck": "tsc --noEmit",
     "assets": "node scripts/build-assets.mjs",
-    "playlists": "node scripts/fetch-playlists.mjs"
+    "playlists": "node scripts/fetch-playlists.mjs",
+    "writing": "node scripts/fetch-writing.mjs",
+    "prebuild": "node scripts/fetch-writing.mjs"
   },
   "dependencies": {
     "@react-three/fiber": "9.8.1",
+    "lucide-react": "1.52.0",
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",

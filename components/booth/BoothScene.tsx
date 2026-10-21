@@ -10,7 +10,15 @@ import { music, playback, useMusic } from './musicStore';
 import { FIGURE } from './figure';
 
 /** Shared, mutable state between the DOM pads and the scene; read every frame, never re-renders. */
-export type BoothSignal = { hover: number; flash: number; flashAt: number };
+export type BoothSignal = {
+  hover: number;
+  flash: number;
+  flashAt: number;
+  /** Set while the visitor drags the booth around, so a drag never counts as a click. */
+  dragged: boolean;
+  /** The camera's current angle around the booth; LEGO-you turns to face it. */
+  azimuth: number;
+};
 
 type Props = {
   signal: React.RefObject<BoothSignal>;
@@ -72,7 +80,7 @@ function typedAt(roles: readonly string[], t: number) {
   return '';
 }
 
-function Figure() {
+function Figure({ signal }: { signal: React.RefObject<BoothSignal> }) {
   const [bodyTex, headTex] = useLoader(THREE.TextureLoader, ['/booth/ena-body.webp', '/booth/ena-head.webp']);
   for (const t of [bodyTex, headTex]) t.colorSpace = THREE.SRGBColorSpace;
 
@@ -83,11 +91,14 @@ function Figure() {
   const pivotY = FIG_TOP - FIGURE.bodyTop * k;
   const pivotX = (FIGURE.neckX - FIGURE.width / 2) * k; // neck sits left of the layer's centre (the record widens it)
 
+  const root = useRef<THREE.Group>(null);
   const body = useRef<THREE.Group>(null);
   const head = useRef<THREE.Group>(null);
   const { pointer } = useThree();
 
   useFrame(({ clock }) => {
+    // She's a cut-out, so she turns to face the camera wherever it goes around the booth.
+    root.current!.rotation.y = signal.current!.azimuth;
     const t = clock.elapsedTime;
     const beat = (t * BPM) / 60;
     const hit = kick(t);
@@ -99,7 +110,7 @@ function Figure() {
   });
 
   return (
-    <group position={[-pivotX, 0, FIG_Z]}>
+    <group ref={root} position={[-pivotX, 0, FIG_Z]}>
       <group ref={body}>
         <mesh position={[0, pivotY - bodyH / 2, 0]} renderOrder={1}>
           <planeGeometry args={[w, bodyH]} />
@@ -123,6 +134,7 @@ function Deck({
   x,
   label,
   signal,
+  role,
   cover,
   hasMusic = false,
   onPlatter,
@@ -130,6 +142,8 @@ function Deck({
   x: number;
   label: string;
   signal: React.RefObject<BoothSignal>;
+  /** 'play': the record that's playing. 'cue': the next record, waiting. */
+  role: 'play' | 'cue';
   cover?: string | null;
   hasMusic?: boolean;
   onPlatter?: () => void;
@@ -202,12 +216,15 @@ function Deck({
     // Same flag the background reads: set by the Spotify player while sound is coming out.
     const playing = document.documentElement.dataset.music === 'playing';
     const since = now() - signal.current!.flashAt;
-    let target = hasMusic ? (playing ? 3.49 : 0) : 3.49;
+    // With nothing playing both records spin for show. Once music is on, the playing record spins
+    // while it plays and the cued one waits.
+    const spinning = !hasMusic || (role === 'play' && playing);
+    let target = spinning ? 3.49 : 0;
     if (since < 0.35) target = -9; // a quick scratch when a pad is hit
-    speed.current = THREE.MathUtils.lerp(speed.current, target, hasMusic && !playing ? 0.05 : 0.2);
+    speed.current = THREE.MathUtils.lerp(speed.current, target, spinning ? 0.2 : 0.05);
     platter.current!.rotation.y -= speed.current * delta;
-    // Tonearm on the record while playing, back on its rest otherwise
-    arm.current!.rotation.y = THREE.MathUtils.lerp(arm.current!.rotation.y, hasMusic && playing ? -0.6 : 0.42, 0.06);
+    // Tonearm on the record while it plays, back on its rest otherwise
+    arm.current!.rotation.y = THREE.MathUtils.lerp(arm.current!.rotation.y, hasMusic && role === 'play' && playing ? -0.6 : 0.42, 0.06);
   });
 
   const over = (e: ThreeEvent<PointerEvent>) => {
@@ -227,7 +244,7 @@ function Deck({
       <group
         ref={platter}
         position={[-0.14, 0.17, 0]}
-        onClick={onPlatter && ((e) => (e.stopPropagation(), onPlatter()))}
+        onClick={onPlatter && ((e) => (e.stopPropagation(), !signal.current!.dragged && onPlatter()))}
         onPointerOver={onPlatter && over}
         onPointerOut={onPlatter && out}
       >
@@ -293,7 +310,7 @@ function Pad({ index, x, z, onPad, signal }: { index: number; x: number; z: numb
 
   return (
     <group position={[x, DESK_TOP + 0.16, z]}>
-      <mesh ref={mesh} onPointerOver={over} onPointerOut={out} onClick={(e) => (e.stopPropagation(), onPad(index))}>
+      <mesh ref={mesh} onPointerOver={over} onPointerOut={out} onClick={(e) => (e.stopPropagation(), !signal.current!.dragged && onPad(index))}>
         <boxGeometry args={[0.32, 0.06, 0.3]} />
         <meshStandardMaterial ref={mat} color={pad.color} emissive={pad.color} emissiveIntensity={0.1} roughness={0.45} />
       </mesh>
@@ -429,22 +446,84 @@ function Lights() {
       <ambientLight intensity={1.1} />
       <directionalLight position={[3, 7, 8]} intensity={1.6} />
       <directionalLight position={[-5, 3, 2]} intensity={0.45} />
+      {/* So the back of the booth isn't dark when you walk round it */}
+      <directionalLight position={[2, 5, -8]} intensity={0.8} />
     </>
   );
 }
 
-/** Frames the booth: fits its width on narrow screens, its height on wide ones, with a little parallax. */
-function Rig() {
-  const { camera, size, pointer } = useThree();
-  const target = useMemo(() => new THREE.Vector3(), []);
+/** Frames the booth and lets visitors walk around it: drag sideways to circle it a full 360°,
+ *  drag up and down to tilt, pinch on a trackpad (or ⌘/Ctrl + scroll) to zoom, double-click to
+ *  face the front again. With no drag, a little mouse parallax. */
+function Rig({ signal }: { signal: React.RefObject<BoothSignal> }) {
+  const { camera, size, pointer, gl } = useThree();
+  const orbit = useRef({ theta: 0, tilt: 0, zoom: 1, cur: { theta: 0, tilt: 0, zoom: 1 } });
+
+  useEffect(() => {
+    const el = gl.domElement;
+    let down: { x: number; y: number; theta: number; tilt: number } | null = null;
+    const o = orbit.current;
+    const onDown = (e: PointerEvent) => {
+      down = { x: e.clientX, y: e.clientY, theta: o.theta, tilt: o.tilt };
+      signal.current!.dragged = false;
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!down) return;
+      const dx = e.clientX - down.x;
+      const dy = e.clientY - down.y;
+      if (Math.hypot(dx, dy) > 6) signal.current!.dragged = true;
+      o.theta = down.theta - dx * 0.008;
+      // Vertical drags only tilt with a mouse; on touch they scroll the page.
+      if (e.pointerType === 'mouse') o.tilt = THREE.MathUtils.clamp(down.tilt + dy * 0.004, -0.25, 0.55);
+    };
+    const onUp = () => {
+      down = null;
+    };
+    const onWheel = (e: WheelEvent) => {
+      if (!e.ctrlKey && !e.metaKey) return; // plain scrolling still scrolls the page
+      e.preventDefault();
+      o.zoom = THREE.MathUtils.clamp(o.zoom * Math.exp(e.deltaY * 0.01), 0.45, 1.25);
+    };
+    const onDouble = () => {
+      o.theta = Math.round(o.theta / (Math.PI * 2)) * Math.PI * 2;
+      o.tilt = 0;
+      o.zoom = 1;
+    };
+    el.addEventListener('pointerdown', onDown);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    el.addEventListener('wheel', onWheel, { passive: false });
+    el.addEventListener('dblclick', onDouble);
+    return () => {
+      el.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      el.removeEventListener('wheel', onWheel);
+      el.removeEventListener('dblclick', onDouble);
+    };
+  }, [gl, signal]);
+
   useFrame(() => {
+    const o = orbit.current;
+    o.cur.theta += (o.theta - o.cur.theta) * 0.1;
+    o.cur.tilt += (o.tilt - o.cur.tilt) * 0.1;
+    o.cur.zoom += (o.zoom - o.cur.zoom) * 0.1;
+    // Fit the booth's width on narrow screens and its height on wide ones.
     const aspect = size.width / size.height;
     const tan = Math.tan(THREE.MathUtils.degToRad(15));
     const halfW = aspect < 1 ? 2.75 : 3.5;
     const dist = Math.max(halfW / (tan * aspect), 2.4 / tan);
-    target.set(pointer.x * 0.45, 3.9 + pointer.y * 0.18, dist);
-    camera.position.lerp(target, 0.06);
-    camera.lookAt(0, 2.05, 0);
+    const lookY = 2.05;
+    const radius = Math.hypot(dist, 3.9 - lookY) * o.cur.zoom;
+    const elevation = THREE.MathUtils.clamp(Math.atan2(3.9 - lookY, dist) + o.cur.tilt + pointer.y * 0.02, 0.02, 1.1);
+    const azimuth = o.cur.theta + pointer.x * 0.05;
+    camera.position.set(
+      Math.sin(azimuth) * Math.cos(elevation) * radius,
+      lookY + Math.sin(elevation) * radius,
+      Math.cos(azimuth) * Math.cos(elevation) * radius,
+    );
+    camera.lookAt(0, lookY, 0);
+    signal.current!.azimuth = azimuth;
   });
   return null;
 }
@@ -456,16 +535,17 @@ function Ready({ onReady }: { onReady: () => void }) {
 
 export default function BoothScene({ signal, roles, onPad, onReady, running }: Props) {
   const current = useMusic();
-  const cover = current ? current.list[current.index]?.cover : null;
-  // Tap the record: nothing playing → start Ena's first playlist; otherwise play/pause.
-  const dropNeedle = () => {
-    if (music.get()) {
-      playback.toggle();
-      return;
-    }
-    const list = (mine as Playlist[]).slice(0, 3);
-    if (list.length) music.set({ list, index: 0, at: Date.now() });
+  // Both records carry playlist art: the left is what's playing (or her first playlist), the right
+  // is the next one, cued up.
+  const list = current?.list ?? (mine as Playlist[]).slice(0, 3);
+  const playIndex = current ? current.index : 0;
+  const cueIndex = list.length > 1 ? (playIndex + 1) % list.length : -1;
+  // Tap the left record: start her music, or play/pause it. Tap the right one: put that record on.
+  const tapPlaying = () => {
+    if (music.get()) playback.toggle();
+    else if (list.length) music.set({ list, index: 0, at: Date.now() });
   };
+  const tapCued = () => cueIndex >= 0 && music.set({ list, index: cueIndex, at: Date.now() });
   return (
     <Canvas
       frameloop={running ? 'always' : 'never'}
@@ -476,14 +556,14 @@ export default function BoothScene({ signal, roles, onPad, onReady, running }: P
       onPointerMissed={() => (document.body.style.cursor = '')}
     >
       <Lights />
-      <Rig />
+      <Rig signal={signal} />
       <Suspense fallback={null}>
-        <Figure />
+        <Figure signal={signal} />
         <Ready onReady={onReady} />
       </Suspense>
       <Desk roles={roles} />
-      <Deck x={-1.95} label="#3557e8" signal={signal} cover={cover} hasMusic={!!current} onPlatter={dropNeedle} />
-      <Deck x={1.95} label="#f2c94c" signal={signal} />
+      <Deck x={-1.95} label="#3557e8" signal={signal} role="play" cover={list[playIndex]?.cover} hasMusic={!!current} onPlatter={tapPlaying} />
+      <Deck x={1.95} label="#f2c94c" signal={signal} role="cue" cover={cueIndex >= 0 ? list[cueIndex].cover : null} hasMusic={!!current} onPlatter={cueIndex >= 0 ? tapCued : undefined} />
       <Mixer onPad={onPad} signal={signal} />
     </Canvas>
   );

@@ -1,18 +1,19 @@
 import {
   ABOUT,
-  CERTIFICATIONS,
   CONTACT,
-  EDUCATION,
+  CREDENTIAL_KINDS,
+  CREDENTIALS,
   EXPERIENCE,
   FOOTER,
   PADS,
   PERSON,
-  RESEARCH,
   SET_LIST,
   SOCIALS,
-  VOLUNTEERING,
   WRITING,
 } from '@/content/site';
+import posts from '@/content/writing.json';
+import { CredentialCard, LogoTile, PostCard, SkillCard } from './Cards';
+import Carousel from './Carousel';
 import CopyEmail from './fx/CopyEmail';
 import { Squiggle } from './fx/Doodles';
 import Magnetic from './fx/Magnetic';
@@ -36,69 +37,35 @@ export function Experience() {
           {EXPERIENCE.map((job) => (
             <li key={job.role + job.org} className={s.job} data-reveal>
               <p className={`mono ${s.dates}`}>{job.dates}</p>
-              <div>
-                <h3 className={s.jobRole}>{job.role}</h3>
-                <p className={s.jobOrg}>
-                  {job.org} · {job.place}
-                </p>
-                <p className={s.jobText}>{job.text}</p>
+              <div className={s.jobBody}>
+                <LogoTile id={job.logo} size={48} />
+                <div>
+                  <h3 className={s.jobRole}>{job.role}</h3>
+                  <p className={s.jobOrg}>
+                    {job.org} · {job.place}
+                  </p>
+                  <p className={s.jobText}>{job.text}</p>
+                </div>
               </div>
             </li>
           ))}
         </ol>
-
-        <div className={s.extras}>
-          <article className={s.panel} data-reveal>
-            <p className="eyebrow">Research</p>
-            <h3 className={s.panelTitle}>{RESEARCH.title}</h3>
-            <p className={s.panelMeta}>{RESEARCH.org}</p>
-            <p>{RESEARCH.text}</p>
-          </article>
-          <div className={s.stack}>
-            <article className={s.panel} data-reveal>
-              <p className="eyebrow">Education</p>
-              {EDUCATION.map((e) => (
-                <div key={e.title} className={s.line}>
-                  <strong>{e.title}</strong>
-                  <span>
-                    {e.org} · {e.dates}
-                  </span>
-                  <p>{e.note}</p>
-                </div>
-              ))}
-            </article>
-            <article className={s.panel} data-reveal>
-              <p className="eyebrow">Volunteering</p>
-              <div className={s.line}>
-                <strong>{VOLUNTEERING.role}</strong>
-                <span>
-                  {VOLUNTEERING.org} · {VOLUNTEERING.dates}
-                </span>
-                <p>{VOLUNTEERING.text}</p>
-              </div>
-            </article>
-            <article className={s.panel} data-reveal>
-              <p className="eyebrow">Certifications</p>
-              {CERTIFICATIONS.map((c) =>
-                c.href ? (
-                  <a key={c.title} className={s.line} href={c.href} target="_blank" rel="noopener">
-                    <strong>{c.title} ↗</strong>
-                    <span>{c.org}</span>
-                  </a>
-                ) : (
-                  <div key={c.title} className={s.line}>
-                    <strong>{c.title}</strong>
-                    <span>{c.org}</span>
-                  </div>
-                ),
-              )}
-            </article>
-          </div>
-        </div>
       </div>
+
+      <div className="wrap" data-reveal>
+        <h3 className={s.subhead}>Education, research &amp; credentials</h3>
+      </div>
+      <Carousel
+        label="Education, research and credentials"
+        filters={CREDENTIAL_KINDS}
+        items={CREDENTIALS.map((c) => ({ key: c.title, group: c.kind, node: <CredentialCard c={c} /> }))}
+      />
     </section>
   );
 }
+
+// The pad colours, with the black pad swapped for white so it shows on the dark page.
+const STEP_COLOURS = PADS.map((p) => (p.color === '#2B2B2E' ? '#f4f4f5' : p.color));
 
 export function SetList() {
   return (
@@ -114,7 +81,7 @@ export function SetList() {
         </div>
         <ol className={s.steps}>
           {SET_LIST.steps.map((step, i) => (
-            <li key={step.name} className={s.step} data-reveal style={{ ['--note' as string]: PADS[i % PADS.length].color, ['--tilt' as string]: `${i % 2 ? 1.4 : -1.2}deg` }}>
+            <li key={step.name} className={s.step} data-reveal style={{ ['--note' as string]: STEP_COLOURS[i % STEP_COLOURS.length], ['--tilt' as string]: `${i % 2 ? 1.4 : -1.2}deg` }}>
               <span className={s.stepNo}>{String(i + 1).padStart(2, '0')}</span>
               <h3 className={s.stepName}>{step.name}</h3>
               <span className={`mono ${s.stepMeans}`}>{step.means}</span>
@@ -126,6 +93,9 @@ export function SetList() {
     </section>
   );
 }
+
+// One colour per skills card, from the pad keycaps.
+const SKILL_COLOURS = ['#F2C94C', '#6b8cff', '#ff7a7e', '#7ee08a'];
 
 export function About() {
   return (
@@ -141,9 +111,9 @@ export function About() {
               {p}
             </p>
           ))}
-          <blockquote className={s.quote}>“{ABOUT.quote}”</blockquote>
         </div>
         <div className={s.aboutSide} data-reveal>
+          <blockquote className={s.quote}>“{ABOUT.quote}”</blockquote>
           <dl className={s.stats}>
             {ABOUT.stats.map((st) => (
               <div key={st.label}>
@@ -154,20 +124,20 @@ export function About() {
               </div>
             ))}
           </dl>
-          {ABOUT.skills.map((g) => (
-            <div key={g.group} className={s.skillGroup}>
-              <h3 className="mono">{g.group}</h3>
-              <ul className="chips">
-                {g.items.map((item) => (
-                  <li key={item} className="chip">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
         </div>
       </div>
+
+      <div className="wrap" data-reveal>
+        <h3 className={s.subhead}>What I bring to the booth</h3>
+      </div>
+      <Carousel
+        label="Skills"
+        width="min(340px, 84vw)"
+        items={ABOUT.skills.map((g, i) => ({
+          key: g.group,
+          node: <SkillCard group={g.group} items={g.items} color={SKILL_COLOURS[i % SKILL_COLOURS.length]} />,
+        }))}
+      />
     </section>
   );
 }
@@ -183,16 +153,13 @@ export function Writing() {
           </h2>
           <p className="lede">{WRITING.text}</p>
         </div>
-        <div className={s.articles}>
-          {WRITING.articles.map((a) => (
-            <a key={a.href} className={s.article} href={a.href} target="_blank" rel="noopener" data-reveal>
-              <span className="mono">Medium</span>
-              <strong>{a.title}</strong>
-              <span>{a.text}</span>
-              <span className={s.read}>Read ↗</span>
-            </a>
-          ))}
-        </div>
+      </div>
+      <Carousel
+        label="Medium posts"
+        width="min(420px, 86vw)"
+        items={posts.map((p) => ({ key: p.href, node: <PostCard p={p} /> }))}
+      />
+      <div className="wrap">
         <a className={s.moreLink} href={WRITING.more.href} target="_blank" rel="noopener">
           {WRITING.more.label} ↗
         </a>
