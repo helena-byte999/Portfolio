@@ -9,8 +9,9 @@ import s from './PlaylistStack.module.css';
 
 // Three of Ena's playlists, stacked and tilted like the tool tiles. Pressing one starts a preview in
 // the mini LEGO player at the bottom of the screen (MusicPlayer.tsx); ↗ goes straight to Spotify.
-// Data comes from content/playlists.json (npm run playlists); ?playlists=demo previews the layout
-// with three public Spotify playlists.
+// Data comes from content/playlists.json (npm run playlists), and each visit asks Spotify (oEmbed,
+// which allows browser requests) for the current name and cover, so the daylist is always today's.
+// ?playlists=demo previews the layout with three public Spotify playlists.
 
 const TINTS = ['#f08a3c', '#3557e8', '#e5484d'];
 
@@ -23,7 +24,19 @@ export default function PlaylistStack() {
     if (new URLSearchParams(location.search).get('playlists') === 'demo') {
       setList(demo as Playlist[]);
       setIsDemo(true);
+      return;
     }
+    // Refresh names and covers from Spotify; keep what we have if that fails.
+    Promise.all(
+      (mine as Playlist[]).map((p) =>
+        fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(p.url)}`)
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d: { title?: string; thumbnail_url?: string } | null) =>
+            d ? { ...p, title: d.title || p.title, cover: d.thumbnail_url || p.cover } : p,
+          )
+          .catch(() => p),
+      ),
+    ).then(setList);
   }, []);
 
   if (!list.length) return null;
@@ -47,7 +60,7 @@ export default function PlaylistStack() {
               aria-label={`Play a preview of ${p.title}`}
             >
               <img src={p.cover} alt="" loading="lazy" />
-              <span className={s.count}>{p.tracks ? `${p.tracks} Tracks` : 'Playlist'}</span>
+              <span className={s.count}>{p.daily ? 'Updates daily' : p.tracks ? `${p.tracks} Tracks` : 'Playlist'}</span>
               <span className={s.foot}>
                 <span className={s.play} aria-hidden="true">
                   {on ? (
