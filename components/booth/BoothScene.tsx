@@ -11,6 +11,7 @@ export type BoothSignal = { hover: number; flash: number; flashAt: number };
 
 type Props = {
   signal: React.RefObject<BoothSignal>;
+  roles: readonly string[];
   onPad: (index: number) => void;
   onReady: () => void;
   running: boolean;
@@ -22,6 +23,9 @@ const FIG_TOP = 4.0;
 const FIG_Z = -1.05;
 const DESK_TOP = 1.3;
 const DESK_W = 6.2;
+const CHARCOAL = '#2b2b2e';
+const CREAM = '#ebe7de';
+const LCD_GREEN = '#9be36a';
 const now = () => performance.now() / 1000;
 
 /** 0→1 envelope that spikes on every beat and decays before the next. */
@@ -38,8 +42,32 @@ function canvasTexture(width: number, height: number, draw: (ctx: CanvasRenderin
   return tex;
 }
 
-const displayFont = () =>
-  getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'system-ui';
+const cssFont = (name: string, fallback: string) =>
+  getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+
+// The LCD types each role, holds it, backspaces, then moves on to the next.
+const TYPE = 0.07;
+const HOLD = 1.8;
+const ERASE = 0.035;
+const GAP = 0.35;
+
+function typedAt(roles: readonly string[], t: number) {
+  const spans = roles.map((r) => r.length * (TYPE + ERASE) + HOLD + GAP);
+  let x = t % spans.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < roles.length; i++) {
+    const role = roles[i].toUpperCase();
+    if (x < spans[i]) {
+      if (x < role.length * TYPE) return role.slice(0, Math.ceil(x / TYPE));
+      x -= role.length * TYPE;
+      if (x < HOLD) return role;
+      x -= HOLD;
+      if (x < role.length * ERASE) return role.slice(0, role.length - Math.floor(x / ERASE));
+      return '';
+    }
+    x -= spans[i];
+  }
+  return '';
+}
 
 function Figure() {
   const [bodyTex, headTex] = useLoader(THREE.TextureLoader, ['/booth/ena-body.webp', '/booth/ena-head.webp']);
@@ -104,12 +132,12 @@ function Deck({ x, label, signal }: { x: number; label: string; signal: React.Re
         ctx.beginPath();
         ctx.arc(256, 256, 80, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = '#1f0a26';
-        ctx.font = `800 34px ${displayFont()}`;
+        ctx.fillStyle = '#161616';
+        ctx.font = `700 22px ${cssFont('--font-display', 'sans-serif')}`;
         ctx.textAlign = 'center';
-        ctx.fillText('ENA', 256, 236);
-        ctx.font = `700 18px ${displayFont()}`;
-        ctx.fillText('SIDE A', 256, 300);
+        ctx.fillText('SIDE A', 256, 222);
+        ctx.font = `600 16px ${cssFont('--font-display', 'sans-serif')}`;
+        ctx.fillText('33 ⅓ RPM', 256, 306);
         ctx.beginPath();
         ctx.arc(256, 256, 7, 0, Math.PI * 2);
         ctx.fill();
@@ -129,7 +157,7 @@ function Deck({ x, label, signal }: { x: number; label: string; signal: React.Re
     <group position={[x, DESK_TOP, 0.05]}>
       <mesh position={[0, 0.07, 0]}>
         <boxGeometry args={[1.75, 0.14, 1.12]} />
-        <meshStandardMaterial color="#2a1a31" roughness={0.6} metalness={0.3} />
+        <meshStandardMaterial color={CHARCOAL} roughness={0.6} metalness={0.25} />
       </mesh>
       <group ref={platter} position={[-0.14, 0.17, 0]}>
         <mesh>
@@ -144,11 +172,11 @@ function Deck({ x, label, signal }: { x: number; label: string; signal: React.Re
       <group position={[0.62, 0.2, -0.38]} rotation={[0, 0.42, 0]}>
         <mesh>
           <cylinderGeometry args={[0.07, 0.07, 0.08, 20]} />
-          <meshStandardMaterial color="#c9c3cf" metalness={0.8} roughness={0.25} />
+          <meshStandardMaterial color="#c9c6c0" metalness={0.8} roughness={0.25} />
         </mesh>
         <mesh position={[0, 0.04, 0.36]}>
           <boxGeometry args={[0.035, 0.03, 0.72]} />
-          <meshStandardMaterial color="#d7d1dc" metalness={0.8} roughness={0.25} />
+          <meshStandardMaterial color="#d8d5cf" metalness={0.8} roughness={0.25} />
         </mesh>
       </group>
     </group>
@@ -163,21 +191,21 @@ function Pad({ index, x, z, onPad, signal }: { index: number; x: number; z: numb
   const number = useMemo(
     () =>
       canvasTexture(128, 128, (ctx) => {
-        ctx.fillStyle = 'rgba(31,10,38,0.85)';
-        ctx.font = `800 76px ${displayFont()}`;
+        ctx.fillStyle = pad.ink;
+        ctx.font = `800 76px ${cssFont('--font-display', 'sans-serif')}`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(pad.key, 64, 70);
       }),
-    [pad.key],
+    [pad.key, pad.ink],
   );
 
   useFrame(({ clock }) => {
     const s = signal.current!;
     const hovered = hover3d.current || s.hover === index;
     const since = now() - s.flashAt;
-    const flash = s.flash === index && since < 0.6 ? 3 * (1 - since / 0.6) : 0;
-    const target = (hovered ? 1.6 : 0.35 + 0.25 * kick(clock.elapsedTime + index * 0.125)) + flash;
+    const flash = s.flash === index && since < 0.6 ? 2 * (1 - since / 0.6) : 0;
+    const target = (hovered ? 0.9 : 0.08 + 0.18 * kick(clock.elapsedTime + index * 0.125)) + flash;
     mat.current!.emissiveIntensity = THREE.MathUtils.lerp(mat.current!.emissiveIntensity, target, 0.3);
     mesh.current!.position.y = hovered || flash > 0 ? 0.015 : 0.03;
   });
@@ -196,7 +224,7 @@ function Pad({ index, x, z, onPad, signal }: { index: number; x: number; z: numb
     <group position={[x, DESK_TOP + 0.16, z]}>
       <mesh ref={mesh} onPointerOver={over} onPointerOut={out} onClick={(e) => (e.stopPropagation(), onPad(index))}>
         <boxGeometry args={[0.32, 0.06, 0.3]} />
-        <meshStandardMaterial ref={mat} color={pad.color} emissive={pad.color} emissiveIntensity={0.4} roughness={0.5} />
+        <meshStandardMaterial ref={mat} color={pad.color} emissive={pad.color} emissiveIntensity={0.1} roughness={0.45} />
       </mesh>
       <mesh position={[0, 0.062, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <planeGeometry args={[0.26, 0.26]} />
@@ -211,7 +239,7 @@ function Mixer({ onPad, signal }: { onPad: Props['onPad']; signal: React.RefObje
     <group>
       <mesh position={[0, DESK_TOP + 0.08, 0.05]}>
         <boxGeometry args={[1.32, 0.16, 1.16]} />
-        <meshStandardMaterial color="#1f1226" roughness={0.55} metalness={0.35} />
+        <meshStandardMaterial color={CHARCOAL} roughness={0.55} metalness={0.3} />
       </mesh>
       {PADS.map((_, i) => (
         <Pad key={i} index={i} x={(i % 3 - 1) * 0.4} z={i < 3 ? -0.14 : 0.24} onPad={onPad} signal={signal} />
@@ -219,7 +247,7 @@ function Mixer({ onPad, signal }: { onPad: Props['onPad']; signal: React.RefObje
       {[-0.45, -0.15, 0.15, 0.45].map((x) => (
         <mesh key={x} position={[x, DESK_TOP + 0.19, -0.42]}>
           <cylinderGeometry args={[0.055, 0.055, 0.07, 20]} />
-          <meshStandardMaterial color="#d7d1dc" metalness={0.7} roughness={0.3} />
+          <meshStandardMaterial color="#d8d5cf" metalness={0.7} roughness={0.3} />
         </mesh>
       ))}
       <mesh position={[0, DESK_TOP + 0.165, 0.52]}>
@@ -228,120 +256,108 @@ function Mixer({ onPad, signal }: { onPad: Props['onPad']; signal: React.RefObje
       </mesh>
       <mesh position={[0.06, DESK_TOP + 0.19, 0.52]}>
         <boxGeometry args={[0.08, 0.05, 0.1]} />
-        <meshStandardMaterial color="#ffcf3f" emissive="#ffcf3f" emissiveIntensity={0.3} />
+        <meshStandardMaterial color="#f2c94c" />
       </mesh>
     </group>
   );
 }
 
-function Desk() {
-  const front = useMemo(
-    () =>
-      canvasTexture(2048, 430, (ctx) => {
-        const g = ctx.createLinearGradient(0, 0, 0, 430);
-        g.addColorStop(0, '#24122d');
-        g.addColorStop(1, '#12081a');
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, 2048, 430);
-        ctx.fillStyle = 'rgba(255,255,255,0.05)';
-        for (let x = 40; x < 2048; x += 80) ctx.fillRect(x, 60, 2, 330);
-        ctx.font = `800 120px ${displayFont()}`;
-        ctx.fontStretch = 'expanded';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = '#f6edf8';
-        ctx.fillText('ENA OTUOKON', 1024, 205);
-        ctx.font = `700 40px ${displayFont()}`;
-        ctx.fillStyle = '#ffcf3f';
-        ctx.fillText('● LIVE  ·  PRODUCT  ·  MUSIC  ·  AI', 1024, 320);
-      }),
-    [],
-  );
+/** The booth body. Its front carries an LCD that types out each role in turn. */
+function Desk({ roles }: { roles: readonly string[] }) {
+  const lcd = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 2048;
+    canvas.height = 430;
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 4;
+    return { ctx: canvas.getContext('2d')!, texture };
+  }, []);
+  const shown = useRef('');
+
+  const draw = (text: string, caret: boolean) => {
+    const { ctx, texture } = lcd;
+    const g = ctx.createLinearGradient(0, 0, 0, 430);
+    g.addColorStop(0, '#f4f1ea');
+    g.addColorStop(1, '#e2ddd1');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 2048, 430);
+
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#e5484d';
+    ctx.beginPath();
+    ctx.arc(1800, 97, 13, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#161616';
+    ctx.font = `700 34px ${cssFont('--font-mono', 'monospace')}`;
+    ctx.textAlign = 'right';
+    ctx.fillText('LIVE', 1772, 110);
+
+    ctx.fillStyle = '#121412';
+    ctx.strokeStyle = '#2c302c';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.roundRect(224, 150, 1600, 210, 28);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.save();
+    ctx.font = `700 112px ${cssFont('--font-mono', 'monospace')}`;
+    ctx.fillStyle = LCD_GREEN;
+    ctx.shadowColor = 'rgba(155, 227, 106, 0.55)';
+    ctx.shadowBlur = 24;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, 300, 258);
+    if (caret) ctx.fillRect(300 + ctx.measureText(text).width + 12, 208, 58, 100);
+    ctx.restore();
+    texture.needsUpdate = true;
+  };
+
+  useFrame(({ clock }) => {
+    const text = typedAt(roles, clock.elapsedTime);
+    const caret = Math.floor(clock.elapsedTime * 2) % 2 === 0;
+    const key = `${text}|${caret}`;
+    if (key !== shown.current) {
+      shown.current = key;
+      draw(text, caret);
+    }
+  });
+
   const studs = useMemo(() => Array.from({ length: 18 }, (_, i) => -2.98 + i * 0.35), []);
 
   return (
     <group>
       <mesh position={[0, DESK_TOP / 2, 0.2]}>
         <boxGeometry args={[DESK_W, DESK_TOP, 1.6]} />
-        <meshStandardMaterial attach="material-0" color="#1a0d21" roughness={0.7} />
-        <meshStandardMaterial attach="material-1" color="#1a0d21" roughness={0.7} />
-        <meshStandardMaterial attach="material-2" color="#24142c" roughness={0.6} />
-        <meshStandardMaterial attach="material-3" color="#1a0d21" roughness={0.7} />
-        <meshStandardMaterial attach="material-4" map={front} roughness={0.5} emissive="#ffffff" emissiveMap={front} emissiveIntensity={0.35} />
-        <meshStandardMaterial attach="material-5" color="#1a0d21" roughness={0.7} />
+        <meshStandardMaterial attach="material-0" color={CREAM} roughness={0.7} />
+        <meshStandardMaterial attach="material-1" color={CREAM} roughness={0.7} />
+        <meshStandardMaterial attach="material-2" color="#e4dfd4" roughness={0.6} />
+        <meshStandardMaterial attach="material-3" color={CREAM} roughness={0.7} />
+        <meshStandardMaterial attach="material-4" map={lcd.texture} roughness={0.55} emissive="#ffffff" emissiveMap={lcd.texture} emissiveIntensity={0.2} />
+        <meshStandardMaterial attach="material-5" color={CREAM} roughness={0.7} />
       </mesh>
       {/* LEGO plate trim with studs along the front edge */}
       <mesh position={[0, DESK_TOP + 0.04, 0.86]}>
         <boxGeometry args={[DESK_W + 0.1, 0.08, 0.3]} />
-        <meshStandardMaterial color="#ffcf3f" roughness={0.35} />
+        <meshStandardMaterial color="#f2c94c" roughness={0.35} />
       </mesh>
       {studs.map((x) => (
         <mesh key={x} position={[x, DESK_TOP + 0.115, 0.86]}>
           <cylinderGeometry args={[0.085, 0.085, 0.07, 24]} />
-          <meshStandardMaterial color="#ffcf3f" roughness={0.35} />
+          <meshStandardMaterial color="#f2c94c" roughness={0.35} />
         </mesh>
       ))}
     </group>
   );
 }
 
-function Beams() {
-  const beams = useRef<THREE.Group[]>([]);
-  const alpha = useMemo(
-    () =>
-      canvasTexture(4, 256, (ctx) => {
-        const g = ctx.createLinearGradient(0, 0, 0, 256);
-        g.addColorStop(0, '#000');
-        g.addColorStop(1, '#fff');
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, 4, 256);
-      }),
-    [],
-  );
-  const specs = [
-    { x: -3.6, color: '#b65cff', phase: 0 },
-    { x: 3.6, color: '#ff5fa2', phase: 1.7 },
-    { x: 0, color: '#ffcf3f', phase: 3.1 },
-  ];
-
-  useFrame(({ clock }) => {
-    const t = clock.elapsedTime;
-    beams.current.forEach((b, i) => {
-      const s = specs[i];
-      b.rotation.z = (s.x === 0 ? 0 : -Math.sign(s.x) * 0.38) + Math.sin(t * 0.55 + s.phase) * 0.28;
-      const m = (b.children[0] as THREE.Mesh).material as THREE.MeshBasicMaterial;
-      m.opacity = 0.1 + 0.08 * kick(t + i * 0.25);
-    });
-  });
-
-  return (
-    <>
-      {specs.map((s, i) => (
-        <group key={i} ref={(g) => void (g && (beams.current[i] = g))} position={[s.x, 6.2, -2.4]}>
-          <mesh position={[0, -4.5, 0]}>
-            <coneGeometry args={[1.5, 9, 40, 1, true]} />
-            <meshBasicMaterial color={s.color} alphaMap={alpha} transparent opacity={0.14} blending={THREE.AdditiveBlending} depthWrite={false} side={THREE.DoubleSide} />
-          </mesh>
-        </group>
-      ))}
-    </>
-  );
-}
-
 function Lights() {
-  const purple = useRef<THREE.PointLight>(null);
-  const warm = useRef<THREE.PointLight>(null);
-  useFrame(({ clock }) => {
-    const hit = kick(clock.elapsedTime);
-    purple.current!.intensity = 18 + 14 * hit;
-    warm.current!.intensity = 10 + 6 * hit;
-  });
   return (
     <>
-      <ambientLight intensity={0.55} />
-      <directionalLight position={[2, 6, 7]} intensity={1.4} />
-      <pointLight ref={purple} position={[-3, 3.2, 2.5]} color="#b65cff" distance={12} />
-      <pointLight ref={warm} position={[3, 2.6, 2.5]} color="#ffcf3f" distance={12} />
+      <ambientLight intensity={1.1} />
+      <directionalLight position={[3, 7, 8]} intensity={1.6} />
+      <directionalLight position={[-5, 3, 2]} intensity={0.45} />
     </>
   );
 }
@@ -367,7 +383,7 @@ function Ready({ onReady }: { onReady: () => void }) {
   return null;
 }
 
-export default function BoothScene({ signal, onPad, onReady, running }: Props) {
+export default function BoothScene({ signal, roles, onPad, onReady, running }: Props) {
   return (
     <Canvas
       frameloop={running ? 'always' : 'never'}
@@ -379,14 +395,13 @@ export default function BoothScene({ signal, onPad, onReady, running }: Props) {
     >
       <Lights />
       <Rig />
-      <Beams />
       <Suspense fallback={null}>
         <Figure />
         <Ready onReady={onReady} />
       </Suspense>
-      <Desk />
-      <Deck x={-1.95} label="#b65cff" signal={signal} />
-      <Deck x={1.95} label="#ffcf3f" signal={signal} />
+      <Desk roles={roles} />
+      <Deck x={-1.95} label="#3557e8" signal={signal} />
+      <Deck x={1.95} label="#f2c94c" signal={signal} />
       <Mixer onPad={onPad} signal={signal} />
     </Canvas>
   );

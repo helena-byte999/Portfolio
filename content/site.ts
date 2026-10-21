@@ -3,7 +3,8 @@
 export const PERSON = {
   name: 'Ena Otuokon',
   fullName: 'Ena Helena Otuokon',
-  roles: ['Product Manager', 'DJ', 'Builder'],
+  /** Cycled on the LCD on the front of the booth. Product Manager first: it's the role she's hiring for. */
+  roles: ['Product Manager', 'Software Engineer', 'AI Enthusiast', 'DJ'],
   location: 'London, UK',
   email: 'otuokonhelena@gmail.com',
   cv: '/asset/pdf/ena_cv.pdf',
@@ -17,19 +18,28 @@ export const SOCIALS = [
 ];
 
 export const HERO = {
-  eyebrow: 'Now playing',
-  line: 'Product manager for AI, music and consumer products. I read the room before I drop the track.',
-  proof: ['8,000+ lens users in 4 days', '500+ users at launch', 'MSc AI, Distinction'],
+  greeting: "Hi, I'm",
+  lead: 'Product Manager who ',
+  /** Shown in blue with a blinking caret, like a line still being typed. */
+  accent: 'reads the room',
+  intro: 'I build AI, music and consumer products in London, test ideas by building them myself, and DJ and produce events on the side.',
+  /** Tilted stickers to the right of the booth. */
+  proof: [
+    { value: '8,000+', label: 'lens users in 4 days' },
+    { value: '500+', label: 'users at launch' },
+    { value: 'MSc', label: 'AI, Distinction' },
+  ],
 };
 
 /** The six pads on the mixer. Keys 1–6 hit them too. */
+// Keycap colours; `ink` is the label colour that reads on each.
 export const PADS = [
-  { key: '1', label: 'Work', target: 'work', color: '#FFCF3F' },
-  { key: '2', label: 'Experience', target: 'experience', color: '#B65CFF' },
-  { key: '3', label: 'Set list', target: 'setlist', color: '#FF5FA2' },
-  { key: '4', label: 'About', target: 'about', color: '#38D6FF' },
-  { key: '5', label: 'Writing', target: 'writing', color: '#7CF26B' },
-  { key: '6', label: 'Contact', target: 'contact', color: '#FF8A3D' },
+  { key: '1', label: 'Work', target: 'work', color: '#F2C94C', ink: '#161616' },
+  { key: '2', label: 'Experience', target: 'experience', color: '#3557E8', ink: '#ffffff' },
+  { key: '3', label: 'Set list', target: 'setlist', color: '#E5484D', ink: '#ffffff' },
+  { key: '4', label: 'About', target: 'about', color: '#4FAF5B', ink: '#ffffff' },
+  { key: '5', label: 'Writing', target: 'writing', color: '#F08A3C', ink: '#161616' },
+  { key: '6', label: 'Contact', target: 'contact', color: '#2B2B2E', ink: '#ffffff' },
 ] as const;
 
 export const BOOTH_HINT = 'Hit a pad to jump there, or press 1–6.';
@@ -122,6 +132,7 @@ export const SET_LIST = {
 
 export const ABOUT = {
   title: 'Product manager by day, DJ by night, builder in between.',
+  quote: 'Most of my product ideas start on the dance floor.',
   paragraphs: [
     "I'm Ena, a product manager based in London. I studied software engineering, worked as a UI/UX designer, and finished an MSc in Artificial Intelligence with Distinction. I use all three in the PM role: I can sketch a flow in Figma, read the code, and design an experiment, so designers, engineers and researchers don't have to translate for me.",
     "I've worked on music, fintech, education and government products across Nigeria and the UK, and won a UI/UX design competition run by the Association for Computing Machinery (ACM).",
