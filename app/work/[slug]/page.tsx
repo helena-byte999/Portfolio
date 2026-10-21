@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Cover from '@/components/Cover';
 import Header from '@/components/Header';
+import VideoClip from '@/components/VideoClip';
 import { Footer } from '@/components/Sections';
 import { PADS } from '@/content/site';
 import { TRACKS } from '@/content/work';
@@ -99,6 +100,20 @@ export default async function CaseStudy({ params }: Params) {
             </ul>
           </aside>
         </div>
+
+        {track.clips && track.clips.length > 0 && (
+          <section className={`wrap ${s.notes}`} aria-labelledby="proto-title">
+            <p className="eyebrow">Prototype</p>
+            <h2 id="proto-title" className={`display ${s.notesTitle}`}>
+              See it working
+            </h2>
+            <div className={s.clips}>
+              {track.clips.map((clip) => (
+                <VideoClip key={clip.src} clip={clip} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {track.slides.length > 0 && (
           <section className={`wrap ${s.notes}`} aria-labelledby="notes-title">

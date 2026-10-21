@@ -3,6 +3,8 @@
 
 export type Link = { label: string; href: string };
 export type Slide = { src: string; title: string; text: string };
+/** A looping prototype recording. `phone` clips are one portrait screen; `wide` ones hold several. */
+export type Clip = { src: string; poster: string; title: string; text: string; shape: 'phone' | 'wide'; sound?: boolean };
 
 /** How the card's cover is drawn. */
 export type Cover =
@@ -36,6 +38,8 @@ export type Track = {
   cover: Cover;
   /** Tall image behind the work-deck card; tracks without one get a designed background. */
   card?: string;
+  /** Prototype recordings, shown before the liner notes. */
+  clips?: Clip[];
   slides: Slide[];
   /** Short line under the cover; numbers only, no fluff. */
   stat?: string;
@@ -61,11 +65,36 @@ export const TRACKS: Track[] = [
     tags: ['Scope Trade-offs', 'Success Metrics', 'Delivery Planning', 'Pitching', 'Lens Studio', 'Blender'],
     meta: [
       { label: 'Role', value: 'Product Manager & AR Designer' },
-      { label: 'Team', value: '3 people' },
+      { label: 'Team', value: 'with Melissa Nhau (Brand Manager) and Jabaar Hussain (AR Designer & Creative Director)' },
       { label: 'Timeline', value: '3 weeks · July–August 2026' },
     ],
     links: [],
-    cover: { kind: 'stat', value: '8,000+', label: 'users in the first 4 days', icon: 'lens' },
+    cover: { kind: 'slide', src: img('kickback', 1) },
+    card: img('kickback', 1),
+    clips: [
+      {
+        src: '/work/kickback/kickback-how-it-works.mp4',
+        poster: '/work/kickback/kickback-how-it-works.webp',
+        title: 'How it works',
+        text: 'Open the lens, tap the screen, and the bedroom drops into the world around you.',
+        shape: 'wide',
+      },
+      {
+        src: '/work/kickback/kickback-inside.mp4',
+        poster: '/work/kickback/kickback-inside.webp',
+        title: 'Inside the room',
+        text: 'Step in and look around: the disco ball, the photo wall, the bed and the desk, with your Bitmoji in the room.',
+        shape: 'wide',
+      },
+      {
+        src: '/work/kickback/kickback-demo.mp4',
+        poster: '/work/kickback/kickback-demo.webp',
+        title: 'The live lens',
+        text: 'The room placed in a park, then explored up close with the on-screen joystick.',
+        shape: 'phone',
+        sound: true,
+      },
+    ],
     slides: [],
   },
   {
@@ -93,7 +122,7 @@ export const TRACKS: Track[] = [
       { label: 'Data & analysis', href: 'https://github.com/helena-byte999/discovery-gap-analysis' },
     ],
     cover: { kind: 'laptop', src: img('discovery-gap', 1), phone: img('discovery-gap', 2) },
-    card: img('discovery-gap', 2),
+    card: img('discovery-gap', 1),
     slides: [],
   },
   {
@@ -121,7 +150,7 @@ export const TRACKS: Track[] = [
       { label: 'GitHub', href: 'https://github.com/helena-byte999/ecms' },
     ],
     cover: { kind: 'laptop', src: img('ecms', 1) },
-    card: img('ecms', 3),
+    card: img('ecms', 1),
     slides: [
       { src: img('ecms', 2), title: 'Admin dashboard', text: 'Doses given, incidents, residents and outstanding invoices on one screen, with today\'s medicine round underneath.' },
     ],
@@ -151,7 +180,7 @@ export const TRACKS: Track[] = [
       { label: 'GitHub', href: 'https://github.com/helena-byte999/MovieRec' },
     ],
     cover: { kind: 'laptop', src: img('movierec', 1) },
-    card: img('movierec', 5),
+    card: img('movierec', 1),
     slides: [
       { src: img('movierec', 1), title: 'Project overview', text: 'Search any title and get recommendations instantly, browse curated genre rows (Action, K-Drama, Romance, Bollywood and more), and save titles to a personal Watchlist. The live site supports 5 languages and 22 global regions.' },
       { src: img('movierec', 2), title: 'Watchlist & user features', text: 'Signed-in users get a personal Watchlist: save any title, mark it as watched, and recommendations improve from that history. Guest Watchlists transfer to the account on sign-up. Google OAuth and email/password login.' },
