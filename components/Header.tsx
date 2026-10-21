@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { PERSON } from '@/content/site';
+import ThemeToggle from './ThemeToggle';
 import s from './Header.module.css';
 
 export default function Header() {
@@ -17,6 +18,7 @@ export default function Header() {
           <a href={PERSON.cv} target="_blank" rel="noopener" className={s.cv}>
             Resume ↗
           </a>
+          <ThemeToggle />
         </nav>
       </div>
     </header>
