@@ -3,20 +3,19 @@
 import { useEffect, useState } from 'react';
 import mine from '@/content/playlists.json';
 import demo from '@/content/playlists.demo.json';
-import MusicPlayer, { type Playlist } from './MusicPlayer';
+import type { Playlist } from './MusicPlayer';
+import { music, useMusic } from './musicStore';
 import s from './PlaylistStack.module.css';
 
-// Three of Ena's playlists, stacked and tilted like the tool tiles. Pressing one opens her music
-// player (MusicPlayer.tsx), docked bottom-centre so the music keeps going while visitors scroll.
+// Three of Ena's playlists as mini covers, side by side and tilted like the tool tiles. Pressing one
+// starts a preview in the mini LEGO player at the bottom of the screen (MusicPlayer.tsx).
 // Data comes from content/playlists.json (npm run playlists); ?playlists=demo previews the layout
 // with three public Spotify playlists.
-
-const TINTS = ['#f08a3c', '#3557e8', '#e5484d'];
 
 export default function PlaylistStack() {
   const [list, setList] = useState<Playlist[]>(mine as Playlist[]);
   const [isDemo, setIsDemo] = useState(false);
-  const [open, setOpen] = useState<number | null>(null);
+  const playing = useMusic();
 
   useEffect(() => {
     if (new URLSearchParams(location.search).get('playlists') === 'demo') {
@@ -29,34 +28,42 @@ export default function PlaylistStack() {
   const shown = list.slice(0, 3);
 
   return (
-    <>
-      <ul className={s.stack} aria-label={isDemo ? 'Sample playlists (demo)' : 'My playlists'}>
-        {shown.map((p, i) => (
-          <li
-            key={p.id}
-            className={s.item}
-            data-playing={open === i || undefined}
-            style={{ ['--i' as string]: i, ['--tint' as string]: TINTS[i % TINTS.length] }}
-          >
-            <button type="button" className={s.card} onClick={() => setOpen(i)} aria-label={`Play ${p.title}`}>
-              <img src={p.cover} alt="" loading="lazy" />
-              <span className={s.count}>{p.tracks ? `${p.tracks} Tracks` : 'Playlist'}</span>
-              <span className={s.foot}>
+    <div className={s.wrap}>
+      <ul className={s.row} aria-label={isDemo ? 'Sample playlists (demo)' : 'My playlists'}>
+        {shown.map((p, i) => {
+          const on = playing?.list[playing.index]?.id === p.id;
+          return (
+            <li key={p.id} className={s.item} data-playing={on || undefined} style={{ ['--i' as string]: i }}>
+              <button
+                type="button"
+                className={s.card}
+                onClick={() => music.set({ list: shown, index: i, at: Date.now() })}
+                aria-label={`Play a preview of ${p.title}`}
+              >
+                <img src={p.cover} alt="" loading="lazy" />
                 <span className={s.play} aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M8 5.5v13l11-6.5z" fill="currentColor" />
-                  </svg>
+                  {on ? (
+                    <span className={s.eq}>
+                      <i />
+                      <i />
+                      <i />
+                    </span>
+                  ) : (
+                    <svg viewBox="0 0 24 24">
+                      <path d="M8 5.5v13l11-6.5z" fill="currentColor" />
+                    </svg>
+                  )}
                 </span>
-                <span className={s.names}>
-                  <strong>{p.title}</strong>
-                  <small>{isDemo ? 'Sample · not mine' : p.subtitle ?? 'My playlist'}</small>
-                </span>
+              </button>
+              <span className={s.tip} aria-hidden="true">
+                {p.title}
+                {isDemo ? ' (sample)' : ''}
               </span>
-            </button>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
-      {open !== null && <MusicPlayer list={shown} index={open} onIndex={setOpen} onClose={() => setOpen(null)} />}
-    </>
+      <span className={s.caption}>on repeat</span>
+    </div>
   );
 }

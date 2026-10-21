@@ -1,5 +1,3 @@
-import NowPlaying from '@/components/fx/NowPlaying';
-import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import WorkDeck from '@/components/WorkDeck';
 import { About, Contact, Experience, Footer, SetList, Writing } from '@/components/Sections';
@@ -7,7 +5,6 @@ import { About, Contact, Experience, Footer, SetList, Writing } from '@/componen
 export default function Home() {
   return (
     <>
-      <Header />
       <main>
         <Hero />
         <WorkDeck />
@@ -18,7 +15,6 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
-      <NowPlaying />
     </>
   );
 }

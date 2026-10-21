@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Archivo, JetBrains_Mono } from 'next/font/google';
+import Header from '@/components/Header';
+import MusicDock from '@/components/MusicDock';
 import Reveal from '@/components/Reveal';
 import './globals.css';
 
@@ -38,7 +40,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: boot }} />
       </head>
       <body>
+        <Header />
         {children}
+        <MusicDock />
         <Reveal />
       </body>
     </html>

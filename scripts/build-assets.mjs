@@ -81,6 +81,8 @@ async function clips() {
 }
 
 const WORK = {
+  // The paper's title page (rendered from the PDF at 3x with PDFKit), cropped to the title.
+  'b-sides': [{ src: 'bsides/haic-p1.png', crop: { left: 240, top: 660, width: 1305, height: 900 } }],
   kickback: ['kickback/title.jpg'],
   'discovery-gap': ['captures/discovery-gap-desktop.png', 'captures/discovery-gap-phone.png'],
   ecms: ['captures/ecms-desktop.png', 'work/ecms/ecms_dashboard.png'],
@@ -180,7 +182,7 @@ async function work() {
     await mkdir(`public/work/${slug}`, { recursive: true });
     await Promise.all(
       files.map((file, i) =>
-        sharp(`assets-src/${file}`)
+        (typeof file === 'string' ? sharp(`assets-src/${file}`) : sharp(`assets-src/${file.src}`).extract(file.crop))
           .resize({ width: 1600, withoutEnlargement: true })
           .webp({ quality: 82, effort: 5 })
           .toFile(`public/work/${slug}/${String(i + 1).padStart(2, '0')}.webp`),
