@@ -1,17 +1,52 @@
 'use client';
 
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState, type PointerEvent } from 'react';
 import { PADS, WORK_INTRO } from '@/content/site';
-import { B_SIDES, TRACKS } from '@/content/work';
+import { B_SIDES, SHELVES, TRACKS, type Shelf } from '@/content/work';
 import Cover from './Cover';
+import { Squiggle } from './fx/Doodles';
+import Rise from './fx/Rise';
 import s from './WorkDeck.module.css';
 
 const two = (n: number) => String(n).padStart(2, '0');
 
+/** Tilt card: the card leans toward the cursor and a soft glare follows it. */
+function tilt(e: PointerEvent<HTMLLIElement>) {
+  if (e.pointerType !== 'mouse') return;
+  const el = e.currentTarget;
+  const r = el.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width;
+  const y = (e.clientY - r.top) / r.height;
+  el.style.setProperty('--rx', `${(0.5 - y) * 7}deg`);
+  el.style.setProperty('--ry', `${(x - 0.5) * 9}deg`);
+  el.style.setProperty('--gx', `${x * 100}%`);
+  el.style.setProperty('--gy', `${y * 100}%`);
+}
+
+function untilt(e: PointerEvent<HTMLLIElement>) {
+  for (const p of ['--rx', '--ry', '--gx', '--gy']) e.currentTarget.style.removeProperty(p);
+}
+
 export default function WorkDeck() {
   const deck = useRef<HTMLOListElement>(null);
+  const tabs = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(0);
+  const [shelf, setShelf] = useState<Shelf | 'all'>('all');
+  const [indicator, setIndicator] = useState({ left: 0, width: 0 });
+
+  const tracks = TRACKS.map((t, i) => ({ ...t, number: i + 1 })).filter((t) => shelf === 'all' || t.shelves.includes(shelf));
+
+  // Slide the pill indicator under the active filter.
+  useLayoutEffect(() => {
+    const place = () => {
+      const active = tabs.current?.querySelector<HTMLElement>('[aria-pressed="true"]');
+      if (active) setIndicator({ left: active.offsetLeft, width: active.offsetWidth });
+    };
+    place();
+    window.addEventListener('resize', place);
+    return () => window.removeEventListener('resize', place);
+  }, [shelf]);
 
   const cardStep = () => {
     const first = deck.current?.children[0] as HTMLElement | undefined;
@@ -20,11 +55,17 @@ export default function WorkDeck() {
   };
 
   const onScroll = () => {
-    setCurrent(Math.min(TRACKS.length - 1, Math.round(deck.current!.scrollLeft / cardStep())));
+    setCurrent(Math.min(tracks.length - 1, Math.round(deck.current!.scrollLeft / cardStep())));
   };
 
   const go = (dir: 1 | -1) => {
     deck.current!.scrollBy({ left: dir * cardStep(), behavior: 'smooth' });
+  };
+
+  const pick = (id: Shelf | 'all') => {
+    setShelf(id);
+    setCurrent(0);
+    deck.current?.scrollTo({ left: 0 });
   };
 
   return (
@@ -33,32 +74,50 @@ export default function WorkDeck() {
         <div data-reveal>
           <p className="eyebrow">{WORK_INTRO.title}</p>
           <h2 id="work-title" className="display section-title">
-            {WORK_INTRO.tagline}
+            <Rise text={WORK_INTRO.tagline} />
           </h2>
+          <Squiggle />
           <p className="lede">{WORK_INTRO.text}</p>
+        </div>
+      </div>
+
+      <div className={`wrap ${s.bar}`}>
+        <div ref={tabs} className={s.tabs} role="group" aria-label="Filter projects">
+          <span className={s.indicator} style={{ transform: `translateX(${indicator.left}px)`, width: indicator.width }} aria-hidden="true" />
+          {SHELVES.map((sh) => (
+            <button key={sh.id} type="button" className={s.tab} aria-pressed={shelf === sh.id} onClick={() => pick(sh.id)}>
+              {sh.label}
+            </button>
+          ))}
         </div>
         <div className={s.controls}>
           <span className="mono" aria-live="polite">
-            Track {two(current + 1)} / {two(TRACKS.length)}
+            {two(current + 1)} / {two(tracks.length)}
           </span>
-          <button type="button" className={s.arrow} onClick={() => go(-1)} aria-label="Previous track" disabled={current === 0}>
+          <button type="button" className={s.arrow} onClick={() => go(-1)} aria-label="Previous project" disabled={current === 0}>
             ←
           </button>
-          <button type="button" className={s.arrow} onClick={() => go(1)} aria-label="Next track" disabled={current === TRACKS.length - 1}>
+          <button type="button" className={s.arrow} onClick={() => go(1)} aria-label="Next project" disabled={current >= tracks.length - 1}>
             →
           </button>
         </div>
       </div>
 
       <ol ref={deck} className={s.deck} onScroll={onScroll} aria-label="Projects">
-        {TRACKS.map((t, i) => (
-          <li key={t.slug} className={s.card} style={{ ['--accent-c' as string]: PADS[i % PADS.length].color }}>
+        {tracks.map((t, i) => (
+          <li
+            key={t.slug}
+            className={s.card}
+            style={{ ['--accent-c' as string]: PADS[(t.number - 1) % PADS.length].color }}
+            onPointerMove={tilt}
+            onPointerLeave={untilt}
+          >
             <div className={s.cover}>
               <Cover cover={t.cover} title={t.title} eager={i < 2} />
             </div>
             <div className={s.body}>
               <p className="mono">
-                Track {two(i + 1)}
+                Track {two(t.number)}
                 {t.year ? ` · ${t.year}` : ''}
               </p>
               <h3 className={`display ${s.title}`}>
@@ -70,7 +129,7 @@ export default function WorkDeck() {
               <p className={s.summary}>{t.summary}</p>
               {t.stat && <p className={s.stat}>{t.stat}</p>}
               <span className={s.more} aria-hidden="true">
-                View case study →
+                View case study <span className={s.moreArrow}>→</span>
               </span>
             </div>
           </li>

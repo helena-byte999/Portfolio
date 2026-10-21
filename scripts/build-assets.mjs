@@ -91,12 +91,12 @@ async function figure() {
   // Link preview card (1200×630) for LinkedIn, Slack and iMessage.
   const fig = await sharp('public/booth/ena-full.webp').resize({ height: 580 }).toBuffer();
   const text = `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-    <defs><radialGradient id="g" cx="78%" cy="45%" r="60%"><stop offset="0" stop-color="#5b1470"/><stop offset="1" stop-color="#0e0613"/></radialGradient></defs>
-    <rect width="1200" height="630" fill="url(#g)"/>
-    <text x="64" y="250" font-family="Helvetica Neue, Arial" font-weight="800" font-size="92" fill="#f6edf8">ENA</text>
-    <text x="64" y="345" font-family="Helvetica Neue, Arial" font-weight="800" font-size="92" fill="#f6edf8">OTUOKON</text>
-    <text x="66" y="410" font-family="Helvetica Neue, Arial" font-weight="600" font-size="34" fill="#ffcf3f">Product Manager · DJ · Builder</text>
-    <text x="66" y="460" font-family="Helvetica Neue, Arial" font-size="26" fill="#b9a7c1">AI, music and consumer products · London</text>
+    <rect width="1200" height="630" fill="#f3f1ec"/>
+    <rect x="52" y="272" width="470" height="84" rx="4" fill="#f2c94c" transform="skewX(-12) rotate(-1.4 290 314)"/>
+    <text x="64" y="250" font-family="Helvetica Neue, Arial" font-weight="800" font-size="92" fill="#161616">ENA</text>
+    <text x="64" y="345" font-family="Helvetica Neue, Arial" font-weight="800" font-size="92" fill="#161616">OTUOKON</text>
+    <text x="66" y="410" font-family="Helvetica Neue, Arial" font-weight="700" font-size="34" fill="#2f4be0">Product Manager · Software Engineer · DJ</text>
+    <text x="66" y="460" font-family="Helvetica Neue, Arial" font-size="26" fill="#5f5b55">AI, music and consumer products · London</text>
   </svg>`;
   await sharp(Buffer.from(text))
     .composite([{ input: fig, left: 760, top: 50 }])

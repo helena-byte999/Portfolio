@@ -11,8 +11,19 @@ export type Cover =
   | { kind: 'stat'; value: string; label: string; icon: 'lens' | 'paper' }
   | { kind: 'terminal'; lines: string[] };
 
+export type Shelf = 'product' | 'built' | 'research';
+
+/** The filter pills above the work deck. */
+export const SHELVES: { id: Shelf | 'all'; label: string }[] = [
+  { id: 'all', label: 'All tracks' },
+  { id: 'product', label: 'Product' },
+  { id: 'built', label: 'Built & shipped' },
+  { id: 'research', label: 'Design & research' },
+];
+
 export type Track = {
   slug: string;
+  shelves: Shelf[];
   title: string;
   kicker: string;
   year?: string;
@@ -33,6 +44,7 @@ const img = (slug: string, n: number) => `/work/${slug}/${String(n).padStart(2, 
 export const TRACKS: Track[] = [
   {
     slug: 'kickback',
+    shelves: ['product'],
     title: 'Kickback',
     kicker: 'Product Management · AR · Snap Lens Lab',
     year: '2026',
@@ -56,6 +68,7 @@ export const TRACKS: Track[] = [
   },
   {
     slug: 'discovery-gap',
+    shelves: ['product', 'research'],
     title: 'Discovery Gap',
     kicker: 'Product Analysis · Music Streaming',
     year: '2026',
@@ -82,6 +95,7 @@ export const TRACKS: Track[] = [
   },
   {
     slug: 'ecms',
+    shelves: ['product', 'built'],
     title: 'ECMS',
     kicker: 'Product Ownership · Health & Care',
     year: '2026',
@@ -110,6 +124,7 @@ export const TRACKS: Track[] = [
   },
   {
     slug: 'movierec',
+    shelves: ['built'],
     title: 'MOV.IE REC',
     kicker: 'Built Solo · AI · Python / Flask',
     year: '2026',
@@ -141,6 +156,7 @@ export const TRACKS: Track[] = [
   },
   {
     slug: 'cuepoint',
+    shelves: ['built'],
     title: 'Cuepoint',
     kicker: 'Built & Published · Music Tech · Python',
     year: '2026',
@@ -176,6 +192,7 @@ export const TRACKS: Track[] = [
   },
   {
     slug: 'peerpods',
+    shelves: ['research'],
     title: 'PeerPods',
     kicker: 'Product Definition · User Research · MSc AI',
     year: '2025',
@@ -218,6 +235,7 @@ export const TRACKS: Track[] = [
   },
   {
     slug: 'kuda-teens',
+    shelves: ['product'],
     title: 'Kuda Teens',
     kicker: 'Product Discovery · Fintech · Concept',
     year: '2023',
@@ -252,6 +270,7 @@ export const TRACKS: Track[] = [
   },
   {
     slug: 'ufit',
+    shelves: ['research'],
     title: 'UFit',
     kicker: 'UX Research & Design · Design Thinking',
     summary: 'A fitness and nutrition app taken through a full design-thinking cycle, from interviews to a usability-tested prototype.',

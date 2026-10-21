@@ -1,3 +1,4 @@
+import NowPlaying from '@/components/fx/NowPlaying';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import WorkDeck from '@/components/WorkDeck';
@@ -17,6 +18,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <NowPlaying />
     </>
   );
 }

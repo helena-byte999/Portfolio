@@ -4,12 +4,10 @@
 
 .stage {
   position: relative;
-  height: clamp(440px, 74vh, 760px);
+  height: clamp(440px, 72vh, 740px);
   overflow: hidden;
-  /* soft floor glow so the booth isn't floating */
-  background: radial-gradient(60% 45% at 50% 92%, rgba(182, 92, 255, 0.22), transparent 70%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent);
-  mask-image: linear-gradient(to bottom, #000 82%, transparent);
+  /* a soft shadow on the floor so the booth isn't floating */
+  background: radial-gradient(46% 22% at 50% 90%, rgba(0, 0, 0, 0.1), transparent 70%);
 }
 
 .stage canvas {
@@ -31,8 +29,8 @@
 .posterFigure {
   position: absolute;
   left: 50%;
-  top: 15%;
-  height: 66%;
+  top: 9%;
+  height: 62%;
   width: auto;
   transform: translateX(-42.5%);
 }
@@ -40,17 +38,15 @@
 .posterDesk {
   position: absolute;
   left: 50%;
-  top: 63%;
-  bottom: 4%;
+  top: 60%;
+  bottom: 6%;
   width: min(74%, 980px);
   transform: translateX(-50%);
-  border-radius: 10px 10px 4px 4px;
-  background: linear-gradient(#24122d, #12081a);
-  box-shadow: 0 -2px 0 #ffcf3f, 0 30px 60px rgba(0, 0, 0, 0.45);
+  border-radius: 12px 12px 6px 6px;
+  background: linear-gradient(#f4f1ea, #e3ded2);
+  box-shadow: 0 -3px 0 var(--yellow), 0 24px 40px -18px rgba(0, 0, 0, 0.35);
   display: grid;
-  place-content: center;
-  text-align: center;
-  gap: 6px;
+  place-items: center;
 }
 
 .posterStuds {
@@ -59,26 +55,35 @@
   right: 0;
   top: -12px;
   height: 12px;
-  background: radial-gradient(circle at 50% 70%, #ffcf3f 0 6px, transparent 6.5px) 0 0 / 34px 12px repeat-x;
+  background: radial-gradient(circle at 50% 70%, var(--yellow) 0 6px, transparent 6.5px) 0 0 / 34px 12px repeat-x;
 }
 
-.posterName {
-  font-family: var(--font-display), sans-serif;
-  font-stretch: 125%;
-  font-weight: 800;
-  text-transform: uppercase;
-  color: #f6edf8;
-  font-size: clamp(22px, 4vw, 56px);
-  line-height: 1;
-}
-
-.posterLive {
-  font-family: var(--font-display), sans-serif;
+.posterLcd {
+  padding: 0.5em 0.9em;
+  border-radius: 10px;
+  background: #121412;
+  color: #9be36a;
+  font-family: var(--font-mono), monospace;
   font-weight: 700;
+  font-size: clamp(16px, 3vw, 40px);
   text-transform: uppercase;
-  color: #ffcf3f;
-  font-size: clamp(10px, 1.2vw, 16px);
-  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.posterLcd i {
+  display: inline-block;
+  width: 0.55em;
+  height: 0.95em;
+  margin-left: 0.15em;
+  vertical-align: -0.12em;
+  background: #9be36a;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }
 
 @media (max-width: 700px) {
@@ -86,81 +91,78 @@
     height: clamp(340px, 52vh, 480px);
   }
   .posterFigure {
-    top: 22%;
-    height: 46%;
+    top: 18%;
+    height: 44%;
   }
   .posterDesk {
-    top: 60%;
-    bottom: 10%;
+    top: 58%;
+    bottom: 12%;
     width: 112%;
   }
 }
 
-/* The pads: real buttons, mirrored by the pads on the 3D mixer */
+/* The pads: real buttons styled as keycaps, mirrored by the pads on the 3D mixer */
 .pads {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: clamp(8px, 1.2vw, 14px);
-  max-width: 980px;
+  max-width: 940px;
   margin: 8px auto 0;
   padding: 0 var(--gutter);
 }
 
 .pad {
-  --glow: color-mix(in srgb, var(--pad) 45%, transparent);
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 18px;
-  min-height: 92px;
-  padding: 12px 14px;
+  gap: 16px;
+  min-height: 86px;
+  padding: 12px 14px 16px;
+  border: 0;
   border-radius: 14px;
-  border: 1px solid color-mix(in srgb, var(--pad) 55%, transparent);
-  background: color-mix(in srgb, var(--pad) 14%, #150a1b);
-  box-shadow: inset 0 0 24px var(--glow), 0 6px 0 #07030a;
-  color: #f6edf8;
+  background: var(--pad);
+  color: var(--pad-ink);
+  box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.2), 0 3px 0 rgba(0, 0, 0, 0.12);
   cursor: pointer;
   text-align: left;
-  transition: transform 0.12s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.15s ease;
 }
 
 .pad:hover,
 .pad:focus-visible {
-  background: var(--pad);
-  color: #1f0a26;
-  box-shadow: inset 0 0 0 transparent, 0 6px 0 #07030a, 0 0 36px var(--glow);
+  transform: translateY(-2px);
+  filter: brightness(1.06);
 }
 
 .pad[data-pressed] {
-  transform: translateY(5px);
-  box-shadow: inset 0 0 0 transparent, 0 1px 0 #07030a, 0 0 48px var(--pad);
-  background: var(--pad);
-  color: #1f0a26;
+  transform: translateY(4px);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(0, 0, 0, 0);
 }
 
 .padKey {
   font-family: var(--font-mono), monospace;
   font-size: 13px;
-  opacity: 0.8;
+  opacity: 0.75;
 }
 
 .padLabel {
   font-family: var(--font-display), sans-serif;
-  font-stretch: 112%;
   font-weight: 800;
   text-transform: uppercase;
-  font-size: clamp(13px, 1.25vw, 16px);
+  letter-spacing: 0.02em;
+  font-size: clamp(13px, 1.2vw, 15px);
   line-height: 1.1;
 }
 
 .hint {
-  margin: 18px 0 0;
+  width: fit-content;
+  margin: 18px auto 0;
   text-align: center;
   font-family: var(--font-mono), monospace;
   font-size: 13px;
-  color: var(--ink-2);
 }
 
 @media (max-width: 700px) {
@@ -168,7 +170,7 @@
     grid-template-columns: repeat(3, 1fr);
   }
   .pad {
-    min-height: 76px;
+    min-height: 72px;
   }
 }
 
@@ -176,5 +178,8 @@
   .pad,
   .poster {
     transition: none;
+  }
+  .posterLcd i {
+    animation: none;
   }
 }

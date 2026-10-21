@@ -1,43 +1,24 @@
 import { HERO, PERSON } from '@/content/site';
 import Booth from './booth/Booth';
-import RotatingRole from './RotatingRole';
+import Rise from './fx/Rise';
 import s from './Hero.module.css';
 
 export default function Hero() {
-  const [first, last] = PERSON.name.split(' ');
   return (
     <section className={s.hero} id="top">
-      <div className="wrap">
-        <p className="eyebrow">{HERO.eyebrow}</p>
-        <h1 className={`display ${s.name}`}>
-          <span>{first}</span> <span>{last}</span>
+      <div className={`wrap ${s.text}`} data-reveal>
+        <h1 className={`display ${s.title}`}>
+          <span className={s.greet}>{HERO.greeting}</span>{' '}
+          <span className={`expanded ${s.marker}`}>
+            <Rise text={PERSON.name} />
+          </span>
         </h1>
-        <div className={s.row}>
-          <div>
-            <p className={s.roleLine}>
-              <RotatingRole roles={PERSON.roles} />
-              <span className={s.where}>· {PERSON.location}</span>
-            </p>
-            <p className="lede">{HERO.line}</p>
-          </div>
-          <div className={s.side}>
-            <ul className="chips" aria-label="Highlights">
-              {HERO.proof.map((p) => (
-                <li key={p} className="chip">
-                  {p}
-                </li>
-              ))}
-            </ul>
-            <div className={s.ctas}>
-              <a className="btn btn-primary" href="#work">
-                See the work ↓
-              </a>
-              <a className="btn" href={PERSON.cv} target="_blank" rel="noopener">
-                Download CV
-              </a>
-            </div>
-          </div>
-        </div>
+        <p className={s.lead}>
+          {HERO.lead}
+          <span className={s.accent}>{HERO.accent}</span>
+          <span className={s.caret} aria-hidden="true" />
+        </p>
+        <p className={s.intro}>{HERO.intro}</p>
       </div>
       <Booth />
     </section>

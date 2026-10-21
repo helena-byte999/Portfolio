@@ -5,6 +5,7 @@ import {
   EDUCATION,
   EXPERIENCE,
   FOOTER,
+  PADS,
   PERSON,
   RESEARCH,
   SET_LIST,
@@ -12,6 +13,11 @@ import {
   VOLUNTEERING,
   WRITING,
 } from '@/content/site';
+import CopyEmail from './fx/CopyEmail';
+import { Squiggle } from './fx/Doodles';
+import Magnetic from './fx/Magnetic';
+import Rise from './fx/Rise';
+import RollingNumber from './fx/RollingNumber';
 import s from './Sections.module.css';
 
 export function Experience() {
@@ -21,7 +27,7 @@ export function Experience() {
         <div data-reveal>
           <p className="eyebrow">Experience</p>
           <h2 id="experience-title" className="display section-title">
-            Previously on
+            <Rise text="Previously on" />
           </h2>
           <p className="lede">Product roles first, backed by the design and engineering work that taught me how products actually get built.</p>
         </div>
@@ -101,13 +107,14 @@ export function SetList() {
         <div data-reveal>
           <p className="eyebrow">How I work</p>
           <h2 id="setlist-title" className="display section-title">
-            {SET_LIST.title}
+            <Rise text={SET_LIST.title} />
           </h2>
+          <Squiggle color="var(--accent)" />
           <p className="lede">{SET_LIST.tagline}</p>
         </div>
         <ol className={s.steps}>
           {SET_LIST.steps.map((step, i) => (
-            <li key={step.name} className={s.step} data-reveal>
+            <li key={step.name} className={s.step} data-reveal style={{ ['--note' as string]: PADS[i % PADS.length].color, ['--tilt' as string]: `${i % 2 ? 1.4 : -1.2}deg` }}>
               <span className={s.stepNo}>{String(i + 1).padStart(2, '0')}</span>
               <h3 className={s.stepName}>{step.name}</h3>
               <span className={`mono ${s.stepMeans}`}>{step.means}</span>
@@ -127,19 +134,22 @@ export function About() {
         <div data-reveal>
           <p className="eyebrow">About</p>
           <h2 id="about-title" className={`display ${s.aboutTitle}`}>
-            {ABOUT.title}
+            <Rise text={ABOUT.title} />
           </h2>
           {ABOUT.paragraphs.map((p) => (
             <p key={p.slice(0, 24)} className={s.aboutText}>
               {p}
             </p>
           ))}
+          <blockquote className={s.quote}>“{ABOUT.quote}”</blockquote>
         </div>
         <div className={s.aboutSide} data-reveal>
           <dl className={s.stats}>
             {ABOUT.stats.map((st) => (
               <div key={st.label}>
-                <dt className="display">{st.value}</dt>
+                <dt className="display">
+                  <RollingNumber value={st.value} />
+                </dt>
                 <dd>{st.label}</dd>
               </div>
             ))}
@@ -169,7 +179,7 @@ export function Writing() {
         <div data-reveal>
           <p className="eyebrow">Writing</p>
           <h2 id="writing-title" className="display section-title">
-            {WRITING.title}
+            <Rise text={WRITING.title} />
           </h2>
           <p className="lede">{WRITING.text}</p>
         </div>
@@ -197,21 +207,29 @@ export function Contact() {
       <div className="wrap" data-reveal>
         <p className="eyebrow">Contact</p>
         <h2 id="contact-title" className={`display ${s.contactTitle}`}>
-          {CONTACT.title}
+          <Rise text={CONTACT.title} />
         </h2>
+        <div className={s.contactSquiggle}>
+          <Squiggle />
+        </div>
         <p className="lede">{CONTACT.text}</p>
         <a className={s.email} href={`mailto:${PERSON.email}`}>
           {PERSON.email}
         </a>
         <div className={s.contactLinks}>
+          <CopyEmail email={PERSON.email} />
           {SOCIALS.map((so) => (
-            <a key={so.label} className="btn" href={so.href} target="_blank" rel="noopener">
-              {so.label} ↗
-            </a>
+            <Magnetic key={so.label}>
+              <a className="btn" href={so.href} target="_blank" rel="noopener">
+                {so.label} ↗
+              </a>
+            </Magnetic>
           ))}
-          <a className="btn btn-primary" href={PERSON.cv} target="_blank" rel="noopener">
-            Download CV
-          </a>
+          <Magnetic>
+            <a className="btn btn-primary" href={PERSON.cv} target="_blank" rel="noopener">
+              Download CV
+            </a>
+          </Magnetic>
         </div>
       </div>
     </section>

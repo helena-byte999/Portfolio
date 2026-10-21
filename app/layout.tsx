@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next';
-import { Archivo, Space_Mono } from 'next/font/google';
-import ParticleWeb from '@/components/ParticleWeb';
+import { Archivo, JetBrains_Mono } from 'next/font/google';
 import Reveal from '@/components/Reveal';
 import './globals.css';
 
-const archivo = Archivo({ subsets: ['latin'], axes: ['wdth'], variable: '--font-display', display: 'swap' });
-const mono = Space_Mono({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-mono', display: 'swap' });
+// Archivo throughout; its width axis gives the expanded ExtraBold used for the name.
+const archivo = Archivo({ subsets: ['latin'], axes: ['wdth'], style: ['normal', 'italic'], variable: '--font-sans', display: 'swap' });
+const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ena-labs.netlify.app'),
@@ -21,23 +21,19 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0e0613' },
-    { media: '(prefers-color-scheme: light)', color: '#fbf4e4' },
-  ],
+  themeColor: '#f3f1ec',
 };
 
-// Runs before paint so the saved theme never flashes the wrong colours.
-const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(!t){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')})()`;
+// Marks the page as scripted before paint, so scroll reveals never flash.
+const jsFlag = `document.documentElement.classList.add('js')`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GB" className={`${archivo.variable} ${mono.variable}`} style={{ ['--font-body' as string]: 'var(--font-display)' }} suppressHydrationWarning>
+    <html lang="en-GB" className={`${archivo.variable} ${mono.variable}`}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: jsFlag }} />
       </head>
       <body>
-        <ParticleWeb />
         {children}
         <Reveal />
       </body>

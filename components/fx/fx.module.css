@@ -1,0 +1,204 @@
+/* Rolling number */
+.roll {
+  display: inline-flex;
+  align-items: baseline;
+  font-variant-numeric: tabular-nums;
+}
+
+.reel {
+  display: inline-block;
+  height: 1em;
+  line-height: 1;
+  overflow: hidden;
+  vertical-align: -0.12em;
+}
+
+.strip {
+  display: flex;
+  flex-direction: column;
+  transition: transform 1.3s cubic-bezier(0.16, 0.9, 0.2, 1);
+  transition-delay: calc(var(--i) * 80ms);
+}
+
+.strip > span {
+  height: 1em;
+  line-height: 1;
+}
+
+.roll[data-on] .strip,
+:global(html:not(.js)) .strip {
+  transform: translateY(calc(var(--d) * -1em));
+}
+
+/* Magnetic */
+.magnetic {
+  display: inline-block;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+/* Now playing */
+.now {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 8px 16px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transform: translateY(160%);
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.now[data-shown] {
+  transform: none;
+}
+
+.eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 18px;
+}
+
+.eq i {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--yellow);
+  transform-origin: bottom;
+  animation: eq 0.9s ease-in-out infinite;
+}
+
+.eq i:nth-child(2) {
+  animation-delay: -0.3s;
+  background: var(--red);
+}
+
+.eq i:nth-child(3) {
+  animation-delay: -0.55s;
+  background: var(--accent);
+}
+
+.eq i:nth-child(4) {
+  animation-delay: -0.15s;
+}
+
+@keyframes eq {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.nowText {
+  display: grid;
+  line-height: 1.2;
+}
+
+.nowLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.nowTrack {
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.skip {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--fill);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.skip:hover {
+  background: var(--yellow);
+  color: #161616;
+}
+
+/* Toast stack */
+.toasts {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 40;
+  display: grid;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.toast {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 260px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  transform: translateY(calc(var(--depth) * -10px)) scale(calc(1 - var(--depth) * 0.05));
+  opacity: calc(1 - var(--depth) * 0.3);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  animation: toast-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.toast > span:last-child {
+  display: grid;
+  font-size: 14px;
+}
+
+.toast > span:last-child span {
+  color: var(--ink-2);
+}
+
+.toastDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #7cf26b;
+  box-shadow: 0 0 10px #7cf26b;
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip,
+  .now,
+  .magnetic,
+  .toast {
+    transition: none;
+    animation: none;
+  }
+  .eq i {
+    animation: none;
+    transform: scaleY(0.6);
+  }
+}

@@ -2,8 +2,10 @@
 
 import dynamic from 'next/dynamic';
 import { Component, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
-import { BOOTH_HINT, PADS } from '@/content/site';
+import { BOOTH_HINT, PADS, PERSON } from '@/content/site';
+import { PadNote } from '../fx/Doodles';
 import type { BoothSignal } from './BoothScene';
+import StageDecor from './StageDecor';
 import s from './Booth.module.css';
 
 // three.js only loads here, after first paint, and never on the case study pages.
@@ -89,25 +91,31 @@ export default function Booth() {
           <img className={s.posterFigure} src="/booth/ena-full.webp" alt="" />
           <div className={s.posterDesk}>
             <span className={s.posterStuds} />
-            <span className={s.posterName}>Ena Otuokon</span>
-            <span className={s.posterLive}>● Live · Product · Music · AI</span>
+            <span className={s.posterLcd}>
+              {PERSON.roles[0]}
+              <i />
+            </span>
           </div>
         </div>
         {use3d && (
           <SceneBoundary onError={() => setReady(false)}>
-            <BoothScene signal={signal} onPad={hit} onReady={onReady} running={onScreen} />
+            <BoothScene signal={signal} roles={PERSON.roles} onPad={hit} onReady={onReady} running={onScreen} />
           </SceneBoundary>
         )}
+        <p className="visually-hidden">{PERSON.roles.join(', ')}</p>
       </div>
 
+      <StageDecor />
+
       <nav className={s.pads} aria-label="Jump to a section">
+        <PadNote text="try a pad" />
         {PADS.map((pad, i) => (
           <button
             key={pad.key}
             type="button"
             className={s.pad}
             data-pressed={pressed === i || undefined}
-            style={{ ['--pad' as string]: pad.color }}
+            style={{ ['--pad' as string]: pad.color, ['--pad-ink' as string]: pad.ink }}
             onPointerEnter={() => (signal.current.hover = i)}
             onPointerLeave={() => (signal.current.hover = -1)}
             onFocus={() => (signal.current.hover = i)}
@@ -120,7 +128,7 @@ export default function Booth() {
           </button>
         ))}
       </nav>
-      <p className={s.hint}>{BOOTH_HINT}</p>
+      <p className={`${s.hint} shimmer`}>{BOOTH_HINT}</p>
     </div>
   );
 }

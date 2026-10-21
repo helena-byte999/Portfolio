@@ -1,107 +1,96 @@
 .hero {
-  padding-top: clamp(28px, 4vw, 48px);
+  padding-top: clamp(40px, 6vw, 84px);
 }
 
-/* Sized so "ENA OTUOKON" fills the content width on one line (it's ~9.6em wide). */
-.name {
-  font-size: min(9.4vw, 118px);
+.text {
+  text-align: center;
+}
+
+.title {
+  font-size: min(6.1vw, 92px);
   white-space: nowrap;
 }
 
-.row {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 32px;
-  align-items: end;
-  margin-top: clamp(16px, 2.2vw, 28px);
+.greet {
+  letter-spacing: -0.035em;
 }
 
-.roleLine {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 0;
-  font-family: var(--font-display), sans-serif;
-  font-stretch: 112%;
-  font-weight: 700;
-  font-size: clamp(20px, 2.4vw, 30px);
-  text-transform: uppercase;
-}
-
-.role {
-  color: var(--yellow);
-}
-
-.roleWindow {
+/* The name sits on a hand-swiped yellow marker band. */
+.marker {
+  position: relative;
   display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-  height: 1.2em;
+  padding: 0 0.12em;
+  isolation: isolate;
 }
 
-.roleText {
-  display: inline-block;
-  animation: roll 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+.marker::before {
+  content: '';
+  position: absolute;
+  inset: 24% -0.06em 4% -0.08em;
+  z-index: -1;
+  background: var(--yellow);
+  border-radius: 3px;
+  transform: skewX(-12deg) rotate(-1.4deg);
+  transform-origin: left center;
+  animation: swipe 0.7s cubic-bezier(0.6, 0, 0.2, 1) 0.35s both;
 }
 
-@keyframes roll {
+@keyframes swipe {
   from {
-    transform: translateY(100%);
+    transform: skewX(-12deg) rotate(-1.4deg) scaleX(0);
+  }
+}
+
+.lead {
+  margin: clamp(18px, 2.4vw, 30px) 0 0;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 2.5vw, 36px);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.caret {
+  display: inline-block;
+  width: 3px;
+  height: 1em;
+  margin-left: 3px;
+  vertical-align: -0.12em;
+  background: var(--accent);
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
     opacity: 0;
   }
-  to {
-    transform: none;
-    opacity: 1;
-  }
 }
 
-.where {
+.intro {
+  max-width: 50ch;
+  margin: 16px auto 0;
   color: var(--ink-2);
-  font-weight: 600;
-  font-size: 0.7em;
-}
-
-.side {
-  display: grid;
-  gap: 18px;
-  justify-items: end;
-}
-
-.side ul {
-  justify-content: flex-end;
-}
-
-.ctas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-@media (max-width: 900px) {
-  .row {
-    grid-template-columns: 1fr;
-  }
-  .side {
-    justify-items: start;
-  }
-  .side ul {
-    justify-content: flex-start;
-  }
+  font-size: clamp(17px, 1.5vw, 21px);
+  line-height: 1.55;
 }
 
 @media (max-width: 700px) {
-  .name {
-    font-size: 13.6vw;
+  .title {
+    font-size: 12.6vw;
     white-space: normal;
   }
-  .name span {
+  .greet {
     display: block;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .roleText {
+  .marker::before,
+  .caret {
     animation: none;
   }
 }
