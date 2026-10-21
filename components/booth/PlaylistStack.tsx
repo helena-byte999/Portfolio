@@ -7,10 +7,12 @@ import type { Playlist } from './MusicPlayer';
 import { music, useMusic } from './musicStore';
 import s from './PlaylistStack.module.css';
 
-// Three of Ena's playlists as mini covers, side by side and tilted like the tool tiles. Pressing one
-// starts a preview in the mini LEGO player at the bottom of the screen (MusicPlayer.tsx).
+// Three of Ena's playlists, stacked and tilted like the tool tiles. Pressing one starts a preview in
+// the mini LEGO player at the bottom of the screen (MusicPlayer.tsx); ↗ goes straight to Spotify.
 // Data comes from content/playlists.json (npm run playlists); ?playlists=demo previews the layout
 // with three public Spotify playlists.
+
+const TINTS = ['#f08a3c', '#3557e8', '#e5484d'];
 
 export default function PlaylistStack() {
   const [list, setList] = useState<Playlist[]>(mine as Playlist[]);
@@ -28,19 +30,25 @@ export default function PlaylistStack() {
   const shown = list.slice(0, 3);
 
   return (
-    <div className={s.wrap}>
-      <ul className={s.row} aria-label={isDemo ? 'Sample playlists (demo)' : 'My playlists'}>
-        {shown.map((p, i) => {
-          const on = playing?.list[playing.index]?.id === p.id;
-          return (
-            <li key={p.id} className={s.item} data-playing={on || undefined} style={{ ['--i' as string]: i }}>
-              <button
-                type="button"
-                className={s.card}
-                onClick={() => music.set({ list: shown, index: i, at: Date.now() })}
-                aria-label={`Play a preview of ${p.title}`}
-              >
-                <img src={p.cover} alt="" loading="lazy" />
+    <ul className={s.stack} aria-label={isDemo ? 'Sample playlists (demo)' : 'My playlists'}>
+      {shown.map((p, i) => {
+        const on = playing?.list[playing.index]?.id === p.id;
+        return (
+          <li
+            key={p.id}
+            className={s.item}
+            data-playing={on || undefined}
+            style={{ ['--i' as string]: i, ['--tint' as string]: TINTS[i % TINTS.length] }}
+          >
+            <button
+              type="button"
+              className={s.card}
+              onClick={() => music.set({ list: shown, index: i, at: Date.now() })}
+              aria-label={`Play a preview of ${p.title}`}
+            >
+              <img src={p.cover} alt="" loading="lazy" />
+              <span className={s.count}>{p.tracks ? `${p.tracks} Tracks` : 'Playlist'}</span>
+              <span className={s.foot}>
                 <span className={s.play} aria-hidden="true">
                   {on ? (
                     <span className={s.eq}>
@@ -54,16 +62,18 @@ export default function PlaylistStack() {
                     </svg>
                   )}
                 </span>
-              </button>
-              <span className={s.tip} aria-hidden="true">
-                {p.title}
-                {isDemo ? ' (sample)' : ''}
+                <span className={s.names}>
+                  <strong>{p.title}</strong>
+                  <small>{isDemo ? 'Sample · not mine' : p.subtitle ?? 'My playlist'}</small>
+                </span>
               </span>
-            </li>
-          );
-        })}
-      </ul>
-      <span className={s.caption}>on repeat</span>
-    </div>
+            </button>
+            <a className={s.out} href={p.url} target="_blank" rel="noopener" aria-label={`Open ${p.title} in Spotify`}>
+              ↗
+            </a>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
