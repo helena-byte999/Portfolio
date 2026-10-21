@@ -177,6 +177,50 @@ async function figure() {
     .toFile('public/booth/og.png');
 }
 
+// Organisation logos for the credentials carousel, from each organisation's own website
+// (northumbria.ac.uk og:image, aun.edu.ng header logo, entrylevel.net apple-touch-icon).
+// Snap, Google and Coursera come from simple-icons in the page itself.
+// `wide` logos keep their full lockup (mark + name) at their own shape; the rest become squares.
+const LOGOS = {
+  // White crest and name on black: turn the black into transparency.
+  northumbria: { src: 'logos/northumbria.png', knockOutBlack: true, wide: true },
+  // Mark plus the university's name in white, already on transparency.
+  aun: { src: 'logos/aun.png', wide: true },
+  entrylevel: { src: 'logos/entrylevel.png' },
+};
+
+async function logos() {
+  await mkdir('public/logos', { recursive: true });
+  for (const [name, l] of Object.entries(LOGOS)) {
+    let img = sharp(`assets-src/${l.src}`).ensureAlpha();
+    if (l.crop) img = img.extract(l.crop);
+    let buf = await img.png().toBuffer();
+    if (l.knockOutBlack) {
+      // Alpha from brightness, so the white crest stays and the black square disappears.
+      const { data, info } = await sharp(buf).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+      for (let i = 0; i < data.length; i += 4) {
+        const lum = Math.max(data[i], data[i + 1], data[i + 2]);
+        data[i + 3] = Math.min(data[i + 3], lum);
+        data[i] = data[i + 1] = data[i + 2] = 255;
+      }
+      buf = await sharp(data, { raw: info }).png().toBuffer();
+    }
+    // Trim to the logo itself, then fit it into a square with a little breathing room (or, for
+    // wide lockups, just size it).
+    buf = await sharp(buf).trim({ threshold: 10 }).png().toBuffer();
+    if (l.wide) {
+      await sharp(buf).resize({ height: 120, withoutEnlargement: true }).png().toFile(`public/logos/${name}.png`);
+      continue;
+    }
+    await sharp(buf)
+      .resize(224, 224, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 }, kernel: 'lanczos3' })
+      .extend({ top: 16, bottom: 16, left: 16, right: 16, background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .png()
+      .toFile(`public/logos/${name}.png`);
+  }
+  console.log('logos', Object.keys(LOGOS).length);
+}
+
 async function work() {
   for (const [slug, files] of Object.entries(WORK)) {
     await mkdir(`public/work/${slug}`, { recursive: true });
@@ -195,4 +239,5 @@ async function work() {
 await mkdir('components/booth', { recursive: true });
 await figure();
 await work();
+await logos();
 await clips();

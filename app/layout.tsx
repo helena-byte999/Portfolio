@@ -24,21 +24,17 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
-  ],
+  themeColor: '#000000',
 };
 
-// Runs before paint: applies the saved theme (or the system's) and marks the page as scripted,
-// so neither the theme nor the scroll reveals flash. It also removes the comment Netlify injects
-// into <head> on the production domain (plus stray whitespace), which otherwise breaks React's
-// hydration with error #418.
-const boot = `(function(){var d=document.documentElement;try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';d.dataset.theme=t}catch(e){}d.classList.add('js');var h=document.head,n=h.firstChild,x;while(n){x=n.nextSibling;if(n.nodeType===8||(n.nodeType===3&&!n.nodeValue.trim()))h.removeChild(n);n=x}})()`;
+// Runs before paint: marks the page as scripted so the scroll reveals don't flash, and removes the
+// comment Netlify injects into <head> on the production domain (plus stray whitespace), which
+// otherwise breaks React's hydration with error #418.
+const boot = `(function(){var d=document.documentElement;d.classList.add('js');var h=document.head,n=h.firstChild,x;while(n){x=n.nextSibling;if(n.nodeType===8||(n.nodeType===3&&!n.nodeValue.trim()))h.removeChild(n);n=x}})()`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GB" className={`${archivo.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en-GB" data-theme="dark" className={`${archivo.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: boot }} />
       </head>

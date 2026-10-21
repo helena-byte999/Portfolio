@@ -1,38 +1,28 @@
-/* Tokens: white page, near-black ink, a marker yellow and one blue, with keycap
-   red/green/orange for the pads. Dark mode (black) overrides below. */
+/* Tokens. Dark only: black page, bright near-white ink, one accent (the LEGO yellow), with the
+   other LEGO primaries kept for small things (pads, icons, chips). Glass surfaces sit on the black. */
 :root {
-  --bg: #ffffff;
-  --bg-2: #f4f4f5;
-  --card: #ffffff;
-  --ink: #161616;
-  --ink-2: #5c5c62;
-  --line: rgba(0, 0, 0, 0.09);
-  --accent: #2f4be0;
+  --bg: #000000;
+  --bg-2: #0b0b0d;
+  --card: #121214;
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-line: rgba(255, 255, 255, 0.14);
+  --ink: #ffffff;
+  --ink-2: #d6d6dc;
+  --ink-3: #a8a8b3;
+  --line: rgba(255, 255, 255, 0.12);
+  --accent: #ffd24d;
   --yellow: #f2c94c;
+  --blue: #4d7cff;
   --red: #e5484d;
   --green: #4faf5b;
   --orange: #f08a3c;
-  --shadow: 0 22px 44px -22px rgba(0, 0, 0, 0.35);
-  --fill: rgba(0, 0, 0, 0.05);
+  --shadow: 0 22px 44px -22px rgba(0, 0, 0, 0.8);
+  --fill: rgba(255, 255, 255, 0.08);
   --radius: 20px;
   --gutter: clamp(16px, 4vw, 48px);
   --max: 1240px;
   --font-display: var(--font-sans);
   --font-body: var(--font-sans);
-  color-scheme: light;
-}
-
-/* Dark: black, same yellow, a lighter blue so it reads on dark. */
-:root[data-theme='dark'] {
-  --bg: #000000;
-  --bg-2: #0d0d0e;
-  --card: #141416;
-  --ink: #f4f4f5;
-  --ink-2: #a1a1aa;
-  --line: rgba(255, 255, 255, 0.1);
-  --accent: #7d92ff;
-  --fill: rgba(255, 255, 255, 0.07);
-  --shadow: 0 22px 44px -22px rgba(0, 0, 0, 0.7);
   color-scheme: dark;
 }
 

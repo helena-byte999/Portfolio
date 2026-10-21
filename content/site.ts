@@ -28,15 +28,15 @@ export const HERO = {
 /** The six pads on the mixer. Keys 1–6 hit them too. */
 // Keycap colours; `ink` is the label colour that reads on each.
 export const PADS = [
-  { key: '1', label: 'Work', target: 'work', color: '#F2C94C', ink: '#161616' },
-  { key: '2', label: 'Experience', target: 'experience', color: '#3557E8', ink: '#ffffff' },
-  { key: '3', label: 'Set list', target: 'setlist', color: '#E5484D', ink: '#ffffff' },
-  { key: '4', label: 'About', target: 'about', color: '#4FAF5B', ink: '#ffffff' },
+  { key: '1', label: 'About', target: 'about', color: '#F2C94C', ink: '#161616' },
+  { key: '2', label: 'Work', target: 'work', color: '#3557E8', ink: '#ffffff' },
+  { key: '3', label: 'Experience', target: 'experience', color: '#E5484D', ink: '#ffffff' },
+  { key: '4', label: 'Set list', target: 'setlist', color: '#4FAF5B', ink: '#ffffff' },
   { key: '5', label: 'Writing', target: 'writing', color: '#F08A3C', ink: '#161616' },
   { key: '6', label: 'Contact', target: 'contact', color: '#2B2B2E', ink: '#ffffff' },
 ] as const;
 
-export const BOOTH_HINT = 'Hit a pad to jump there, or press 1–6. Tap the left record to play my music.';
+export const BOOTH_HINT = 'Hit a pad or press 1–6 to jump. Tap a record to play my music. Drag the booth to walk around it.';
 
 export const WORK_INTRO = {
   title: 'Selected work',
@@ -44,10 +44,26 @@ export const WORK_INTRO = {
   text: 'Product case studies first, then the things I built to test an idea before asking anyone else to.',
 };
 
+/** Logo tiles. Images come from each organisation's own website (see scripts/build-assets.mjs);
+ *  icons from simple-icons; the rest are lettermarks until there's an official logo to use. */
+export type LogoSpec = { img?: string; icon?: 'snapchat' | 'google'; letters?: string; bg: string; ink?: string; wide?: boolean };
+export const LOGOS: Record<string, LogoSpec> = {
+  snap: { icon: 'snapchat', bg: '#FFFC00', ink: '#000000' },
+  ariro: { letters: 'A', bg: '#3557E8' },
+  aberdeen: { letters: 'AC', bg: '#E5484D' },
+  centrifuge: { letters: 'CG', bg: '#4FAF5B' },
+  northumbria: { img: '/logos/northumbria.png', bg: 'transparent', wide: true },
+  aun: { img: '/logos/aun.png', bg: 'transparent', wide: true },
+  google: { icon: 'google', bg: '#ffffff', ink: '#4285F4' },
+  gomycode: { letters: 'GMC', bg: '#F08A3C' },
+  entrylevel: { img: '/logos/entrylevel.png', bg: '#ffffff' },
+};
+
 export const EXPERIENCE = [
   {
     role: 'AR Designer & Product Management Intern',
     org: 'Snap Inc. · Snap Lens Lab',
+    logo: 'snap',
     place: 'London, UK',
     dates: 'Jul 2026 – Aug 2026',
     text: 'Led a three-person team from first sketch to a live AR lens in 3 weeks: Kickback, a shared virtual bedroom where friends listen to music together. I owned scope, delivery and success metrics, cut scope twice to protect the deadline (and documented what was dropped and why), and learned Blender from scratch to build 4 in-lens 3D assets. The lens reached 8,000+ users in 4 days, and I pitched it to 50+ people across Snap product and engineering.',
@@ -55,6 +71,7 @@ export const EXPERIENCE = [
   {
     role: 'Product Manager',
     org: 'Ariro Inc.',
+    logo: 'ariro',
     place: 'Remote · Lagos',
     dates: 'Feb 2024 – May 2025',
     text: 'Took a consumer Afrogospel music-streaming app from concept to launch: designed all 13 screens, led go-to-market to 500+ users, and expanded the product into event reminders, blogs and merch. Kept engineering, branding and web teams aligned on one release plan across a 15-person company.',
@@ -62,6 +79,7 @@ export const EXPERIENCE = [
   {
     role: 'Associate Digital Solutions Intern',
     org: 'Aberdeen Commercial',
+    logo: 'aberdeen',
     place: 'Abuja',
     dates: 'Aug 2023 – Apr 2025',
     text: 'Built and launched the company website end to end, and supported 6 delivery cycles across 5 client-facing projects by documenting 40+ requirements and handling solution design and testing. Worked with 4 cross-functional teams on digital solutions that improved workflow efficiency by 30% and cut project rework by 25%, and evaluated 12 tools and platforms to improve operations and user experience. Organised product analytics in Excel for reporting, presented technical findings to 15 stakeholders across 3 departments, and produced 10+ conference brochures for events in 4 countries to brand guidelines.',
@@ -69,46 +87,105 @@ export const EXPERIENCE = [
   {
     role: 'UI/UX Design Intern',
     org: 'Centrifuge Groups',
+    logo: 'centrifuge',
     place: 'Abuja',
     dates: 'May 2022 – Dec 2022',
     text: 'Led user research with 100+ parents, teachers and board members across 2 schools, and turned the gaps it uncovered into requirements for a digital portal that replaced paper communication books and printed letters. Drove adoption at launch with a week of hands-on training for all three user groups.',
   },
 ];
 
-export const VOLUNTEERING = {
-  role: 'Team Lead (Volunteer), Snap Teen Summit',
-  org: 'Snap Inc.',
-  dates: 'Oct 2026',
-  text: 'Led a squad of 16–18 year olds alongside a fellow Snap alumnus at a one-day summit, supervising 150+ students from 10 schools and keeping them organised throughout the event.',
-};
-
-export const RESEARCH = {
-  title: 'Certainty and Justification Framing in Music Recommendation',
-  org: 'MSc dissertation · Northumbria University · Distinction',
-  text: 'Does the way a recommendation is framed change whether people trust it? I ran a 2×2 between-subjects experiment (certainty × justification) with 60 tracks across 14 genres, sized the sample in advance with a simulation-based power analysis, and modelled 118 responses with linear mixed-effects models in R. Justification raised trust (p = .009) and willingness to explore (p = .002), but only for listeners already familiar with the music. The product takeaway: explanations don\'t help every user equally, so test them per audience instead of assuming.',
-};
-
-export const EDUCATION = [
-  {
-    title: 'MSc Artificial Intelligence, Distinction',
-    org: 'Northumbria University, Newcastle upon Tyne',
-    dates: 'Sep 2025 – Sep 2026',
-    note: 'Dissertation graded Distinction: how certainty and justification framing change trust in music recommendations.',
-  },
-  {
-    title: 'BSc Software Engineering, Second Class Upper (2:1)',
-    org: 'American University of Nigeria, Yola',
-    dates: 'Aug 2019 – May 2023',
-    note: 'Final-year project, B+ (89): an elderly care management system for a residential care home, rebuilt in 2026 as ECMS.',
-  },
+/** Education, research, volunteering and certifications: one carousel, filtered by kind. */
+export const CREDENTIAL_KINDS = [
+  { id: 'education', label: 'Education' },
+  { id: 'research', label: 'Research' },
+  { id: 'volunteering', label: 'Volunteering' },
+  { id: 'certification', label: 'Certifications' },
 ];
 
-export const CERTIFICATIONS = [
-  { title: 'Google AI Specialisation', org: 'Google · Coursera · 2026', href: 'https://www.coursera.org/account/accomplishments/specialization/366Z97NI7B82' },
-  // GoMyCode's diploma site has an expired SSL certificate (Oct 2026), so no link until they fix it.
-  { title: 'Cyber Security Bootcamp: CompTIA Security+ 701', org: 'GoMyCode · 2024 · Credential ID 31728828013524747' },
-  { title: 'UX Designer, Entry Level', org: 'EntryLevel · 2023', href: 'https://entrylevel-public.s3.amazonaws.com/certificate/05ac5980-a11d-44c2-b7ea-9fa7f8d6d136/7581b2c7-bfe2-40ee-9dc5-03850198fe10_cert.pdf' },
-  { title: 'Product Management Virtual Experience', org: 'EntryLevel · 2023', href: 'https://entrylevel-public.s3.amazonaws.com/certificate/0007be48-48a4-4dd8-b02d-c56298714594/9f92dffa-da7e-4363-8e12-45185f6842d3_cert.pdf' },
+export type Credential = {
+  kind: 'education' | 'research' | 'volunteering' | 'certification';
+  title: string;
+  grade?: string;
+  org: string;
+  dates: string;
+  text: string;
+  logo: string;
+  href?: string;
+};
+
+export const CREDENTIALS: Credential[] = [
+  {
+    kind: 'education',
+    title: 'MSc Artificial Intelligence',
+    grade: 'Distinction',
+    org: 'Northumbria University, Newcastle upon Tyne',
+    dates: 'Sep 2025 – Sep 2026',
+    text: 'Dissertation graded Distinction, on how the framing of a recommendation changes whether people trust it.',
+    logo: 'northumbria',
+  },
+  {
+    kind: 'research',
+    title: 'Certainty and Justification Framing in Music Recommendation',
+    grade: 'MSc dissertation · Distinction',
+    org: 'Northumbria University',
+    dates: '2025 – 2026',
+    text: 'A 2×2 experiment with 118 listeners, sized in advance and modelled with mixed-effects models in R. Explanations raised trust (p = .009) and willingness to explore (p = .002), but only for listeners who already knew the music.',
+    logo: 'northumbria',
+  },
+  {
+    kind: 'education',
+    title: 'BSc Software Engineering',
+    grade: 'Second Class Upper (2:1)',
+    org: 'American University of Nigeria, Yola',
+    dates: 'Aug 2019 – May 2023',
+    text: 'Final-year project, B+ (89): an elderly care management system for a residential care home, rebuilt in 2026 as ECMS.',
+    logo: 'aun',
+  },
+  {
+    kind: 'volunteering',
+    title: 'Team Lead, Snap Teen Summit',
+    grade: 'Volunteer',
+    org: 'Snap Inc.',
+    dates: 'Oct 2026',
+    text: 'Led a squad of 16–18 year olds alongside a fellow Snap alumnus at a one-day summit, supervising 150+ students from 10 schools.',
+    logo: 'snap',
+  },
+  {
+    kind: 'certification',
+    title: 'Google AI Specialisation',
+    org: 'Google · Coursera',
+    dates: '2026',
+    text: 'Credential ID 366Z97NI7B82.',
+    logo: 'google',
+    href: 'https://www.coursera.org/account/accomplishments/specialization/366Z97NI7B82',
+  },
+  {
+    kind: 'certification',
+    title: 'Cyber Security Bootcamp: CompTIA Security+ 701',
+    org: 'GoMyCode',
+    dates: '2024',
+    // GoMyCode's diploma site has an expired SSL certificate (Oct 2026), so no link until they fix it.
+    text: 'Credential ID 31728828013524747.',
+    logo: 'gomycode',
+  },
+  {
+    kind: 'certification',
+    title: 'UX Designer, Entry Level',
+    org: 'EntryLevel',
+    dates: '2023',
+    text: 'Credential ID 7581b2c7.',
+    logo: 'entrylevel',
+    href: 'https://entrylevel-public.s3.amazonaws.com/certificate/05ac5980-a11d-44c2-b7ea-9fa7f8d6d136/7581b2c7-bfe2-40ee-9dc5-03850198fe10_cert.pdf',
+  },
+  {
+    kind: 'certification',
+    title: 'Product Management Virtual Experience',
+    org: 'EntryLevel',
+    dates: '2023',
+    text: 'Credential ID 9f92dffa.',
+    logo: 'entrylevel',
+    href: 'https://entrylevel-public.s3.amazonaws.com/certificate/0007be48-48a4-4dd8-b02d-c56298714594/9f92dffa-da7e-4363-8e12-45185f6842d3_cert.pdf',
+  },
 ];
 
 export const SET_LIST = {
@@ -161,18 +238,7 @@ export const ABOUT = {
 export const WRITING = {
   title: 'Liner notes',
   text: 'Product teardowns, and how AI is changing the way we find music.',
-  articles: [
-    {
-      title: 'AI is DJing Too, But Can It Read the Room?',
-      text: 'How recommendation algorithms shape what we listen to, and what that means for music discovery.',
-      href: 'https://medium.com/@otuokonhelena/youre-not-discovering-music-ai-is-deciding-it-for-you-a22f27cf9921',
-    },
-    {
-      title: 'Killing Circle Was a Mistake. X Keeps Proving It',
-      text: 'What one removed feature reveals about confusing low adoption with low value.',
-      href: 'https://medium.com/@otuokonhelena/x-deleted-circle-three-years-ago-its-still-rebuilding-it-476eaa82a486',
-    },
-  ],
+  // The posts themselves come from Medium (content/writing.json, refreshed on every build).
   more: { label: 'More on Medium', href: 'https://medium.com/@otuokonhelena' },
 };
 
@@ -181,4 +247,4 @@ export const CONTACT = {
   text: "I'm open to product manager roles, especially in AI, music and consumer products. Based in London and eligible to work in the UK.",
 };
 
-export const FOOTER = '© 2026 Ena Otuokon. Mixed & mastered with Claude Code.';
+export const FOOTER = '© 2026 Ena Otuokon.';

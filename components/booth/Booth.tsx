@@ -36,7 +36,7 @@ function canRender3d() {
 }
 
 export default function Booth() {
-  const signal = useRef<BoothSignal>({ hover: -1, flash: -1, flashAt: -10 });
+  const signal = useRef<BoothSignal>({ hover: -1, flash: -1, flashAt: -10, dragged: false, azimuth: 0 });
   const stage = useRef<HTMLDivElement>(null);
   const [use3d, setUse3d] = useState(false);
   const [ready, setReady] = useState(false);

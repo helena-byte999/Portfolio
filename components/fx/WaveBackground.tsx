@@ -2,12 +2,11 @@
 
 import { useEffect, useRef } from 'react';
 
-// The site background, after her reference: glossy ribbons sweeping in curves (blue → violet →
-// red → magenta) over a field of tiny stars, slowly flowing. They part around the cursor so you
-// can never quite touch them, and when a playlist is playing (<html data-music="playing">) the
-// whole thing sparks up: more stars, sparks running along the ribbon edges, and a pulse on the
-// beat. White page in light mode, black in dark. Plain WebGL, one full-screen shader; a still frame
-// with reduced motion; the plain page colour without WebGL.
+// The site background: a deep field of tiny sparkles on black, in three slowly drifting layers.
+// The stars shy away from the cursor (you can never quite touch them), and when a playlist is
+// playing (<html data-music="playing">) the field sparks up: more stars, LEGO-coloured sparkles
+// that pulse on the beat, and the odd shooting star. Plain WebGL, one full-screen shader; a still
+// frame with reduced motion; plain black without WebGL.
 
 const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }`;
 
@@ -17,7 +16,6 @@ uniform vec2 uRes;
 uniform float uTime;
 uniform vec2 uMouse;
 uniform float uScroll;
-uniform float uDark;
 uniform float uPlay;
 
 float hash(vec2 p) {
@@ -26,34 +24,35 @@ float hash(vec2 p) {
   return fract(p.x * p.y);
 }
 
-float noise(vec2 p) {
-  vec2 i = floor(p), f = fract(p);
-  vec2 u = f * f * (3. - 2. * f);
-  return mix(mix(hash(i), hash(i + vec2(1., 0.)), u.x), mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), u.x), u.y);
+// LEGO yellow, blue, red, green
+vec3 lego(float h) {
+  if (h < .25) return vec3(1., .82, .3);
+  if (h < .5) return vec3(.3, .49, 1.);
+  if (h < .75) return vec3(.9, .28, .3);
+  return vec3(.31, .69, .36);
 }
 
-float fbm(vec2 p) {
-  float v = 0., a = .5;
-  for (int i = 0; i < 3; i++) {
-    v += a * noise(p);
-    p = p * 2.03 + vec2(1.7, 9.2);
-    a *= .5;
-  }
-  return v;
-}
-
-// Ribbon colours by distance from the swirl's centre: violet near it, then magenta, red,
-// violet again and blue on the far side, like the reference.
-vec3 palette(float h) {
-  vec3 violet = vec3(.48, .17, .94);
-  vec3 magenta = vec3(.89, .23, .85);
-  vec3 red = vec3(.9, .2, .17);
-  vec3 blue = vec3(.18, .17, 1.);
-  h = clamp(h, 0., 1.) * 4.;
-  if (h < 1.) return mix(violet, magenta, h);
-  if (h < 2.) return mix(magenta, red, h - 1.);
-  if (h < 3.) return mix(red, violet, h - 2.);
-  return mix(violet, blue, h - 3.);
+// One layer of stars on a grid: each cell may hold a star at a random spot
+vec3 stars(vec2 uv, float scale, float density, float t, float play, float seed) {
+  vec2 g = uv * scale;
+  vec2 id = floor(g);
+  vec2 f = fract(g) - .5;
+  float h = hash(id + seed);
+  if (h > density) return vec3(0.);
+  vec2 off = vec2(hash(id + seed + 3.1), hash(id + seed + 7.7)) - .5;
+  float d = length(f - off * .7);
+  float size = .045 + .09 * hash(id + seed + 1.3);
+  float tw = .55 + .45 * sin(t * (1.5 + h * 6.) + h * 60.);
+  float core = smoothstep(size, 0., d);
+  // A cross-shaped glint on the bigger ones
+  vec2 q = abs(f - off * .7);
+  float glint = (smoothstep(.012, 0., q.x) + smoothstep(.012, 0., q.y)) * smoothstep(.35, 0., d) * step(.75, hash(id + seed + 9.));
+  float bright = (core + glint * .6) * tw;
+  // While music plays some stars take a LEGO colour and pulse on the beat
+  float beat = pow(1. - fract(t * 2.), 3.);
+  float coloured = step(.55, hash(id + seed + 5.)) * play;
+  vec3 c = mix(vec3(1., .97, .92), lego(hash(id + seed + 11.)), coloured);
+  return c * bright * (1. + play * (.6 + 1.2 * beat * coloured));
 }
 
 void main() {
@@ -61,53 +60,30 @@ void main() {
   vec2 uv = gl_FragCoord.xy / uRes.y;
   float t = uTime;
   float play = uPlay;
-  float beat = pow(1. - fract(t * 2.), 3.);
 
-  // The cursor pushes the field away, so the ribbons part around it
+  // Stars near the cursor are pushed away from it
   vec2 m = vec2(uMouse.x * aspect, uMouse.y);
   vec2 dm = uv - m;
-  vec2 p = uv + normalize(dm + 1e-5) * .075 * exp(-dot(dm, dm) / .02);
+  vec2 push = normalize(dm + 1e-5) * .06 * exp(-dot(dm, dm) / .015);
 
-  // Concentric curves around a point off the bottom-right, warped by slow noise, flowing outwards
-  float n = fbm(p * 1.1 + vec2(t * .03, -t * .02 + uScroll * .12));
-  vec2 c = vec2(aspect * 1.08, -.55);
-  float r = length(p - c) + (n - .5) * .3;
-  float x = r * 5.4 - t * (.05 + .07 * play);
-  float id = floor(x);
-  float f = fract(x);
-  float rnd = hash(vec2(id, 7.3));
-  float rnd2 = hash(vec2(id, 1.9));
+  vec3 col = vec3(0.);
+  // Far, middle and near layers drift at different speeds (and with scroll), for depth
+  col += stars(uv + push * .4 + vec2(t * .004, uScroll * .05), 70., mix(.2, .38, play), t, play, 1.) * .55;
+  col += stars(uv + push * .8 + vec2(t * .008, uScroll * .1), 38., mix(.12, .26, play), t, play, 17.) * .8;
+  col += stars(uv + push + vec2(t * .014, uScroll * .18), 18., mix(.07, .16, play), t, play, 41.);
 
-  // Each ribbon: its own width and brightness, darker inside, a bright rim on its outer edge
-  float width = .28 + .5 * rnd;
-  float inBand = smoothstep(0., .035, f) * (1. - smoothstep(width - .035, width, f));
-  float shade = mix(.22, 1., smoothstep(0., 1., f / width));
-  float rim = exp(-pow((f - (width - .05)) / .028, 2.));
-  float level = (.35 + .65 * rnd2) * (1. + play * (.25 + .55 * beat));
-  vec3 rc = palette((r - .35) / 2. + (rnd - .5) * .08);
+  // Shooting stars while music plays
+  float cycle = floor(t / 2.6);
+  float ph = fract(t / 2.6);
+  vec2 start = vec2(hash(vec2(cycle, 1.)) * aspect, .55 + .45 * hash(vec2(cycle, 2.)));
+  vec2 dir = normalize(vec2(-.8, -.45));
+  vec2 head = start + dir * ph * 1.4;
+  vec2 rel = uv - head;
+  float along = dot(rel, -dir);
+  float across = abs(dot(rel, vec2(-dir.y, dir.x)));
+  float trail = smoothstep(.003, 0., across) * smoothstep(.25, 0., along) * step(0., along) * smoothstep(1., .6, ph);
+  col += vec3(1., .92, .75) * trail * play * step(.35, hash(vec2(cycle, 3.)));
 
-  // Stars, more of them (and twinkling harder) while music plays
-  vec2 g = gl_FragCoord.xy / 3.;
-  float hs = hash(floor(g));
-  float star = step(mix(.992, .972, play), hs) * smoothstep(.5, 0., length(fract(g) - .5));
-  star *= .45 + .55 * sin(t * (2. + hs * 7.) + hs * 40.);
-
-  // Sparks running along the ribbon rims while music plays
-  float spark = rim * inBand * step(.82, noise(vec2(p.x * 38. - t * 7., id * 3.1))) * play;
-
-  vec3 col;
-  if (uDark > .5) {
-    col = rc * inBand * shade * level * .5;
-    col += mix(rc, vec3(1.), .35) * rim * inBand * level * (.55 + .5 * play);
-    col += vec3(.92, .86, 1.) * max(star, 0.) * (.55 + .9 * play);
-    col += vec3(1., .85, 1.) * spark * 1.4;
-  } else {
-    col = vec3(1.);
-    col = mix(col, rc, inBand * shade * level * .3);
-    col = mix(col, rc, rim * inBand * level * (.38 + .3 * play));
-    col = mix(col, rc, max(star, 0.) * (.35 + .5 * play));
-    col = mix(col, mix(rc, vec3(1.), .2), spark * .9);
-  }
   gl_FragColor = vec4(col, 1.);
 }`;
 
@@ -140,21 +116,19 @@ export default function WaveBackground() {
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
 
     const u = (name: string) => gl.getUniformLocation(prog, name);
-    const uRes = u('uRes'), uTime = u('uTime'), uMouse = u('uMouse'), uScroll = u('uScroll'), uDark = u('uDark'), uPlay = u('uPlay');
+    const uRes = u('uRes'), uTime = u('uTime'), uMouse = u('uMouse'), uScroll = u('uScroll'), uPlay = u('uPlay');
 
     const root = document.documentElement;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    // Starts far off-screen, so nothing bends until a mouse moves (and never on touch screens).
+    // Starts far off-screen, so nothing moves aside until a mouse moves (and never on touch screens).
     const mouse = { x: -5, y: -5, tx: -5, ty: -5 };
     let play = 0;
     let frame = 0;
     const start = performance.now();
 
-    const setTheme = () => gl.uniform1f(uDark, root.dataset.theme === 'dark' ? 1 : 0);
-
     const resize = () => {
-      // Rendered a little under full resolution: soft ribbons don't need every pixel.
-      const scale = Math.min(window.devicePixelRatio || 1, 1.5) * (innerWidth < 700 ? 0.6 : 0.75);
+      // Full resolution on small screens would be wasted on tiny stars; cap the pixel ratio.
+      const scale = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = Math.round(innerWidth * scale);
       canvas.height = Math.round(innerHeight * scale);
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -200,15 +174,11 @@ export default function WaveBackground() {
       resize();
       if (reduced) draw(0);
     };
-    // Theme switches, and music starting or stopping (redrawn here when nothing is animating)
-    const rootObserver = new MutationObserver(() => {
-      setTheme();
-      if (reduced) draw(0);
-    });
+    // Music starting or stopping (redrawn here when nothing is animating)
+    const rootObserver = new MutationObserver(() => reduced && draw(0));
 
-    setTheme();
     resize();
-    rootObserver.observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-music'] });
+    rootObserver.observe(root, { attributes: true, attributeFilter: ['data-music'] });
     window.addEventListener('resize', onResize);
     if (reduced) {
       draw(0);
