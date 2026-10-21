@@ -34,13 +34,17 @@ for (const link of links.slice(0, 3)) {
   const data = embed.match(/<script id="__NEXT_DATA__" type="application\/json">(.*?)<\/script>/s)?.[1];
   const listed = data ? (JSON.parse(data).props?.pageProps?.state?.data?.entity?.trackList ?? []).length : 0;
 
+  const cover = meta('og:image') ?? oembed.thumbnail_url;
+  // Spotify's daylist renames and re-covers itself every day; the site refreshes it on each visit.
+  const daily = cover.includes('daylist.') || /inspired by your listening/i.test(description);
   playlists.push({
     id,
     url,
     title: decode(oembed.title),
-    cover: meta('og:image') ?? oembed.thumbnail_url,
+    cover,
     tracks: counted ? Number(counted) : listed || null,
-    subtitle: description && !description.startsWith('Playlist ·') ? description : null,
+    subtitle: daily ? 'Changes every day' : description && !description.startsWith('Playlist ·') ? description : null,
+    ...(daily && { daily: true }),
   });
   console.log('playlist', decode(oembed.title));
 }

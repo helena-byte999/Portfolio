@@ -17,6 +17,8 @@ export type Playlist = {
   cover: string;
   tracks: number | null;
   subtitle: string | null;
+  /** Spotify's daylist: renamed and re-covered every day, so the site refreshes it on each visit. */
+  daily?: boolean;
 };
 
 type Controller = {

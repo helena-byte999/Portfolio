@@ -1,1 +1,27 @@
-[]
+[
+  {
+    "id": "1slf277xsdgG0Br2CbWh9Y",
+    "url": "https://open.spotify.com/playlist/1slf277xsdgG0Br2CbWh9Y",
+    "title": "gqom here",
+    "cover": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000da845712ba3def5c1e592d48c459",
+    "tracks": 15,
+    "subtitle": "JUST GQOM HERE"
+  },
+  {
+    "id": "37i9dQZF1FbFjV8hnP1HxU",
+    "url": "https://open.spotify.com/playlist/37i9dQZF1FbFjV8hnP1HxU",
+    "title": "soulful house tulum wednesday afternoon",
+    "cover": "https://daylist.spotifycdn.com/playlist-covers-mix/en/afternoon_large.jpg",
+    "tracks": 50,
+    "subtitle": "Changes every day",
+    "daily": true
+  },
+  {
+    "id": "0O4C4oh8SyL0bhP2QX1TLI",
+    "url": "https://open.spotify.com/playlist/0O4C4oh8SyL0bhP2QX1TLI",
+    "title": "demure summer ride😃💜",
+    "cover": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000da845681cb9d27a426dfef1372dd",
+    "tracks": 50,
+    "subtitle": null
+  }
+]
