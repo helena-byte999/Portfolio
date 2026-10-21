@@ -30,8 +30,10 @@ export const viewport: Viewport = {
 };
 
 // Runs before paint: applies the saved theme (or the system's) and marks the page as scripted,
-// so neither the theme nor the scroll reveals flash.
-const boot = `(function(){var d=document.documentElement;try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';d.dataset.theme=t}catch(e){}d.classList.add('js')})()`;
+// so neither the theme nor the scroll reveals flash. It also removes the comment Netlify injects
+// into <head> on the production domain (plus stray whitespace), which otherwise breaks React's
+// hydration with error #418.
+const boot = `(function(){var d=document.documentElement;try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';d.dataset.theme=t}catch(e){}d.classList.add('js');var h=document.head,n=h.firstChild,x;while(n){x=n.nextSibling;if(n.nodeType===8||(n.nodeType===3&&!n.nodeValue.trim()))h.removeChild(n);n=x}})()`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
