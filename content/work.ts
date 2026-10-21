@@ -34,6 +34,8 @@ export type Track = {
   meta: { label: string; value: string }[];
   links: Link[];
   cover: Cover;
+  /** Tall image behind the work-deck card; tracks without one get a designed background. */
+  card?: string;
   slides: Slide[];
   /** Short line under the cover; numbers only, no fluff. */
   stat?: string;
@@ -91,6 +93,7 @@ export const TRACKS: Track[] = [
       { label: 'Data & analysis', href: 'https://github.com/helena-byte999/discovery-gap-analysis' },
     ],
     cover: { kind: 'laptop', src: img('discovery-gap', 1), phone: img('discovery-gap', 2) },
+    card: img('discovery-gap', 2),
     slides: [],
   },
   {
@@ -118,6 +121,7 @@ export const TRACKS: Track[] = [
       { label: 'GitHub', href: 'https://github.com/helena-byte999/ecms' },
     ],
     cover: { kind: 'laptop', src: img('ecms', 1) },
+    card: img('ecms', 3),
     slides: [
       { src: img('ecms', 2), title: 'Admin dashboard', text: 'Doses given, incidents, residents and outstanding invoices on one screen, with today\'s medicine round underneath.' },
     ],
@@ -147,6 +151,7 @@ export const TRACKS: Track[] = [
       { label: 'GitHub', href: 'https://github.com/helena-byte999/MovieRec' },
     ],
     cover: { kind: 'laptop', src: img('movierec', 1) },
+    card: img('movierec', 5),
     slides: [
       { src: img('movierec', 1), title: 'Project overview', text: 'Search any title and get recommendations instantly, browse curated genre rows (Action, K-Drama, Romance, Bollywood and more), and save titles to a personal Watchlist. The live site supports 5 languages and 22 global regions.' },
       { src: img('movierec', 2), title: 'Watchlist & user features', text: 'Signed-in users get a personal Watchlist: save any title, mark it as watched, and recommendations improve from that history. Guest Watchlists transfer to the account on sign-up. Google OAuth and email/password login.' },
@@ -212,6 +217,7 @@ export const TRACKS: Track[] = [
     ],
     links: [{ label: 'Full presentation (PDF)', href: '/asset/pdf/PeerPods_Presentation.pdf' }],
     cover: { kind: 'slide', src: img('peerpods', 1) },
+    card: img('peerpods', 1),
     slides: [
       ['PeerPods', 'A context-aware intelligent user interface for music reflection and community, designed as a calm companion layer alongside existing music platforms for writing, discovery and peer connection.'],
       ['Problem statement', 'Music reflection is already happening on Substack, Reddit, X and Medium, but scattered across platforms not built for it. Six public X posts surfaced four recurring needs: structured listening, long-form review spaces, contextual playlist sharing and like-minded community.'],
@@ -255,6 +261,7 @@ export const TRACKS: Track[] = [
     ],
     links: [],
     cover: { kind: 'slide', src: img('kuda-teens', 1) },
+    card: img('kuda-teens', 1),
     slides: [
       ['Problem statement', 'Teens in Nigeria lacked a safe, controlled way to access and manage money, and parents had no visibility into their spending. Kuda Teens is a prepaid debit card and banking experience for teens aged 11–18 and their parents.'],
       ['Market research', 'Research segmented by demographics, geography, psychographics and behaviour identified tech-savvy, budget-conscious parents and financially curious teens as the core audience, across urban and rural Nigeria.'],
@@ -288,6 +295,7 @@ export const TRACKS: Track[] = [
     ],
     links: [],
     cover: { kind: 'slide', src: img('ufit', 1) },
+    card: img('ufit', 1),
     slides: [
       ['Project overview', 'UFit helps people track workouts, set goals and get personalised meal recommendations. I led the full UX process, from user research to prototype testing.'],
       ['User research', 'Scripted interviews covered fitness habits, nutrition tracking, pain points with existing apps, and interest in personalised coaching.'],

@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { useLayoutEffect, useRef, useState, type PointerEvent } from 'react';
 import { PADS, WORK_INTRO } from '@/content/site';
 import { B_SIDES, SHELVES, TRACKS, type Shelf } from '@/content/work';
-import Cover from './Cover';
 import { Squiggle } from './fx/Doodles';
 import Rise from './fx/Rise';
 import s from './WorkDeck.module.css';
 
 const two = (n: number) => String(n).padStart(2, '0');
+
 
 /** Tilt card: the card leans toward the cursor and a soft glare follows it. */
 function tilt(e: PointerEvent<HTMLLIElement>) {
@@ -112,26 +112,35 @@ export default function WorkDeck() {
             onPointerMove={tilt}
             onPointerLeave={untilt}
           >
-            <div className={s.cover}>
-              <Cover cover={t.cover} title={t.title} eager={i < 2} />
+            <div className={s.media} aria-hidden="true">
+              {t.card ? (
+                <img src={t.card} alt="" loading={i < 2 ? 'eager' : 'lazy'} />
+              ) : t.cover.kind === 'terminal' ? (
+                <pre className={s.term}>{t.cover.lines.join('\n')}</pre>
+              ) : t.cover.kind === 'stat' ? (
+                <span className={s.statBg}>{t.cover.value}</span>
+              ) : null}
             </div>
-            <div className={s.body}>
-              <p className="mono">
-                Track {two(t.number)}
-                {t.year ? ` · ${t.year}` : ''}
-              </p>
-              <h3 className={`display ${s.title}`}>
-                <Link href={`/work/${t.slug}/`} className={s.link}>
-                  {t.title}
-                </Link>
-              </h3>
-              <p className={s.kicker}>{t.kicker}</p>
-              <p className={s.summary}>{t.summary}</p>
-              {t.stat && <p className={s.stat}>{t.stat}</p>}
+            <div className={s.chips}>
+              <span className={s.glass}>Track {two(t.number)}</span>
+              {t.year && <span className={s.glass}>{t.year}</span>}
+            </div>
+            <div className={s.fade} aria-hidden="true" />
+            <div className={s.shade} aria-hidden="true" />
+            <div className={s.content}>
+              <span className={s.badge} aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M8 5.5v13l11-6.5z" fill="currentColor" />
+                </svg>
+              </span>
+              <p className={s.label}>{t.kicker.split(' · ')[0]}</p>
+              <h3 className={s.title}>{t.title}</h3>
+              <p className={s.sub}>{t.stat ?? t.summary}</p>
               <span className={s.more} aria-hidden="true">
                 View case study <span className={s.moreArrow}>→</span>
               </span>
             </div>
+            <Link href={`/work/${t.slug}/`} className={s.hit} aria-label={`${t.title}: view case study`} />
           </li>
         ))}
       </ol>

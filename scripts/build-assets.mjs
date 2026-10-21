@@ -12,12 +12,13 @@ const OVERLAP = 10; // head layer reaches this far into the body layer so no sea
 
 const WORK = {
   'discovery-gap': ['captures/discovery-gap-desktop.png', 'captures/discovery-gap-phone.png'],
-  ecms: ['captures/ecms-desktop.png', 'work/ecms/ecms_dashboard.png'],
+  ecms: ['captures/ecms-desktop.png', 'work/ecms/ecms_dashboard.png', 'captures/ecms-phone.png'],
   movierec: [
     'work/movierec/movierec_01_hero.png',
     'work/movierec/movierec_04_watchlist.png',
     'work/movierec/movierec_03_search.png',
     'work/movierec/movierec_02_rows.png',
+    'captures/movierec-phone.png',
   ],
   peerpods: [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20].map(
     (n) => `work/peerpods/slide_${String(n).padStart(2, '0')}.png`,
