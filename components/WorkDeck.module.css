@@ -94,7 +94,7 @@
   --edge: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: min(560px, 84vw);
+  grid-auto-columns: min(360px, 78vw);
   gap: clamp(14px, 2vw, 24px);
   margin: 20px 0 0;
   padding: 12px var(--edge) 32px;
@@ -110,111 +110,270 @@
   display: none;
 }
 
-/* Tilt card: --rx/--ry/--gx/--gy are set from the cursor in WorkDeck.tsx */
+/* Image card: the picture fills it, glass chips up top, a progressive-blur glass fade at the
+   bottom carrying the text. Tilt: --rx/--ry/--gx/--gy are set from the cursor in WorkDeck.tsx. */
 .card {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  aspect-ratio: 4 / 5;
   scroll-snap-align: start;
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--card) 88%, transparent);
+  border-radius: 34px;
   overflow: hidden;
+  background: #111;
+  color: #fff;
+  box-shadow: var(--shadow);
+  isolation: isolate;
   transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
-  transition: transform 0.5s cubic-bezier(0.34, 1.3, 0.64, 1), border-color 0.25s ease;
+  transition: transform 0.5s cubic-bezier(0.34, 1.3, 0.64, 1);
 }
 
+/* Glare that follows the cursor across the glass */
 .card::before {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 4;
   border-radius: inherit;
-  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 0%), rgba(255, 255, 255, 0.12), transparent 45%);
+  background: radial-gradient(380px circle at var(--gx, 50%) var(--gy, 0%), rgba(255, 255, 255, 0.18), transparent 45%);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
 
+/* A thin bright rim, like the edge of a glass pane */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+
 .card:hover,
 .card:focus-within {
   --lift: -6px;
-  border-color: var(--accent-c);
-  transition: transform 0.15s ease-out, border-color 0.25s ease;
+  transition: transform 0.15s ease-out;
 }
 
 .card:hover::before {
   opacity: 1;
 }
 
-.cover {
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card:hover .media img {
+  transform: scale(1.06);
+}
+
+/* Designed backgrounds for the two tracks without a picture */
+.statBg {
+  display: grid;
+  place-items: start center;
+  width: 100%;
+  height: 100%;
+  padding-top: 18%;
+  background:
+    repeating-radial-gradient(circle at 70% 26%, rgba(255, 255, 255, 0.16) 0 2px, transparent 2px 30px),
+    radial-gradient(circle at 70% 26%, #f2c94c, #f08a3c 45%, #7a2a0f 100%);
+  font-family: var(--font-display), sans-serif;
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: 64px;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.term {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 72px 24px 0;
+  background: radial-gradient(circle at 30% 20%, #1d2a1b, #0b0e0b 70%);
+  color: #9be36a;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  line-height: 1.9;
+  white-space: pre;
+  overflow: hidden;
+  text-shadow: 0 0 10px rgba(155, 227, 106, 0.45);
+}
+
+.chips {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+}
+
+/* Frosted glass pill */
+.glass {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(16, 16, 16, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(14px) saturate(1.5);
+  -webkit-backdrop-filter: blur(14px) saturate(1.5);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Progressive blur: frosted at the bottom, clear by the middle */
+/* Two layers so the text always reads: the blur (where the browser supports it) and a plain
+   dark gradient on top that works everywhere. */
+.fade {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 1;
+  height: 62%;
+  backdrop-filter: blur(22px) saturate(1.3);
+  -webkit-backdrop-filter: blur(22px) saturate(1.3);
+  -webkit-mask-image: linear-gradient(to top, #000 55%, transparent);
+  mask-image: linear-gradient(to top, #000 55%, transparent);
+}
+
+.shade {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  height: 74%;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.97) 0%, rgba(10, 10, 10, 0.93) 48%, rgba(10, 10, 10, 0.55) 76%, transparent);
+  pointer-events: none;
+}
+
+.content {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 3;
+  padding: 0 24px 24px;
+}
+
+/* Play button: pops and sends out a pulse ring on hover, like hitting play on a track */
+.badge {
+  position: relative;
   display: grid;
   place-items: center;
-  aspect-ratio: 16 / 11;
-  padding: 7% 5%;
-  background:
-    radial-gradient(80% 70% at 30% 20%, color-mix(in srgb, var(--accent-c) 34%, transparent), transparent 70%),
-    radial-gradient(70% 60% at 90% 100%, color-mix(in srgb, var(--accent-c) 18%, transparent), transparent 70%),
-    var(--bg-2);
-  overflow: hidden;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: #fff;
+  color: #161616;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.body {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 22px 24px 26px;
-  flex: 1;
+.badge svg {
+  width: 22px;
+  height: 22px;
+  margin-left: 3px;
 }
 
-.body > .mono {
-  margin: 0;
-  color: var(--accent-c);
-}
-
-.title {
-  font-size: clamp(28px, 3vw, 40px);
-}
-
-/* The title link stretches over the whole card. */
-.link {
-  text-decoration: none;
-}
-
-.link::after {
+.badge::after {
   content: '';
   position: absolute;
   inset: 0;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  opacity: 0;
+}
+
+.card:hover .badge {
+  transform: scale(1.1);
+}
+
+.card:hover .badge::after {
+  animation: pulse 1.2s ease-out infinite;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.title {
+  margin: 6px 0 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(28px, 2.6vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: #fff;
+}
+
+/* One link covering the whole card. */
+.hit {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
   border-radius: inherit;
 }
 
-.kicker {
-  margin: 0;
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--ink-2);
+.hit:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: -3px;
 }
 
-.summary {
-  margin: 4px 0 0;
-}
-
-.stat {
-  margin: 4px 0 0;
-  align-self: flex-start;
-  padding: 5px 11px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 600;
-  background: color-mix(in srgb, var(--accent-c) 18%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent-c) 45%, transparent);
-}
-
-.more {
-  margin-top: auto;
-  padding-top: 12px;
-  font-weight: 700;
+.sub {
+  margin: 8px 0 0;
   font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* "View case study" slides up on hover (always shown on touch screens) */
+.more {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover .more,
+.card:focus-within .more {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: none) {
+  .more {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .moreArrow {
@@ -278,10 +437,13 @@
   .card,
   .card:hover {
     transform: none;
-    transition: border-color 0.25s ease;
+    transition: none;
   }
   .indicator,
-  .moreArrow {
+  .moreArrow,
+  .media img,
+  .badge,
+  .more {
     transition: none;
   }
 }
