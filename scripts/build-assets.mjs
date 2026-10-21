@@ -2,23 +2,93 @@
 // - LEGO-you: tightens the Vision cut-out's edge (drops the yellow backdrop fringe), trims it,
 //   and splits it at the neck so the head can nod on its own layer.
 // - Work: resizes each case study's images to webp, in the order the case study shows them.
+// - Kickback clips: cleans and re-encodes the lens recordings with ffmpeg (skipped when the output
+//   already exists; delete it to re-encode).
 // The cut-out itself comes from: swift scripts/cutout.swift assets-src/ena-lego.png assets-src/ena-lego-cutout.png
 import sharp from 'sharp';
+import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const NECK_Y = 600; // row in the source photo just above the shoulders
 const NECK_X = 510; // column through the middle of the neck: the head's pivot
 const OVERLAP = 10; // head layer reaches this far into the body layer so no seam shows mid-nod
 
+// The recordings sit in phone mock-ups whose status-bar strip came out blank white; each box
+// paints one strip black (x, y, w, h in source pixels). Measured from frames of each clip.
+const statusBar = (x, w, bottom) => ({ x, y: 20, w, h: bottom - 20, color: 'black' });
+const CLIPS = [
+  {
+    // Three-step storyboard: open the camera, tap, the room drops in.
+    src: 'kickback/clip-20.mp4',
+    out: 'kickback-how-it-works',
+    boxes: [
+      statusBar(20, 298, 55),
+      statusBar(451, 298, 79),
+      statusBar(882, 298, 71),
+      { x: 451, y: 649, w: 298, h: 6, color: 'black' }, // white line along the bottom of the screen
+      { x: 882, y: 649, w: 298, h: 6, color: 'black' },
+    ],
+    audio: false,
+    poster: 8,
+  },
+  {
+    // Three phones exploring inside the bedroom.
+    src: 'kickback/clip-4.mp4',
+    out: 'kickback-inside',
+    boxes: [
+      statusBar(20, 298, 58),
+      statusBar(623, 298, 76),
+      { x: 623, y: 547, w: 298, h: 31, color: 'black' }, // blank band above the nav bar
+      { x: 623, y: 650, w: 298, h: 5, color: 'black' }, // white line along the bottom of the screen
+      statusBar(1203, 288, 51),
+      { x: 337, y: 420, w: 7, h: 180, color: 'white' }, // stray line beside the left phone
+    ],
+    audio: false,
+    poster: 6,
+  },
+  {
+    // The room placed in the park, then walked through. Keeps its sound, evened out.
+    src: 'kickback/clip-3.mp4',
+    out: 'kickback-demo',
+    boxes: [statusBar(20, 298, 71), { x: 20, y: 650, w: 298, h: 5, color: 'black' }],
+    audio: true,
+    poster: 5,
+  },
+];
+
+async function clips() {
+  await mkdir('public/work/kickback', { recursive: true });
+  for (const clip of CLIPS) {
+    const out = `public/work/kickback/${clip.out}.mp4`;
+    if (existsSync(out)) continue;
+    const draw = clip.boxes.map((b) => `drawbox=x=${b.x}:y=${b.y}:w=${b.w}:h=${b.h}:color=${b.color}:t=fill`).join(',');
+    // Even out the loud burst at the end: normalise, then hard-limit peaks to about -2.5 dBFS.
+    const audio = clip.audio
+      ? ['-af', 'loudnorm=I=-18:TP=-1.5:LRA=11,alimiter=limit=0.75:level=false,aresample=48000', '-c:a', 'aac', '-b:a', '128k']
+      : ['-an'];
+    // Wide clips never show wider than ~1100px on the page.
+    const video = `${draw},scale='min(1100,iw)':-2,fps=30,format=yuv420p`;
+    const args = ['-v', 'error', '-y', '-i', `assets-src/${clip.src}`, '-vf', video,
+      '-c:v', 'libx264', '-profile:v', 'high', '-preset', 'slow', '-crf', '28', '-movflags', '+faststart', ...audio, out];
+    const run = spawnSync('ffmpeg', args, { stdio: 'inherit' });
+    if (run.status !== 0) throw new Error(`ffmpeg failed on ${clip.src}`);
+    // Poster: one cleaned frame, so the page shows something before the clip loads.
+    const frame = spawnSync('ffmpeg', ['-v', 'error', '-ss', String(clip.poster), '-i', out, '-frames:v', '1', '-f', 'image2pipe', '-vcodec', 'png', '-']);
+    await sharp(frame.stdout).webp({ quality: 82 }).toFile(`public/work/kickback/${clip.out}.webp`);
+    console.log('clip', clip.out);
+  }
+}
+
 const WORK = {
+  kickback: ['kickback/title.jpg'],
   'discovery-gap': ['captures/discovery-gap-desktop.png', 'captures/discovery-gap-phone.png'],
-  ecms: ['captures/ecms-desktop.png', 'work/ecms/ecms_dashboard.png', 'captures/ecms-phone.png'],
+  ecms: ['captures/ecms-desktop.png', 'work/ecms/ecms_dashboard.png'],
   movierec: [
     'work/movierec/movierec_01_hero.png',
     'work/movierec/movierec_04_watchlist.png',
     'work/movierec/movierec_03_search.png',
     'work/movierec/movierec_02_rows.png',
-    'captures/movierec-phone.png',
   ],
   peerpods: [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20].map(
     (n) => `work/peerpods/slide_${String(n).padStart(2, '0')}.png`,
@@ -123,3 +193,4 @@ async function work() {
 await mkdir('components/booth', { recursive: true });
 await figure();
 await work();
+await clips();

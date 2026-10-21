@@ -1,0 +1,67 @@
+/* The recordings already include their phone frames on a white background, so each one sits
+   on a white stage that the white edges blend into. */
+.clip {
+  margin: 0;
+}
+
+/* One portrait screen doesn't need the full width */
+.phone {
+  justify-self: center;
+  width: min(100%, 460px);
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: clamp(14px, 3vw, 28px);
+  border-radius: 24px;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.stage video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.phone .stage video {
+  width: min(100%, 320px);
+}
+
+.sound {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(16, 16, 16, 0.78);
+  color: #fff;
+  font: 600 13px/1 var(--font-body), sans-serif;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+.sound:hover {
+  background: #161616;
+}
+
+.clip figcaption {
+  display: grid;
+  gap: 4px;
+  margin-top: 14px;
+}
+
+.clip figcaption strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.clip figcaption span {
+  color: var(--ink-2);
+}

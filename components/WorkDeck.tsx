@@ -114,7 +114,10 @@ export default function WorkDeck() {
           >
             <div className={s.media} aria-hidden="true">
               {t.card ? (
-                <img src={t.card} alt="" loading={i < 2 ? 'eager' : 'lazy'} />
+                <>
+                  <img className={s.blur} src={t.card} alt="" loading={i < 2 ? 'eager' : 'lazy'} />
+                  <img className={s.fit} src={t.card} alt="" loading={i < 2 ? 'eager' : 'lazy'} />
+                </>
               ) : t.cover.kind === 'terminal' ? (
                 <pre className={s.term}>{t.cover.lines.join('\n')}</pre>
               ) : t.cover.kind === 'stat' ? (
