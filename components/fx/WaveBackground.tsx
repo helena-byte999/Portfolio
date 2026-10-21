@@ -2,10 +2,12 @@
 
 import { useEffect, useRef } from 'react';
 
-// The site background: slowly marbling ink with bundles of music-wave lines flowing through it.
-// The waves swell on a 120 BPM beat (the booth's tempo), ripple as you scroll, and a soft glow
-// follows the cursor. Plain WebGL, one full-screen shader. Light and dark get their own palettes;
-// with reduced motion it draws a single still frame; without WebGL the plain page colour shows.
+// The site background, after her reference: glossy ribbons sweeping in curves (blue → violet →
+// red → magenta) over a field of tiny stars, slowly flowing. They part around the cursor so you
+// can never quite touch them, and when a playlist is playing (<html data-music="playing">) the
+// whole thing sparks up: more stars, sparks running along the ribbon edges, and a pulse on the
+// beat. White page in light mode, black in dark. Plain WebGL, one full-screen shader; a still frame
+// with reduced motion; the plain page colour without WebGL.
 
 const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }`;
 
@@ -16,11 +18,7 @@ uniform float uTime;
 uniform vec2 uMouse;
 uniform float uScroll;
 uniform float uDark;
-uniform vec3 uBg;
-uniform vec3 uInk;
-uniform vec3 uA;
-uniform vec3 uB;
-uniform vec3 uC;
+uniform float uPlay;
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -36,7 +34,7 @@ float noise(vec2 p) {
 
 float fbm(vec2 p) {
   float v = 0., a = .5;
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 3; i++) {
     v += a * noise(p);
     p = p * 2.03 + vec2(1.7, 9.2);
     a *= .5;
@@ -44,56 +42,74 @@ float fbm(vec2 p) {
   return v;
 }
 
+// Ribbon colours by distance from the swirl's centre: violet near it, then magenta, red,
+// violet again and blue on the far side, like the reference.
+vec3 palette(float h) {
+  vec3 violet = vec3(.48, .17, .94);
+  vec3 magenta = vec3(.89, .23, .85);
+  vec3 red = vec3(.9, .2, .17);
+  vec3 blue = vec3(.18, .17, 1.);
+  h = clamp(h, 0., 1.) * 4.;
+  if (h < 1.) return mix(violet, magenta, h);
+  if (h < 2.) return mix(magenta, red, h - 1.);
+  if (h < 3.) return mix(red, violet, h - 2.);
+  return mix(violet, blue, h - 3.);
+}
+
 void main() {
   float aspect = uRes.x / uRes.y;
   vec2 uv = gl_FragCoord.xy / uRes.y;
   float t = uTime;
-
-  // Ink: domain-warped noise, slowly marbling
-  vec2 q = vec2(fbm(uv * 1.4 + vec2(0., t * .03)), fbm(uv * 1.4 + vec2(5.2, 1.3) - t * .025));
-  float ink = fbm(uv * 2.2 + 1.6 * q + vec2(t * .02, -uScroll * .15));
-  vec3 col = mix(uBg, uInk, smoothstep(.45, .95, ink) * mix(.7, .9, uDark));
-
-  // A soft glow that follows the cursor
-  float md = length(uv - vec2(uMouse.x * aspect, uMouse.y));
-  float bloom = exp(-md * md * 14.);
-  col = mix(mix(col, uB, .1 * bloom), col + uB * .16 * bloom, uDark);
-
-  // Music waves: bundles of lines that flow across, swell on the beat and ripple with the ink
+  float play = uPlay;
   float beat = pow(1. - fract(t * 2.), 3.);
-  float px = 1.6 / uRes.y;
-  for (int b = 0; b < 2; b++) {
-    float fb = float(b);
-    float centre = fb < .5 ? .3 : .76;
-    float strength = fb < .5 ? 1. : .45;
-    for (int i = 0; i < 7; i++) {
-      float fi = float(i);
-      float k = fi / 6.;
-      float x = uv.x + fb * 3.1;
-      float env = .55 + .45 * sin(x * 1.3 - t * .4 + fi * .35);
-      env *= .7 + .6 * noise(vec2(x * 3. - t * .6, fi + fb * 7.));
-      float amp = (.032 + .022 * beat) * env;
-      float y = centre + (k - .5) * .075
-        + amp * sin(x * (7. + fi * .9) - t * (1.1 + fi * .14) + fi * 1.3 + uScroll * .8)
-        + (q.x - .5) * .09;
-      float d = abs(uv.y - y);
-      float line = 1. - smoothstep(0., px * (1. + .7 * k), d);
-      float glow = exp(-d * 85.) * .32;
-      vec3 lc = k < .5 ? mix(uA, uB, k * 2.) : mix(uB, uC, k * 2. - 1.);
-      float a = (line * .85 + glow) * strength;
-      col = mix(mix(col, lc, a * .42), col + lc * a * .55, uDark);
-    }
-  }
 
+  // The cursor pushes the field away, so the ribbons part around it
+  vec2 m = vec2(uMouse.x * aspect, uMouse.y);
+  vec2 dm = uv - m;
+  vec2 p = uv + normalize(dm + 1e-5) * .075 * exp(-dot(dm, dm) / .02);
+
+  // Concentric curves around a point off the bottom-right, warped by slow noise, flowing outwards
+  float n = fbm(p * 1.1 + vec2(t * .03, -t * .02 + uScroll * .12));
+  vec2 c = vec2(aspect * 1.08, -.55);
+  float r = length(p - c) + (n - .5) * .3;
+  float x = r * 5.4 - t * (.05 + .07 * play);
+  float id = floor(x);
+  float f = fract(x);
+  float rnd = hash(vec2(id, 7.3));
+  float rnd2 = hash(vec2(id, 1.9));
+
+  // Each ribbon: its own width and brightness, darker inside, a bright rim on its outer edge
+  float width = .28 + .5 * rnd;
+  float inBand = smoothstep(0., .035, f) * (1. - smoothstep(width - .035, width, f));
+  float shade = mix(.22, 1., smoothstep(0., 1., f / width));
+  float rim = exp(-pow((f - (width - .05)) / .028, 2.));
+  float level = (.35 + .65 * rnd2) * (1. + play * (.25 + .55 * beat));
+  vec3 rc = palette((r - .35) / 2. + (rnd - .5) * .08);
+
+  // Stars, more of them (and twinkling harder) while music plays
+  vec2 g = gl_FragCoord.xy / 3.;
+  float hs = hash(floor(g));
+  float star = step(mix(.992, .972, play), hs) * smoothstep(.5, 0., length(fract(g) - .5));
+  star *= .45 + .55 * sin(t * (2. + hs * 7.) + hs * 40.);
+
+  // Sparks running along the ribbon rims while music plays
+  float spark = rim * inBand * step(.82, noise(vec2(p.x * 38. - t * 7., id * 3.1))) * play;
+
+  vec3 col;
+  if (uDark > .5) {
+    col = rc * inBand * shade * level * .5;
+    col += mix(rc, vec3(1.), .35) * rim * inBand * level * (.55 + .5 * play);
+    col += vec3(.92, .86, 1.) * max(star, 0.) * (.55 + .9 * play);
+    col += vec3(1., .85, 1.) * spark * 1.4;
+  } else {
+    col = vec3(1.);
+    col = mix(col, rc, inBand * shade * level * .3);
+    col = mix(col, rc, rim * inBand * level * (.38 + .3 * play));
+    col = mix(col, rc, max(star, 0.) * (.35 + .5 * play));
+    col = mix(col, mix(rc, vec3(1.), .2), spark * .9);
+  }
   gl_FragColor = vec4(col, 1.);
 }`;
-
-type Palette = { bg: number[]; ink: number[]; a: number[]; b: number[]; c: number[] };
-const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
-const PALETTES: Record<'light' | 'dark', Palette> = {
-  light: { bg: hex('#f3f1ec'), ink: hex('#dedbea'), a: hex('#3557e8'), b: hex('#8a4fd8'), c: hex('#e5484d') },
-  dark: { bg: hex('#121211'), ink: hex('#1f1c38'), a: hex('#5b7cff'), b: hex('#b36bff'), c: hex('#f2c94c') },
-};
 
 export default function WaveBackground() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -124,27 +140,20 @@ export default function WaveBackground() {
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
 
     const u = (name: string) => gl.getUniformLocation(prog, name);
-    const uRes = u('uRes'), uTime = u('uTime'), uMouse = u('uMouse'), uScroll = u('uScroll'), uDark = u('uDark');
-    const uBg = u('uBg'), uInk = u('uInk'), uA = u('uA'), uB = u('uB'), uC = u('uC');
+    const uRes = u('uRes'), uTime = u('uTime'), uMouse = u('uMouse'), uScroll = u('uScroll'), uDark = u('uDark'), uPlay = u('uPlay');
 
+    const root = document.documentElement;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const mouse = { x: 0.7, y: 0.6, tx: 0.7, ty: 0.6 };
+    // Starts far off-screen, so nothing bends until a mouse moves (and never on touch screens).
+    const mouse = { x: -5, y: -5, tx: -5, ty: -5 };
+    let play = 0;
     let frame = 0;
     const start = performance.now();
 
-    const setTheme = () => {
-      const dark = document.documentElement.dataset.theme === 'dark';
-      const p = PALETTES[dark ? 'dark' : 'light'];
-      gl.uniform1f(uDark, dark ? 1 : 0);
-      gl.uniform3fv(uBg, p.bg);
-      gl.uniform3fv(uInk, p.ink);
-      gl.uniform3fv(uA, p.a);
-      gl.uniform3fv(uB, p.b);
-      gl.uniform3fv(uC, p.c);
-    };
+    const setTheme = () => gl.uniform1f(uDark, root.dataset.theme === 'dark' ? 1 : 0);
 
     const resize = () => {
-      // Rendered a little under full resolution: soft ink doesn't need every pixel.
+      // Rendered a little under full resolution: soft ribbons don't need every pixel.
       const scale = Math.min(window.devicePixelRatio || 1, 1.5) * (innerWidth < 700 ? 0.6 : 0.75);
       canvas.width = Math.round(innerWidth * scale);
       canvas.height = Math.round(innerHeight * scale);
@@ -155,6 +164,10 @@ export default function WaveBackground() {
     const draw = (now: number) => {
       mouse.x += (mouse.tx - mouse.x) * 0.06;
       mouse.y += (mouse.ty - mouse.y) * 0.06;
+      // Ease into and out of the "music playing" look
+      const target = root.dataset.music === 'playing' ? 1 : 0;
+      play = reduced ? target : play + (target - play) * 0.04;
+      gl.uniform1f(uPlay, play);
       gl.uniform1f(uTime, reduced ? 12 : (now - start) / 1000);
       gl.uniform2f(uMouse, mouse.x, mouse.y);
       gl.uniform1f(uScroll, window.scrollY / Math.max(1, innerHeight));
@@ -167,8 +180,17 @@ export default function WaveBackground() {
     };
 
     const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return;
+      // Jump straight to the cursor on first contact rather than sweeping in from off-screen.
+      if (mouse.x < -1) {
+        mouse.x = e.clientX / innerWidth;
+        mouse.y = 1 - e.clientY / innerHeight;
+      }
       mouse.tx = e.clientX / innerWidth;
       mouse.ty = 1 - e.clientY / innerHeight;
+    };
+    const onLeave = () => {
+      mouse.tx = mouse.ty = mouse.x = mouse.y = -5;
     };
     const onVisibility = () => {
       cancelAnimationFrame(frame);
@@ -178,28 +200,31 @@ export default function WaveBackground() {
       resize();
       if (reduced) draw(0);
     };
-    const themeObserver = new MutationObserver(() => {
+    // Theme switches, and music starting or stopping (redrawn here when nothing is animating)
+    const rootObserver = new MutationObserver(() => {
       setTheme();
       if (reduced) draw(0);
     });
 
     setTheme();
     resize();
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    rootObserver.observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-music'] });
     window.addEventListener('resize', onResize);
     if (reduced) {
       draw(0);
     } else {
       window.addEventListener('pointermove', onMove, { passive: true });
+      root.addEventListener('pointerleave', onLeave);
       document.addEventListener('visibilitychange', onVisibility);
       frame = requestAnimationFrame(loop);
     }
 
     return () => {
       cancelAnimationFrame(frame);
-      themeObserver.disconnect();
+      rootObserver.disconnect();
       window.removeEventListener('resize', onResize);
       window.removeEventListener('pointermove', onMove);
+      root.removeEventListener('pointerleave', onLeave);
       document.removeEventListener('visibilitychange', onVisibility);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };

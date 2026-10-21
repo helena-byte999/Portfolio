@@ -36,7 +36,7 @@ export const PADS = [
   { key: '6', label: 'Contact', target: 'contact', color: '#2B2B2E', ink: '#ffffff' },
 ] as const;
 
-export const BOOTH_HINT = 'Hit a pad to jump there, or press 1–6.';
+export const BOOTH_HINT = 'Hit a pad to jump there, or press 1–6. Tap the left record to play my music.';
 
 export const WORK_INTRO = {
   title: 'Selected work',

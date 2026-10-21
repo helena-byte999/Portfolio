@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { siSpotify } from 'simple-icons';
-import { music } from './musicStore';
+import { music, playback } from './musicStore';
 import s from './MusicPlayer.module.css';
 
 // The mini player: a blue LEGO brick docked bottom-centre, holding Spotify's own compact embed
@@ -24,8 +24,9 @@ export type Playlist = {
 type Controller = {
   loadUri: (uri: string) => void;
   play: () => void;
+  togglePlay: () => void;
   destroy: () => void;
-  addListener: (event: string, cb: () => void) => void;
+  addListener: (event: string, cb: (e: { data?: { isPaused?: boolean } }) => void) => void;
 };
 type IFrameAPI = {
   createController: (el: HTMLElement, opts: { uri: string; width: string; height: number }, cb: (c: Controller) => void) => void;
@@ -66,12 +67,17 @@ export default function MusicPlayer({ list, index, at }: Props) {
       iframeApi.createController(host.current, { uri: `spotify:playlist:${playlist.id}`, width: '100%', height: 80 }, (c) => {
         ctrl.current = c;
         c.addListener('ready', () => c.play());
+        // Tell the background and the decks whether sound is actually playing.
+        c.addListener('playback_update', (e) => playback.set(e.data?.isPaused === false));
+        playback.setToggle(() => c.togglePlay());
       });
     });
     return () => {
       cancelled = true;
       ctrl.current?.destroy();
       ctrl.current = null;
+      playback.setToggle(null);
+      playback.set(false);
     };
     // The controller lives as long as the player; switching goes through loadUri below.
     // eslint-disable-next-line react-hooks/exhaustive-deps

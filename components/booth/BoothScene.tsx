@@ -3,7 +3,10 @@
 import { Canvas, useFrame, useLoader, useThree, type ThreeEvent } from '@react-three/fiber';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
+import mine from '@/content/playlists.json';
 import { PADS } from '@/content/site';
+import type { Playlist } from './MusicPlayer';
+import { music, playback, useMusic } from './musicStore';
 import { FIGURE } from './figure';
 
 /** Shared, mutable state between the DOM pads and the scene; read every frame, never re-renders. */
@@ -113,45 +116,107 @@ function Figure() {
   );
 }
 
-function Deck({ x, label, signal }: { x: number; label: string; signal: React.RefObject<BoothSignal> }) {
+/** A turntable. The left one is the player: it wears the playing playlist's cover as its label,
+ *  spins while music plays and stops when it's paused, drops its tonearm onto the record, and a tap
+ *  on the record plays or pauses. With nothing playing both decks just spin for show. */
+function Deck({
+  x,
+  label,
+  signal,
+  cover,
+  hasMusic = false,
+  onPlatter,
+}: {
+  x: number;
+  label: string;
+  signal: React.RefObject<BoothSignal>;
+  cover?: string | null;
+  hasMusic?: boolean;
+  onPlatter?: () => void;
+}) {
   const platter = useRef<THREE.Group>(null);
-  const vinyl = useMemo(
-    () =>
-      canvasTexture(512, 512, (ctx) => {
-        ctx.fillStyle = '#0b0b0e';
+  const arm = useRef<THREE.Group>(null);
+  const vinyl = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 512;
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 4;
+    return { canvas, texture };
+  }, []);
+
+  // Paint the record: grooves, then either the playlist cover or the plain coloured label.
+  useEffect(() => {
+    const ctx = vinyl.canvas.getContext('2d')!;
+    const paint = (img?: HTMLImageElement) => {
+      ctx.clearRect(0, 0, 512, 512);
+      ctx.fillStyle = '#0b0b0e';
+      ctx.beginPath();
+      ctx.arc(256, 256, 256, 0, Math.PI * 2);
+      ctx.fill();
+      const labelR = img ? 122 : 80;
+      for (let r = labelR + 10; r < 250; r += 5) {
+        ctx.strokeStyle = r % 15 === 0 ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.04)';
         ctx.beginPath();
-        ctx.arc(256, 256, 256, 0, Math.PI * 2);
-        ctx.fill();
-        for (let r = 90; r < 250; r += 5) {
-          ctx.strokeStyle = r % 15 === 0 ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.04)';
-          ctx.beginPath();
-          ctx.arc(256, 256, r, 0, Math.PI * 2);
-          ctx.stroke();
-        }
+        ctx.arc(256, 256, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(256, 256, labelR, 0, Math.PI * 2);
+      ctx.clip();
+      if (img) {
+        ctx.drawImage(img, 256 - labelR, 256 - labelR, labelR * 2, labelR * 2);
+      } else {
         ctx.fillStyle = label;
-        ctx.beginPath();
-        ctx.arc(256, 256, 80, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillRect(0, 0, 512, 512);
         ctx.fillStyle = '#161616';
         ctx.font = `700 22px ${cssFont('--font-display', 'sans-serif')}`;
         ctx.textAlign = 'center';
         ctx.fillText('SIDE A', 256, 222);
         ctx.font = `600 16px ${cssFont('--font-display', 'sans-serif')}`;
         ctx.fillText('33 ⅓ RPM', 256, 306);
-        ctx.beginPath();
-        ctx.arc(256, 256, 7, 0, Math.PI * 2);
-        ctx.fill();
-      }),
-    [label],
-  );
+      }
+      ctx.restore();
+      ctx.fillStyle = '#0b0b0e';
+      ctx.beginPath();
+      ctx.arc(256, 256, 7, 0, Math.PI * 2);
+      ctx.fill();
+      vinyl.texture.needsUpdate = true;
+    };
+    paint();
+    if (!cover) return;
+    let cancelled = false;
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => !cancelled && paint(img);
+    img.src = cover;
+    return () => {
+      cancelled = true;
+    };
+  }, [cover, label, vinyl]);
+
   const speed = useRef(3.49); // 33⅓ rpm
 
   useFrame((_, delta) => {
+    // Same flag the background reads: set by the Spotify player while sound is coming out.
+    const playing = document.documentElement.dataset.music === 'playing';
     const since = now() - signal.current!.flashAt;
-    const target = since < 0.35 ? -9 : 3.49; // a quick scratch when a pad is hit
-    speed.current = THREE.MathUtils.lerp(speed.current, target, 0.2);
+    let target = hasMusic ? (playing ? 3.49 : 0) : 3.49;
+    if (since < 0.35) target = -9; // a quick scratch when a pad is hit
+    speed.current = THREE.MathUtils.lerp(speed.current, target, hasMusic && !playing ? 0.05 : 0.2);
     platter.current!.rotation.y -= speed.current * delta;
+    // Tonearm on the record while playing, back on its rest otherwise
+    arm.current!.rotation.y = THREE.MathUtils.lerp(arm.current!.rotation.y, hasMusic && playing ? -0.6 : 0.42, 0.06);
   });
+
+  const over = (e: ThreeEvent<PointerEvent>) => {
+    e.stopPropagation();
+    document.body.style.cursor = 'var(--cursor-hover)';
+  };
+  const out = () => {
+    document.body.style.cursor = '';
+  };
 
   return (
     <group position={[x, DESK_TOP, 0.05]}>
@@ -159,17 +224,23 @@ function Deck({ x, label, signal }: { x: number; label: string; signal: React.Re
         <boxGeometry args={[1.75, 0.14, 1.12]} />
         <meshStandardMaterial color={CHARCOAL} roughness={0.6} metalness={0.25} />
       </mesh>
-      <group ref={platter} position={[-0.14, 0.17, 0]}>
+      <group
+        ref={platter}
+        position={[-0.14, 0.17, 0]}
+        onClick={onPlatter && ((e) => (e.stopPropagation(), onPlatter()))}
+        onPointerOver={onPlatter && over}
+        onPointerOut={onPlatter && out}
+      >
         <mesh>
           <cylinderGeometry args={[0.5, 0.5, 0.05, 48]} />
           <meshStandardMaterial color="#111014" roughness={0.4} metalness={0.6} />
         </mesh>
         <mesh position={[0, 0.027, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <circleGeometry args={[0.49, 64]} />
-          <meshStandardMaterial map={vinyl} roughness={0.35} />
+          <meshStandardMaterial map={vinyl.texture} roughness={0.35} />
         </mesh>
       </group>
-      <group position={[0.62, 0.2, -0.38]} rotation={[0, 0.42, 0]}>
+      <group ref={arm} position={[0.62, 0.2, -0.38]} rotation={[0, 0.42, 0]}>
         <mesh>
           <cylinderGeometry args={[0.07, 0.07, 0.08, 20]} />
           <meshStandardMaterial color="#c9c6c0" metalness={0.8} roughness={0.25} />
@@ -213,7 +284,7 @@ function Pad({ index, x, z, onPad, signal }: { index: number; x: number; z: numb
   const over = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     hover3d.current = true;
-    document.body.style.cursor = 'pointer';
+    document.body.style.cursor = 'var(--cursor-hover)';
   };
   const out = () => {
     hover3d.current = false;
@@ -384,6 +455,17 @@ function Ready({ onReady }: { onReady: () => void }) {
 }
 
 export default function BoothScene({ signal, roles, onPad, onReady, running }: Props) {
+  const current = useMusic();
+  const cover = current ? current.list[current.index]?.cover : null;
+  // Tap the record: nothing playing → start Ena's first playlist; otherwise play/pause.
+  const dropNeedle = () => {
+    if (music.get()) {
+      playback.toggle();
+      return;
+    }
+    const list = (mine as Playlist[]).slice(0, 3);
+    if (list.length) music.set({ list, index: 0, at: Date.now() });
+  };
   return (
     <Canvas
       frameloop={running ? 'always' : 'never'}
@@ -400,7 +482,7 @@ export default function BoothScene({ signal, roles, onPad, onReady, running }: P
         <Ready onReady={onReady} />
       </Suspense>
       <Desk roles={roles} />
-      <Deck x={-1.95} label="#3557e8" signal={signal} />
+      <Deck x={-1.95} label="#3557e8" signal={signal} cover={cover} hasMusic={!!current} onPlatter={dropNeedle} />
       <Deck x={1.95} label="#f2c94c" signal={signal} />
       <Mixer onPad={onPad} signal={signal} />
     </Canvas>
