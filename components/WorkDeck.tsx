@@ -141,7 +141,13 @@ export default function WorkDeck() {
                 </span>
               </div>
             </div>
-            <Link href={`/work/${t.slug}/`} className={s.hit} aria-label={`${t.title}: view case study`} />
+            <Link
+              href={`/work/${t.slug}/`}
+              target="_blank"
+              rel="noopener"
+              className={s.hit}
+              aria-label={`${t.title}: view case study (opens in a new tab)`}
+            />
           </li>
         ))}
       </ol>
