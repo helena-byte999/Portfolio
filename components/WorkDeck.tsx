@@ -112,36 +112,34 @@ export default function WorkDeck() {
             onPointerMove={tilt}
             onPointerLeave={untilt}
           >
-            <div className={s.media} aria-hidden="true">
-              {t.card ? (
-                <>
-                  <img className={s.blur} src={t.card} alt="" loading={i < 2 ? 'eager' : 'lazy'} />
-                  <img className={s.fit} src={t.card} alt="" loading={i < 2 ? 'eager' : 'lazy'} />
-                </>
-              ) : t.cover.kind === 'terminal' ? (
-                <pre className={s.term}>{t.cover.lines.join('\n')}</pre>
-              ) : t.cover.kind === 'stat' ? (
-                <span className={s.statBg}>{t.cover.value}</span>
-              ) : null}
-            </div>
-            <div className={s.chips}>
-              <span className={s.glass}>Track {two(t.number)}</span>
-              {t.year && <span className={s.glass}>{t.year}</span>}
-            </div>
-            <div className={s.fade} aria-hidden="true" />
-            <div className={s.shade} aria-hidden="true" />
-            <div className={s.content}>
-              <span className={s.badge} aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M8 5.5v13l11-6.5z" fill="currentColor" />
-                </svg>
-              </span>
-              <p className={s.label}>{t.kicker.split(' · ')[0]}</p>
-              <h3 className={s.title}>{t.title}</h3>
-              <p className={s.sub}>{t.stat ?? t.summary}</p>
-              <span className={s.more} aria-hidden="true">
-                View case study <span className={s.moreArrow}>→</span>
-              </span>
+            {/* Everything inside the frame is clipped to its rounded corners, tilt or not. */}
+            <div className={s.frame}>
+              <div className={s.media} aria-hidden="true">
+                {t.card ? (
+                  <img src={t.card} alt="" loading={i < 2 ? 'eager' : 'lazy'} />
+                ) : t.cover.kind === 'terminal' ? (
+                  <pre className={s.term}>{t.cover.lines.join('\n')}</pre>
+                ) : t.cover.kind === 'stat' ? (
+                  <span className={s.statBg}>{t.cover.value}</span>
+                ) : null}
+              </div>
+              <div className={s.chips}>
+                <span className={s.glass}>Track {two(t.number)}</span>
+                {t.year && <span className={s.glass}>{t.year}</span>}
+              </div>
+              <div className={s.shade} aria-hidden="true" />
+              <div className={s.content}>
+                <div className={s.text}>
+                  <p className={s.label}>{t.kicker.split(' · ')[0]}</p>
+                  <h3 className={s.title}>{t.title}</h3>
+                  <p className={s.sub}>{t.stat ?? t.summary}</p>
+                </div>
+                <span className={s.badge} aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M8 5.5v13l11-6.5z" fill="currentColor" />
+                  </svg>
+                </span>
+              </div>
             </div>
             <Link href={`/work/${t.slug}/`} className={s.hit} aria-label={`${t.title}: view case study`} />
           </li>
