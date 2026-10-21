@@ -61,6 +61,11 @@
   transform: none;
 }
 
+/* The music player's pill takes the bottom of the screen while it's open */
+:global(body[data-music='on']) .now {
+  transform: translateY(160%);
+}
+
 .eq {
   display: flex;
   align-items: flex-end;
