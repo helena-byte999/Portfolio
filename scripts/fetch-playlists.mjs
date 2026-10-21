@@ -1,0 +1,45 @@
+// Reads each playlist's name, cover and track count from Spotify's public pages (no keys needed)
+// and writes content/playlists.json for the stack beside the booth. Run after editing
+// content/playlist-links.json:  npm run playlists
+// With --demo it writes content/playlists.demo.json from three public Spotify playlists instead,
+// used only when the page is opened with ?playlists=demo.
+import { readFile, writeFile } from 'node:fs/promises';
+
+const DEMO = [
+  'https://open.spotify.com/playlist/37i9dQZF1DWYkaDif7Ztbp',
+  'https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M',
+  'https://open.spotify.com/playlist/37i9dQZF1DX0XUsuxWHRQd',
+];
+
+const decode = (s) =>
+  s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+
+const demo = process.argv.includes('--demo');
+const links = demo ? DEMO : JSON.parse(await readFile('content/playlist-links.json', 'utf8')).links;
+
+const playlists = [];
+for (const link of links.slice(0, 3)) {
+  const id = link.match(/playlist\/([A-Za-z0-9]+)/)?.[1];
+  if (!id) throw new Error(`Not a Spotify playlist link: ${link}`);
+  const url = `https://open.spotify.com/playlist/${id}`;
+  const oembed = await (await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`)).json();
+  const html = await (await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } })).text();
+  const meta = (name) => html.match(new RegExp(`<meta (?:property|name)="${name}" content="([^"]*)"`))?.[1];
+
+  const description = decode(meta('og:description') ?? '');
+  // A personal playlist's description reads "Playlist · Name · 39 items · 5 saves".
+  const counted = description.match(/(\d[\d,]*)\s+(?:songs|items|tracks)/i)?.[1]?.replace(/,/g, '');
+  // The page lists at most 30 songs, so a count of 30 from the listing means "30 or more".
+  const listed = (html.match(/<meta name="music:song" /g) ?? []).length;
+  playlists.push({
+    id,
+    url,
+    title: decode(oembed.title),
+    cover: meta('og:image') ?? oembed.thumbnail_url,
+    tracks: counted ? Number(counted) : listed && listed < 30 ? listed : null,
+    subtitle: description && !description.startsWith('Playlist ·') ? description : null,
+  });
+  console.log('playlist', decode(oembed.title));
+}
+
+await writeFile(demo ? 'content/playlists.demo.json' : 'content/playlists.json', JSON.stringify(playlists, null, 2) + '\n');

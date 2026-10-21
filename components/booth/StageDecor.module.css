@@ -74,10 +74,10 @@
   }
 }
 
-/* Wide screens: tiles float to the left of the booth, the Spotify card to the right. */
+/* Wide screens: tiles float to the left of the booth, the playlists to the right. */
 @media (min-width: 1100px) {
   .tools,
-  .player {
+  .playlists {
     position: absolute;
     top: 4%;
     z-index: 2;
@@ -91,12 +91,12 @@
   .tools li:nth-child(even) {
     margin-top: 40px;
   }
-  .player {
+  .playlists {
     right: max(2%, calc(50% - 660px));
   }
 }
 
-/* Narrow screens: a row of tiles, then the card, under the pads. */
+/* Narrow screens: a row of tiles, then the playlists, under the pads. */
 @media (max-width: 1099px) {
   .tools {
     display: flex;
@@ -115,7 +115,7 @@
     width: 26px;
     height: 26px;
   }
-  .player {
+  .playlists {
     display: flex;
     justify-content: center;
     margin-top: 28px;
