@@ -11,7 +11,7 @@ const archivo = Archivo({ subsets: ['latin'], axes: ['wdth'], style: ['normal', 
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://ena-labs.netlify.app'),
+  metadataBase: new URL('https://ena-labs.vercel.app'),
   title: { default: 'Ena Otuokon · Product Manager', template: '%s · Ena Otuokon' },
   description:
     'Ena Otuokon is a London-based product manager for AI, music and consumer products, and a DJ who builds the tools she wants to use.',
