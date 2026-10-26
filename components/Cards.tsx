@@ -184,7 +184,7 @@ function SkillIcon({ label }: { label: string }) {
 export function SkillCard({ group, items, color }: { group: string; items: string[]; color: string }) {
   const G = GROUP_ICONS[group] ?? Sparkles;
   return (
-    <article className={`${s.glass} ${s.skills}`} style={{ ['--c' as string]: color }}>
+    <article className={s.glass} style={{ ['--c' as string]: color }}>
       <div className={s.skillHead}>
         <span className={s.groupIcon}>
           <G aria-hidden="true" />

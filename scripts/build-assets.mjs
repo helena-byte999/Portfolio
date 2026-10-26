@@ -85,7 +85,12 @@ const WORK = {
   'b-sides': [{ src: 'bsides/haic-p1.png', crop: { left: 240, top: 660, width: 1305, height: 900 } }],
   kickback: ['kickback/title.jpg'],
   'discovery-gap': ['captures/discovery-gap-desktop.png', 'captures/discovery-gap-phone.png'],
-  ecms: ['captures/ecms-desktop.png', 'work/ecms/ecms_dashboard.png'],
+  // Every screen of the live demo, captured at 1440px for each of its three roles.
+  ecms: [
+    'captures/ecms-desktop.png',
+    ...['admin-dashboard', 'admin-analytics', 'admin-round', 'admin-people', 'admin-contracts', 'admin-rota',
+      'admin-invoices', 'caregiver-dashboard', 'family-dashboard', 'family-invoices'].map((f) => `captures/ecms-${f}.png`),
+  ],
   movierec: [
     'work/movierec/movierec_01_hero.png',
     'work/movierec/movierec_04_watchlist.png',
@@ -187,7 +192,38 @@ const LOGOS = {
   // Mark plus the university's name in white, already on transparency.
   aun: { src: 'logos/aun.png', wide: true },
   entrylevel: { src: 'logos/entrylevel.png' },
+  // Employers' logos, supplied by Ena (square files)
+  ariro: { src: 'logos/ariro.jpg', fill: true },
+  aberdeen: { src: 'logos/aberdeen.png', bg: '#ffffff' },
+  // An orange rounded square on white: flood the white corners with the orange so the tile is solid.
+  centrifuge: { src: 'logos/centrifuge.png', fill: true, cornerFill: true },
 };
+
+/** Repaints the near-white area connected to the image's corners with the colour found just inside
+ *  them, so a rounded-square logo becomes a full square. */
+async function floodCorners(buf) {
+  const { data, info } = await sharp(buf).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width: W, height: H } = info;
+  const at = (x, y) => (y * W + x) * 4;
+  const white = (i) => data[i] > 225 && data[i + 1] > 225 && data[i + 2] > 225;
+  const c = at(Math.round(W * 0.15), Math.round(H * 0.5));
+  const fill = [data[c], data[c + 1], data[c + 2]];
+  const seen = new Uint8Array(W * H);
+  const stack = [[0, 0], [W - 1, 0], [0, H - 1], [W - 1, H - 1]];
+  while (stack.length) {
+    const [x, y] = stack.pop();
+    if (x < 0 || y < 0 || x >= W || y >= H || seen[y * W + x]) continue;
+    seen[y * W + x] = 1;
+    const i = at(x, y);
+    if (!white(i)) continue;
+    data[i] = fill[0];
+    data[i + 1] = fill[1];
+    data[i + 2] = fill[2];
+    data[i + 3] = 255;
+    stack.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
+  }
+  return sharp(data, { raw: info }).png().toBuffer();
+}
 
 async function logos() {
   await mkdir('public/logos', { recursive: true });
@@ -205,6 +241,15 @@ async function logos() {
       }
       buf = await sharp(data, { raw: info }).png().toBuffer();
     }
+    if (l.cornerFill) buf = await floodCorners(buf);
+    // `fill` logos already are their own square tile: trim any white margin and fill the square.
+    if (l.fill) {
+      await sharp(await sharp(buf).trim({ background: '#ffffff', threshold: 30 }).toBuffer())
+        .resize(256, 256, { fit: 'cover' })
+        .png()
+        .toFile(`public/logos/${name}.png`);
+      continue;
+    }
     // Trim to the logo itself, then fit it into a square with a little breathing room (or, for
     // wide lockups, just size it).
     buf = await sharp(buf).trim({ threshold: 10 }).png().toBuffer();
@@ -212,9 +257,10 @@ async function logos() {
       await sharp(buf).resize({ height: 120, withoutEnlargement: true }).png().toFile(`public/logos/${name}.png`);
       continue;
     }
+    const pad = l.bg ? { r: 255, g: 255, b: 255, alpha: 1 } : { r: 0, g: 0, b: 0, alpha: 0 };
     await sharp(buf)
-      .resize(224, 224, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 }, kernel: 'lanczos3' })
-      .extend({ top: 16, bottom: 16, left: 16, right: 16, background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .resize(224, 224, { fit: 'contain', background: pad, kernel: 'lanczos3' })
+      .extend({ top: 16, bottom: 16, left: 16, right: 16, background: pad })
       .png()
       .toFile(`public/logos/${name}.png`);
   }
