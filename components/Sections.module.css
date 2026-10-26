@@ -48,10 +48,31 @@
   color: var(--accent);
 }
 
-.jobText {
-  margin: 10px 0 0;
-  color: var(--ink-2);
+.jobPoints {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
   max-width: 72ch;
+  list-style: none;
+  color: var(--ink-2);
+}
+
+/* Small yellow studs for bullets */
+.jobPoints li {
+  position: relative;
+  padding-left: 20px;
+}
+
+.jobPoints li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.62em;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--accent);
 }
 
 /* Logo beside each role */
@@ -63,11 +84,24 @@
 
 /* Smaller heading that introduces a carousel inside a section */
 .subhead {
-  margin: clamp(48px, 7vw, 80px) 0 0;
+  margin: clamp(32px, 4vw, 48px) 0 0;
   font-family: var(--font-display), sans-serif;
   font-size: clamp(24px, 2.6vw, 32px);
   font-weight: 700;
   letter-spacing: -0.02em;
+}
+
+/* Skills: three cards across, and the long Tools list spans the row underneath */
+.skillGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-flow: dense;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.skillGrid > :nth-child(3) {
+  grid-column: 1 / -1;
 }
 
 /* Set list */
@@ -287,6 +321,9 @@
   }
   .steps {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .skillGrid {
+    grid-template-columns: 1fr;
   }
 }
 

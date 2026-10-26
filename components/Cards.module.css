@@ -137,10 +137,6 @@ a.glass:focus-visible {
 }
 
 /* Skills */
-.skills {
-  min-height: 100%;
-}
-
 .skillHead {
   display: flex;
   align-items: center;
@@ -168,8 +164,10 @@ a.glass:focus-visible {
   height: 22px;
 }
 
+/* One column in a narrow card; a wide card spreads its list across columns. */
 .skillList {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   gap: 4px;
   margin: 0;
   padding: 0;

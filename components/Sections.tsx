@@ -44,7 +44,11 @@ export function Experience() {
                   <p className={s.jobOrg}>
                     {job.org} · {job.place}
                   </p>
-                  <p className={s.jobText}>{job.text}</p>
+                  <ul className={s.jobPoints}>
+                    {job.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </li>
@@ -129,15 +133,12 @@ export function About() {
 
       <div className="wrap" data-reveal>
         <h3 className={s.subhead}>What I bring to the booth</h3>
+        <div className={s.skillGrid}>
+          {ABOUT.skills.map((g, i) => (
+            <SkillCard key={g.group} group={g.group} items={g.items} color={SKILL_COLOURS[i % SKILL_COLOURS.length]} />
+          ))}
+        </div>
       </div>
-      <Carousel
-        label="Skills"
-        width="min(340px, 84vw)"
-        items={ABOUT.skills.map((g, i) => ({
-          key: g.group,
-          node: <SkillCard group={g.group} items={g.items} color={SKILL_COLOURS[i % SKILL_COLOURS.length]} />,
-        }))}
-      />
     </section>
   );
 }

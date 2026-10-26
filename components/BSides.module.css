@@ -1,5 +1,5 @@
 .section {
-  margin-top: clamp(40px, 6vw, 72px);
+  margin-top: clamp(28px, 4vw, 48px);
 }
 
 /* The stage: soft colour blobs drifting behind the glass. Radial gradients fade out inside

@@ -152,7 +152,16 @@ export const TRACKS: Track[] = [
     cover: { kind: 'laptop', src: img('ecms', 1) },
     card: img('ecms', 1),
     slides: [
-      { src: img('ecms', 2), title: 'Admin dashboard', text: 'Doses given, incidents, residents and outstanding invoices on one screen, with today\'s medicine round underneath.' },
+      { src: img('ecms', 2), title: 'Admin dashboard', text: 'One sentence sums up the day, then doses given, incidents, residents and outstanding invoices, with the week\'s doses and invoiced vs paid underneath.' },
+      { src: img('ecms', 3), title: 'Care analytics', text: 'Dose rate, on-time recording, refusals, incidents and days unwell over 7, 30 or 90 days or a custom range, each against the period before. Exports to PDF and CSV.' },
+      { src: img('ecms', 4), title: 'Medicine round', text: 'Today\'s round with a progress bar. Each dose shows the resident\'s allergies and is recorded in one tap: given, refused or missed. As-needed medicines carry their dose limits.' },
+      { src: img('ecms', 5), title: 'People', text: 'Residents, caregivers and admins in one place, with search and status.' },
+      { src: img('ecms', 6), title: 'Contracts', text: 'Every caregiver and client contract with its end date and status, filtered by valid, expired or missing.' },
+      { src: img('ecms', 7), title: 'Rota', text: 'Weekly rotas with the staff on each, generated in one click.' },
+      { src: img('ecms', 8), title: 'Invoices', text: 'Monthly care packages per resident, with due dates and overdue flags, to view or download.' },
+      { src: img('ecms', 9), title: 'Caregiver view', text: 'A caregiver sees their round, their contract and the week\'s rota, and nothing else.' },
+      { src: img('ecms', 10), title: 'Family view', text: 'Read-only access for a resident\'s family: medicines today, the care team on shift and the latest care log.' },
+      { src: img('ecms', 11), title: 'Family invoices', text: 'Families see and download only their own invoices, paid and overdue.' },
     ],
   },
   {

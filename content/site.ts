@@ -44,14 +44,14 @@ export const WORK_INTRO = {
   text: 'Product case studies first, then the things I built to test an idea before asking anyone else to.',
 };
 
-/** Logo tiles. Images come from each organisation's own website (see scripts/build-assets.mjs);
- *  icons from simple-icons; the rest are lettermarks until there's an official logo to use. */
+/** Logo tiles. School logos come from each university's own website, employers' logos from Ena
+ *  (see scripts/build-assets.mjs); icons from simple-icons; a lettermark until a logo is supplied. */
 export type LogoSpec = { img?: string; icon?: 'snapchat' | 'google'; letters?: string; bg: string; ink?: string; wide?: boolean };
 export const LOGOS: Record<string, LogoSpec> = {
   snap: { icon: 'snapchat', bg: '#FFFC00', ink: '#000000' },
-  ariro: { letters: 'A', bg: '#3557E8' },
-  aberdeen: { letters: 'AC', bg: '#E5484D' },
-  centrifuge: { letters: 'CG', bg: '#4FAF5B' },
+  ariro: { img: '/logos/ariro.png', bg: '#0b1a33' },
+  aberdeen: { img: '/logos/aberdeen.png', bg: '#ffffff' },
+  centrifuge: { img: '/logos/centrifuge.png', bg: '#e8682a' },
   northumbria: { img: '/logos/northumbria.png', bg: 'transparent', wide: true },
   aun: { img: '/logos/aun.png', bg: 'transparent', wide: true },
   google: { icon: 'google', bg: '#ffffff', ink: '#4285F4' },
@@ -66,7 +66,12 @@ export const EXPERIENCE = [
     logo: 'snap',
     place: 'London, UK',
     dates: 'Jul 2026 – Aug 2026',
-    text: 'Led a three-person team from first sketch to a live AR lens in 3 weeks: Kickback, a shared virtual bedroom where friends listen to music together. I owned scope, delivery and success metrics, cut scope twice to protect the deadline (and documented what was dropped and why), and learned Blender from scratch to build 4 in-lens 3D assets. The lens reached 8,000+ users in 4 days, and I pitched it to 50+ people across Snap product and engineering.',
+    points: [
+      'Led a three-person team from first sketch to a live AR lens in 3 weeks: Kickback, a shared virtual bedroom where friends listen to music together.',
+      'Owned scope, delivery and success metrics, and cut scope twice to protect the deadline, documenting what was dropped and why.',
+      'Learned Blender from scratch to build 4 in-lens 3D assets.',
+      'The lens reached 8,000+ users in 4 days, and I pitched it to 50+ people across Snap product and engineering.',
+    ],
   },
   {
     role: 'Product Manager',
@@ -74,7 +79,12 @@ export const EXPERIENCE = [
     logo: 'ariro',
     place: 'Remote · Lagos',
     dates: 'Feb 2024 – May 2025',
-    text: 'Took a consumer Afrogospel music-streaming app from concept to launch: designed all 13 screens, led go-to-market to 500+ users, and expanded the product into event reminders, blogs and merch. Kept engineering, branding and web teams aligned on one release plan across a 15-person company.',
+    points: [
+      'Took a consumer Afrogospel music-streaming app from concept to launch and designed all 13 screens.',
+      'Led go-to-market to 500+ users.',
+      'Expanded the product into event reminders, blogs and merch.',
+      'Kept engineering, branding and web teams aligned on one release plan across a 15-person company.',
+    ],
   },
   {
     role: 'Associate Digital Solutions Intern',
@@ -82,7 +92,14 @@ export const EXPERIENCE = [
     logo: 'aberdeen',
     place: 'Abuja',
     dates: 'Aug 2023 – Apr 2025',
-    text: 'Built and launched the company website end to end, and supported 6 delivery cycles across 5 client-facing projects by documenting 40+ requirements and handling solution design and testing. Worked with 4 cross-functional teams on digital solutions that improved workflow efficiency by 30% and cut project rework by 25%, and evaluated 12 tools and platforms to improve operations and user experience. Organised product analytics in Excel for reporting, presented technical findings to 15 stakeholders across 3 departments, and produced 10+ conference brochures for events in 4 countries to brand guidelines.',
+    points: [
+      'Built and launched the company website end to end.',
+      'Supported 6 delivery cycles across 5 client-facing projects, documenting 40+ requirements and handling solution design and testing.',
+      'Worked with 4 cross-functional teams on digital solutions that improved workflow efficiency by 30% and cut project rework by 25%.',
+      'Evaluated 12 tools and platforms to improve operations and user experience.',
+      'Organised product analytics in Excel for reporting and presented technical findings to 15 stakeholders across 3 departments.',
+      'Produced 10+ conference brochures for events in 4 countries, to brand guidelines.',
+    ],
   },
   {
     role: 'UI/UX Design Intern',
@@ -90,7 +107,11 @@ export const EXPERIENCE = [
     logo: 'centrifuge',
     place: 'Abuja',
     dates: 'May 2022 – Dec 2022',
-    text: 'Led user research with 100+ parents, teachers and board members across 2 schools, and turned the gaps it uncovered into requirements for a digital portal that replaced paper communication books and printed letters. Drove adoption at launch with a week of hands-on training for all three user groups.',
+    points: [
+      'Led user research with 100+ parents, teachers and board members across 2 schools.',
+      'Turned the gaps it uncovered into requirements for a digital portal that replaced paper communication books and printed letters.',
+      'Drove adoption at launch with a week of hands-on training for all three user groups.',
+    ],
   },
 ];
 
