@@ -1,0 +1,3 @@
+# Source captures for `npm run assets`; the build only reads public/.
+assets-src/
+out/
